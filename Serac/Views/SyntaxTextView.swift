@@ -1,0 +1,222 @@
+//
+//  SyntaxTextView.swift
+//  Serac
+//
+//  Created by Mike Polan on 10/2/21.
+//
+
+import Combine
+import SwiftUI
+
+struct SyntaxTextView: NSViewRepresentable {
+    @Binding var text: String
+    var isEditable: Bool = true
+    var font: NSFont?    = .userFixedPitchFont(ofSize: 14)
+    
+    var onEditingChanged: () -> Void       = {}
+    var onCommit        : () -> Void       = {}
+    var onTextChange    : (String) -> Void = { _ in }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    func makeNSView(context: Context) -> CustomTextView {
+        let textView = CustomTextView(
+            text: text,
+            isEditable: isEditable,
+            font: font
+        )
+        textView.delegate = context.coordinator
+        
+        return textView
+    }
+    
+    func updateNSView(_ view: CustomTextView, context: Context) {
+        view.text = text
+        view.selectedRanges = context.coordinator.selectedRanges
+    }
+}
+
+// MARK: - Preview
+
+struct SyntaxTextView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            SyntaxTextView(
+                text: .constant("{ \n    planets: { \n        name: \"mike\" \n    }\n}"),
+                isEditable: true,
+                font: .userFixedPitchFont(ofSize: 14)
+            )
+                .environment(\.colorScheme, .dark)
+                .previewDisplayName("Dark Mode")
+        }
+    }
+}
+
+// MARK: - Coordinator
+
+extension SyntaxTextView {
+    
+    class Coordinator: NSObject, NSTextViewDelegate {
+        var parent: SyntaxTextView
+        var selectedRanges: [NSValue] = []
+        
+        init(_ parent: SyntaxTextView) {
+            self.parent = parent
+        }
+        
+        func textDidBeginEditing(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else {
+                return
+            }
+            
+            self.parent.text = textView.string
+            self.parent.onEditingChanged()
+        }
+        
+        func textDidChange(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else {
+                return
+            }
+            
+            self.parent.text = textView.string
+            self.selectedRanges = textView.selectedRanges
+        }
+        
+        func textDidEndEditing(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else {
+                return
+            }
+            
+            self.parent.text = textView.string
+            self.parent.onCommit()
+        }
+    }
+}
+
+// MARK: - CustomTextView
+
+final class CustomTextView: NSView {
+    private var isEditable: Bool
+    private var font: NSFont?
+    
+    weak var delegate: NSTextViewDelegate?
+    
+    var text: String {
+        didSet {
+            textView.textStorage?.setAttributedString(
+                JSONString(from: text).attributedString)
+        }
+    }
+    
+    var selectedRanges: [NSValue] = [] {
+        didSet {
+            guard selectedRanges.count > 0 else {
+                return
+            }
+            
+            textView.selectedRanges = selectedRanges
+        }
+    }
+    
+    private lazy var scrollView: NSScrollView = {
+        let scrollView = NSScrollView()
+        scrollView.drawsBackground = true
+        scrollView.borderType = .noBorder
+        scrollView.hasVerticalScroller = true
+        scrollView.hasHorizontalRuler = false
+        scrollView.autoresizingMask = [.width, .height]
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return scrollView
+    }()
+    
+    private lazy var textView: NSTextView = {
+        let contentSize = scrollView.contentSize
+        let textStorage = NSTextStorage()
+        
+        
+        let layoutManager = NSLayoutManager()
+        textStorage.addLayoutManager(layoutManager)
+        
+        
+        let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
+        textContainer.widthTracksTextView = true
+        textContainer.containerSize = NSSize(
+            width: contentSize.width,
+            height: CGFloat.greatestFiniteMagnitude
+        )
+        
+        layoutManager.addTextContainer(textContainer)
+        
+        let textView                     = CustomNSTextView(frame: .zero, textContainer: textContainer)
+        textView.autoresizingMask        = .width
+        textView.backgroundColor         = NSColor.textBackgroundColor
+        textView.delegate                = self.delegate
+        textView.drawsBackground         = true
+        textView.font                    = self.font
+        textView.isEditable              = self.isEditable
+        textView.isHorizontallyResizable = false
+        textView.isVerticallyResizable   = true
+        textView.maxSize                 = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.minSize                 = NSSize(width: 0, height: contentSize.height)
+        textView.allowsUndo              = true
+        
+        return textView
+    }()
+    
+    init(text: String, isEditable: Bool, font: NSFont?) {
+        self.font       = font
+        self.isEditable = isEditable
+        self.text       = text
+        
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillDraw() {
+        super.viewWillDraw()
+        
+        setupScrollViewConstraints()
+        setupTextView()
+    }
+    
+    func setupScrollViewConstraints() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(scrollView)
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor)
+        ])
+    }
+    
+    func setupTextView() {
+        scrollView.documentView = textView
+    }
+}
+
+final class CustomNSTextView: NSTextView {
+    
+    override func insertText(_ string: Any, replacementRange: NSRange) {
+        if let string = string as? String {
+            
+            if string == "{" {
+                // insert a closing brace automatically
+                super.insertText("{}", replacementRange: replacementRange)
+            } else {
+                print(string)
+                super.insertText(string, replacementRange: replacementRange)
+            }
+        } else {
+            super.insertText(string, replacementRange: replacementRange)
+        }
+    }
+}

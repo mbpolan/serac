@@ -11,6 +11,9 @@
 		27945AB62709179D00F97E78 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AB52709179D00F97E78 /* ContentView.swift */; };
 		27945AB8270917A000F97E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27945AB7270917A000F97E78 /* Assets.xcassets */; };
 		27945ABB270917A000F97E78 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27945ABA270917A000F97E78 /* Preview Assets.xcassets */; };
+		27945AC32709281700F97E78 /* SyntaxTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AC22709281600F97E78 /* SyntaxTextView.swift */; };
+		27945AC82709448500F97E78 /* Verb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AC72709448500F97E78 /* Verb.swift */; };
+		27BB5A392724D66100F26AC7 /* JSONString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A382724D66100F26AC7 /* JSONString.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +23,9 @@
 		27945AB7270917A000F97E78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27945ABA270917A000F97E78 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		27945ABC270917A000F97E78 /* Serac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Serac.entitlements; sourceTree = "<group>"; };
+		27945AC22709281600F97E78 /* SyntaxTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxTextView.swift; sourceTree = "<group>"; };
+		27945AC72709448500F97E78 /* Verb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verb.swift; sourceTree = "<group>"; };
+		27BB5A382724D66100F26AC7 /* JSONString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,11 +58,12 @@
 		27945AB22709179D00F97E78 /* Serac */ = {
 			isa = PBXGroup;
 			children = (
-				27945AB32709179D00F97E78 /* SeracApp.swift */,
-				27945AB52709179D00F97E78 /* ContentView.swift */,
-				27945AB7270917A000F97E78 /* Assets.xcassets */,
 				27945ABC270917A000F97E78 /* Serac.entitlements */,
+				27945AB7270917A000F97E78 /* Assets.xcassets */,
+				27945AC62709447900F97E78 /* Models */,
 				27945AB9270917A000F97E78 /* Preview Content */,
+				27945AC52709447400F97E78 /* System */,
+				27945AC42709446D00F97E78 /* Views */,
 			);
 			path = Serac;
 			sourceTree = "<group>";
@@ -67,6 +74,32 @@
 				27945ABA270917A000F97E78 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		27945AC42709446D00F97E78 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				27945AB52709179D00F97E78 /* ContentView.swift */,
+				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		27945AC52709447400F97E78 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				27945AB32709179D00F97E78 /* SeracApp.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		27945AC62709447900F97E78 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				27945AC72709448500F97E78 /* Verb.swift */,
+				27BB5A382724D66100F26AC7 /* JSONString.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +172,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27BB5A392724D66100F26AC7 /* JSONString.swift in Sources */,
+				27945AC82709448500F97E78 /* Verb.swift in Sources */,
 				27945AB62709179D00F97E78 /* ContentView.swift in Sources */,
+				27945AC32709281700F97E78 /* SyntaxTextView.swift in Sources */,
 				27945AB42709179D00F97E78 /* SeracApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
