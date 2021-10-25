@@ -25,6 +25,7 @@
 		27BB5A4F272634CF00F26AC7 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A4E272634CF00F26AC7 /* SessionView.swift */; };
 		27BB5A51272636A500F26AC7 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A50272636A500F26AC7 /* SidebarView.swift */; };
 		27BB5A532726381600F26AC7 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A522726381600F26AC7 /* Session.swift */; };
+		27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C014F92726416400F693A0 /* CenteredViewModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		27BB5A4E272634CF00F26AC7 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		27BB5A50272636A500F26AC7 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		27BB5A522726381600F26AC7 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		27C014F92726416400F693A0 /* CenteredViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredViewModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 		27945AB22709179D00F97E78 /* Serac */ = {
 			isa = PBXGroup;
 			children = (
+				27C014F82726415600F693A0 /* Modifiers */,
 				27945ABC270917A000F97E78 /* Serac.entitlements */,
 				27945AB7270917A000F97E78 /* Assets.xcassets */,
 				27945AC62709447900F97E78 /* Models */,
@@ -149,6 +152,14 @@
 				27BB5A4A27262EC500F26AC7 /* AppState.swift */,
 			);
 			path = State;
+			sourceTree = "<group>";
+		};
+		27C014F82726415600F693A0 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				27C014F92726416400F693A0 /* CenteredViewModifier.swift */,
+			);
+			path = Modifiers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,6 +246,7 @@
 				27BB5A4627262DFF00F26AC7 /* HTTPClient.swift in Sources */,
 				27BB5A532726381600F26AC7 /* Session.swift in Sources */,
 				27BB5A3D2725D42400F26AC7 /* RequestBodyType.swift in Sources */,
+				27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */,
 				27945AC32709281700F97E78 /* SyntaxTextView.swift in Sources */,
 				27945AB42709179D00F97E78 /* SeracApp.swift in Sources */,
 			);

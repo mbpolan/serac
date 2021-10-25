@@ -20,6 +20,8 @@ struct ResponseView: View {
                 Spacer()
                 
                 Text("Nothing to see here")
+                    .foregroundColor(.secondary)
+                    .centered(.both)
                     .padding(15)
                 
                 Spacer()

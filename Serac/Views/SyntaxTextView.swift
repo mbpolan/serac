@@ -44,7 +44,7 @@ struct SyntaxTextView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SyntaxTextView(
-                text: .constant("{ \n    planets: { \n        name: \"mike\" \n    }\n}"),
+                text: .constant("{ \"foo\": 123}"),
                 isEditable: true,
                 adaptor: JSONSyntaxAdaptor()
             )

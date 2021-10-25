@@ -14,10 +14,12 @@ struct RequestView: View {
     @StateObject private var viewModel: RequestViewModel = RequestViewModel()
     
     var body: some View {
-        TabView(selection: $viewModel.tab) {
-            RequestBodyView()
-                .tabItem { Text("Body") }
-                .tag(RequestViewModel.Tab.body)
+        VStack {
+            TabView(selection: $viewModel.tab) {
+                RequestBodyView()
+                    .tabItem { Text("Body") }
+                    .tag(RequestViewModel.Tab.body)
+            }
         }
     }
 }
