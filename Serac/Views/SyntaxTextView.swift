@@ -11,7 +11,7 @@ import SwiftUI
 struct SyntaxTextView: NSViewRepresentable {
     @Binding var text: String
     var isEditable: Bool = true
-    var font: NSFont?    = .userFixedPitchFont(ofSize: 14)
+    let adaptor: SyntaxAdaptor
     
     var onEditingChanged: () -> Void       = {}
     var onCommit        : () -> Void       = {}
@@ -25,7 +25,7 @@ struct SyntaxTextView: NSViewRepresentable {
         let textView = CustomTextView(
             text: text,
             isEditable: isEditable,
-            font: font
+            adaptor: adaptor
         )
         textView.delegate = context.coordinator
         
@@ -46,7 +46,7 @@ struct SyntaxTextView_Previews: PreviewProvider {
             SyntaxTextView(
                 text: .constant("{ \n    planets: { \n        name: \"mike\" \n    }\n}"),
                 isEditable: true,
-                font: .userFixedPitchFont(ofSize: 14)
+                adaptor: JSONSyntaxAdaptor()
             )
                 .environment(\.colorScheme, .dark)
                 .previewDisplayName("Dark Mode")
@@ -99,14 +99,13 @@ extension SyntaxTextView {
 
 final class CustomTextView: NSView {
     private var isEditable: Bool
-    private var font: NSFont?
+    private var adaptor: SyntaxAdaptor
     
     weak var delegate: NSTextViewDelegate?
     
     var text: String {
         didSet {
-            textView.textStorage?.setAttributedString(
-                JSONString(from: text).attributedString)
+            textView.textStorage?.setAttributedString(adaptor.decorate(text))
         }
     }
     
@@ -136,10 +135,8 @@ final class CustomTextView: NSView {
         let contentSize = scrollView.contentSize
         let textStorage = NSTextStorage()
         
-        
         let layoutManager = NSLayoutManager()
         textStorage.addLayoutManager(layoutManager)
-        
         
         let textContainer = NSTextContainer(containerSize: scrollView.frame.size)
         textContainer.widthTracksTextView = true
@@ -150,26 +147,30 @@ final class CustomTextView: NSView {
         
         layoutManager.addTextContainer(textContainer)
         
-        let textView                     = CustomNSTextView(frame: .zero, textContainer: textContainer)
+        let textView = CustomNSTextView(frame: .zero,
+                                        textContainer: textContainer,
+                                        adaptor: adaptor)
+        
         textView.autoresizingMask        = .width
         textView.backgroundColor         = NSColor.textBackgroundColor
         textView.delegate                = self.delegate
         textView.drawsBackground         = true
-        textView.font                    = self.font
         textView.isEditable              = self.isEditable
         textView.isHorizontallyResizable = false
         textView.isVerticallyResizable   = true
-        textView.maxSize                 = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-        textView.minSize                 = NSSize(width: 0, height: contentSize.height)
+        textView.maxSize                 = NSSize(width: CGFloat.greatestFiniteMagnitude,
+                                                  height: CGFloat.greatestFiniteMagnitude)
+        textView.minSize                 = NSSize(width: 0,
+                                                  height: contentSize.height)
         textView.allowsUndo              = true
         
         return textView
     }()
     
-    init(text: String, isEditable: Bool, font: NSFont?) {
-        self.font       = font
+    init(text: String, isEditable: Bool, adaptor: SyntaxAdaptor) {
         self.isEditable = isEditable
-        self.text       = text
+        self.text = text
+        self.adaptor = adaptor
         
         super.init(frame: .zero)
     }
@@ -205,16 +206,23 @@ final class CustomTextView: NSView {
 
 final class CustomNSTextView: NSTextView {
     
+    private var adaptor: SyntaxAdaptor
+    
+    init(frame frameRect: NSRect,
+         textContainer container: NSTextContainer?,
+         adaptor: SyntaxAdaptor) {
+        
+        self.adaptor = adaptor
+        super.init(frame: frameRect, textContainer: container)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func insertText(_ string: Any, replacementRange: NSRange) {
         if let string = string as? String {
-            
-            if string == "{" {
-                // insert a closing brace automatically
-                super.insertText("{}", replacementRange: replacementRange)
-            } else {
-                print(string)
-                super.insertText(string, replacementRange: replacementRange)
-            }
+            super.insertText(adaptor.update(string: string), replacementRange: replacementRange)
         } else {
             super.insertText(string, replacementRange: replacementRange)
         }

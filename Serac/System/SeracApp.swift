@@ -12,6 +12,10 @@ struct SeracApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(AppState())
+        }
+        .commands {
+            SidebarCommands()
         }
     }
 }

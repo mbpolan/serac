@@ -7,33 +7,44 @@
 
 import SwiftUI
 
+// MARK: - View
+
 struct ContentView: View {
-    @State private var requestBody: String = ""
-    @State private var responseBody: String = ""
-    @State private var url: String = ""
+    @EnvironmentObject private var appState: AppState
     
     var body: some View {
-        VStack {
-            HStack {
-                Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: /*@START_MENU_TOKEN@*/Text("Picker")/*@END_MENU_TOKEN@*/) {
-                    /*@START_MENU_TOKEN@*/Text("1").tag(1)/*@END_MENU_TOKEN@*/
-                    /*@START_MENU_TOKEN@*/Text("2").tag(2)/*@END_MENU_TOKEN@*/
-                }
-                
-                TextField("", text: $url)
-                
-                Button("Send") {
-                    
+        NavigationView {
+            SidebarView()
+            
+            SessionView(session: $appState.activeSession)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button(action: handleSidebar) {
+                    Image(systemName: "sidebar.leading")
                 }
             }
             
-            HSplitView {
-                SyntaxTextView(text: $requestBody, isEditable: true)
-                SyntaxTextView(text: $responseBody, isEditable: false)
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: handleAdd) {
+                    Image(systemName: "plus")
+                }
             }
         }
     }
+    
+    private func handleSidebar() {
+        NSApp.keyWindow?.firstResponder?.tryToPerform(
+            #selector(NSSplitViewController.toggleSidebar(_:)),
+            with: nil)
+    }
+    
+    private func handleAdd() {
+        
+    }
 }
+
+// MARK: - Preview
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

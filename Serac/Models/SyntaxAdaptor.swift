@@ -1,22 +1,32 @@
 //
-//  JSONString.swift
+//  SyntaxAdaptor.swift
 //  Serac
 //
-//  Created by Mike Polan on 10/23/21.
+//  Created by Mike Polan on 10/24/21.
 //
 
 import SwiftUI
 
-struct JSONString {
-    let attributedString: NSMutableAttributedString
+protocol SyntaxAdaptor {
+    func decorate(_ text: String) -> NSMutableAttributedString
+    func update(string: String) -> String
+}
+
+struct NoopSyntaxAdaptor: SyntaxAdaptor {
     
-    init(from text: String) {
-        attributedString = NSMutableAttributedString(string: text)
-        
-        decorateString(text)
+    func decorate(_ text: String) -> NSMutableAttributedString {
+        return NSMutableAttributedString(string: text)
     }
     
-    private func decorateString(_ text: String) {
+    func update(string: String) -> String {
+        return string
+    }
+}
+
+struct JSONSyntaxAdaptor: SyntaxAdaptor {
+    
+    func decorate(_ text: String) -> NSMutableAttributedString {
+        let attributedString = NSMutableAttributedString(string: text)
         let fullRange = NSRange(text.startIndex..., in: text)
         
         // set default font
@@ -39,6 +49,17 @@ struct JSONString {
         stringRegex.matches(in: text,
                             range: NSRange(text.startIndex..., in: text)).forEach { match in
             attributedString.addAttribute(.foregroundColor, value: NSColor.systemGreen, range: match.range)
+        }
+        
+        return attributedString
+    }
+    
+    func update(string: String) -> String {
+        if string == "{" {
+            // insert a closing brace automatically
+            return "{\n}"
+        } else {
+            return string
         }
     }
 }
