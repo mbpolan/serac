@@ -16,19 +16,26 @@ struct RequestView: View {
     var body: some View {
         VStack {
             TabView(selection: $viewModel.tab) {
-                RequestBodyView()
+                RequestBodyView(request: $request)
                     .tabItem { Text("Body") }
                     .tag(RequestViewModel.Tab.body)
+                
+                QueryParameterView(request: $request)
+                    .tabItem { Text("Query") }
+                    .tag(RequestViewModel.Tab.query)
             }
         }
     }
 }
+
+// MARK: - View Model
 
 class RequestViewModel: ObservableObject {
     @Published var tab: Tab = .body
     
     enum Tab: Hashable {
         case body
+        case query
     }
 }
 

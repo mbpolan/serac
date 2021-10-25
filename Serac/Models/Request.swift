@@ -8,11 +8,11 @@
 import Foundation
 
 class Request: ObservableObject {
-    var name: String = "Untitled"
-    var method: HTTPMethod = .get
-    var url: String = ""
-    var headers: Dictionary<String, String> = [:]
-    var body: String?
+    @Published var name: String = "Untitled"
+    @Published var method: HTTPMethod = .get
+    @Published var url: String = ""
+    @Published var headers: Dictionary<String, String> = [:]
+    @Published var body: String?
 }
 
 extension Request {
