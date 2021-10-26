@@ -10,17 +10,17 @@ import SwiftUI
 // MARK: - View
 
 struct RequestView: View {
-    @Binding var request: Request
+    @StateObject var request: Request
     @StateObject private var viewModel: RequestViewModel = RequestViewModel()
     
     var body: some View {
         VStack {
             TabView(selection: $viewModel.tab) {
-                RequestBodyView(request: $request)
+                RequestBodyView(request: request)
                     .tabItem { Text("Body") }
                     .tag(RequestViewModel.Tab.body)
                 
-                QueryParameterView(request: $request)
+                QueryParameterView(request: request)
                     .tabItem { Text("Query") }
                     .tag(RequestViewModel.Tab.query)
             }
@@ -45,6 +45,6 @@ struct RequestView_Previews: PreviewProvider {
     @State static var request: Request = Request()
     
     static var previews: some View {
-        RequestView(request: $request)
+        RequestView(request: request)
     }
 }

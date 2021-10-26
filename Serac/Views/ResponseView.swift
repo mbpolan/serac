@@ -10,33 +10,44 @@ import SwiftUI
 // MARK: - View
 
 struct ResponseView: View {
-    @Binding var response: Response?
+    @StateObject var response: Response
+    @StateObject private var viewModel: ResponseViewModel = ResponseViewModel()
     
     var body: some View {
         VStack {
-            if let response = response {
-                Text("Response!!!")
+            if response.valid {
+                TabView(selection: $viewModel.tab) {
+                    HeadersView(editable: false,
+                                message: response)
+                        .tabItem { Text("Headers") }
+                        .tag(ResponseViewModel.Tab.headers)
+                }
             } else {
-                Spacer()
-                
                 Text("Nothing to see here")
                     .foregroundColor(.secondary)
                     .centered(.both)
                     .padding(15)
-                
-                Spacer()
             }
             // SyntaxTextView(text: $responseBody, isEditable: false)
         }
     }
 }
 
+class ResponseViewModel: ObservableObject {
+    @Published var tab: Tab = .headers
+    
+    enum Tab {
+        case body
+        case headers
+    }
+}
+
 // MARK: - Preview
 
 struct ResponseView_Preview: PreviewProvider {
-    @State static var response: Response? = Response()
+    @State static var response: Response = Response()
     
     static var previews: some View {
-        ResponseView(response: $response)
+        ResponseView(response: response)
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct RequestBodyView: View {
-    @Binding var request: Request
+    @StateObject var request: Request
     @State private var requestBodyType: RequestBodyType = .none
     @State private var requestBody: String = ""
     
@@ -56,6 +56,6 @@ struct RequestBodyView_Preview: PreviewProvider {
     @State static var request: Request = Request()
     
     static var previews: some View {
-        RequestBodyView(request: $request)
+        RequestBodyView(request: request)
     }
 }

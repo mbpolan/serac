@@ -11,5 +11,5 @@ class Session: ObservableObject, Identifiable {
     var id = UUID().uuidString
     
     @Published var request: Request = Request()
-    @Published var response: Response?
+    @Published var response: Response = Response()
 }

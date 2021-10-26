@@ -31,12 +31,21 @@ struct HTTPClient {
             if let error = error {
                 completionHandler(.failure(error))
             } else if let response = response as? HTTPURLResponse {
+                let headerKeys = response.allHeaderFields.map { String(describing: $0.key).lowercased() }
+                
+                let headers = Dictionary(uniqueKeysWithValues: headerKeys.map {
+                    ($0, response.value(forHTTPHeaderField: $0) ?? "")
+                })
+                
+                // extract known headers
+                let contentType = response.value(forHTTPHeaderField: "Content-Type")
+                
                 completionHandler(.success(
-                    Response(
-                        statusCode: response.statusCode,
-                        contentLength: data?.count,
-                        data: data
-                    )))
+                    Response(statusCode: response.statusCode,
+                             contentLength: data?.count,
+                             contentType: contentType,
+                             headers: headers,
+                             data: data)))
             }
         }.resume()
     }

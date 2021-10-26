@@ -28,6 +28,9 @@
 		27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C014F92726416400F693A0 /* CenteredViewModifier.swift */; };
 		27C014FC2726430400F693A0 /* QueryParameterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C014FB2726430400F693A0 /* QueryParameterView.swift */; };
 		27C014FE272645B300F693A0 /* KeyValuePair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C014FD272645B300F693A0 /* KeyValuePair.swift */; };
+		27C015002726577E00F693A0 /* OperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C014FF2726577E00F693A0 /* OperationView.swift */; };
+		27C015022727999B00F693A0 /* HeadersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C015012727999B00F693A0 /* HeadersView.swift */; };
+		27C0150427279B6B00F693A0 /* HTTPMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C0150327279B6B00F693A0 /* HTTPMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +57,9 @@
 		27C014F92726416400F693A0 /* CenteredViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredViewModifier.swift; sourceTree = "<group>"; };
 		27C014FB2726430400F693A0 /* QueryParameterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryParameterView.swift; sourceTree = "<group>"; };
 		27C014FD272645B300F693A0 /* KeyValuePair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValuePair.swift; sourceTree = "<group>"; };
+		27C014FF2726577E00F693A0 /* OperationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationView.swift; sourceTree = "<group>"; };
+		27C015012727999B00F693A0 /* HeadersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadersView.swift; sourceTree = "<group>"; };
+		27C0150327279B6B00F693A0 /* HTTPMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +92,10 @@
 		27945AB22709179D00F97E78 /* Serac */ = {
 			isa = PBXGroup;
 			children = (
-				27C014F82726415600F693A0 /* Modifiers */,
 				27945ABC270917A000F97E78 /* Serac.entitlements */,
 				27945AB7270917A000F97E78 /* Assets.xcassets */,
 				27945AC62709447900F97E78 /* Models */,
+				27C014F82726415600F693A0 /* Modifiers */,
 				27945AB9270917A000F97E78 /* Preview Content */,
 				27BB5A4427262DAA00F26AC7 /* Services */,
 				27BB5A4927262EB800F26AC7 /* State */,
@@ -111,13 +117,15 @@
 			isa = PBXGroup;
 			children = (
 				27945AB52709179D00F97E78 /* ContentView.swift */,
+				27C015012727999B00F693A0 /* HeadersView.swift */,
+				27C014FF2726577E00F693A0 /* OperationView.swift */,
+				27C014FB2726430400F693A0 /* QueryParameterView.swift */,
 				27BB5A40272628BD00F26AC7 /* RequestBodyView.swift */,
 				27BB5A3A2724EEA600F26AC7 /* RequestView.swift */,
 				27BB5A4227262A6A00F26AC7 /* ResponseView.swift */,
 				27BB5A4E272634CF00F26AC7 /* SessionView.swift */,
-				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
 				27BB5A50272636A500F26AC7 /* SidebarView.swift */,
-				27C014FB2726430400F693A0 /* QueryParameterView.swift */,
+				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -136,9 +144,6 @@
 				27BB5A3E272609DC00F26AC7 /* SyntaxAdaptor.swift */,
 				27945AC72709448500F97E78 /* HTTPMethod.swift */,
 				27BB5A3C2725D42400F26AC7 /* RequestBodyType.swift */,
-				27BB5A4727262E2100F26AC7 /* Request.swift */,
-				27BB5A4C272631F300F26AC7 /* Response.swift */,
-				27BB5A522726381600F26AC7 /* Session.swift */,
 				27C014FD272645B300F693A0 /* KeyValuePair.swift */,
 			);
 			path = Models;
@@ -155,7 +160,11 @@
 		27BB5A4927262EB800F26AC7 /* State */ = {
 			isa = PBXGroup;
 			children = (
+				27C0150327279B6B00F693A0 /* HTTPMessage.swift */,
 				27BB5A4A27262EC500F26AC7 /* AppState.swift */,
+				27BB5A4727262E2100F26AC7 /* Request.swift */,
+				27BB5A4C272631F300F26AC7 /* Response.swift */,
+				27BB5A522726381600F26AC7 /* Session.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -240,13 +249,16 @@
 			files = (
 				27BB5A3F272609DC00F26AC7 /* SyntaxAdaptor.swift in Sources */,
 				27BB5A41272628BD00F26AC7 /* RequestBodyView.swift in Sources */,
+				27C015002726577E00F693A0 /* OperationView.swift in Sources */,
 				27BB5A51272636A500F26AC7 /* SidebarView.swift in Sources */,
 				27945AC82709448500F97E78 /* HTTPMethod.swift in Sources */,
+				27C015022727999B00F693A0 /* HeadersView.swift in Sources */,
 				27BB5A4B27262EC500F26AC7 /* AppState.swift in Sources */,
 				27BB5A3B2724EEA600F26AC7 /* RequestView.swift in Sources */,
 				27BB5A4827262E2100F26AC7 /* Request.swift in Sources */,
 				27BB5A4D272631F300F26AC7 /* Response.swift in Sources */,
 				27BB5A4F272634CF00F26AC7 /* SessionView.swift in Sources */,
+				27C0150427279B6B00F693A0 /* HTTPMessage.swift in Sources */,
 				27BB5A4327262A6A00F26AC7 /* ResponseView.swift in Sources */,
 				27945AB62709179D00F97E78 /* ContentView.swift in Sources */,
 				27BB5A4627262DFF00F26AC7 /* HTTPClient.swift in Sources */,

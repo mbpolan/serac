@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct QueryParameterView: View {
-    @Binding var request: Request
+    @StateObject var request: Request
     @StateObject private var viewModel: QueryParameterViewModel = QueryParameterViewModel()
     
     var body: some View {
@@ -106,6 +106,6 @@ struct QueryParameterView_Preview: PreviewProvider {
     
     static var previews: some View {
         request.url = "https://google.com?key=value"
-        return QueryParameterView(request: $request)
+        return QueryParameterView(request: request)
     }
 }

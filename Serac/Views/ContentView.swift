@@ -16,7 +16,7 @@ struct ContentView: View {
         NavigationView {
             SidebarView()
             
-            SessionView(session: $appState.activeSession)
+            SessionView(session: appState.activeSession)
         }
         .toolbar {
             ToolbarItem(placement: .navigation) {

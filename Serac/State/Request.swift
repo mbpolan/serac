@@ -7,16 +7,9 @@
 
 import Foundation
 
-class Request: ObservableObject {
+class Request: HTTPMessage {
     @Published var name: String = "Untitled"
     @Published var method: HTTPMethod = .get
     @Published var url: String = ""
-    @Published var headers: Dictionary<String, String> = [:]
     @Published var body: String?
-}
-
-extension Request {
-    enum Header: String {
-        case contentType = "Content-Type"
-    }
 }
