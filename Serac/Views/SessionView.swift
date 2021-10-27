@@ -35,6 +35,7 @@ struct SessionView: View {
                     session.response.valid = true
                     session.response.statusCode = response.statusCode
                     session.response.contentLength = response.contentLength
+                    session.response.contentType = response.contentType
                     session.response.headers = response.headers
                     session.response.data = response.data
                 }

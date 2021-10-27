@@ -34,9 +34,9 @@ struct RequestBodyView: View {
             
             Group {
                 if requestBodyType == .json {
-                    SyntaxTextView(text: $requestBody, adaptor: JSONSyntaxAdaptor())
+                    SyntaxTextView(string: $requestBody, isEditable: true, adaptor: JSONSyntaxAdaptor())
                 } else if requestBodyType == .raw {
-                    SyntaxTextView(text: $requestBody, adaptor: NoopSyntaxAdaptor())
+                    SyntaxTextView(string: $requestBody, isEditable: true, adaptor: NoopSyntaxAdaptor())
                 } else {
                     VStack {
                         Spacer()

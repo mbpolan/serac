@@ -43,7 +43,7 @@ struct HTTPClient {
                 completionHandler(.success(
                     Response(statusCode: response.statusCode,
                              contentLength: data?.count,
-                             contentType: contentType,
+                             contentType: ResponseBodyType.parse(from: contentType),
                              headers: headers,
                              data: data)))
             }

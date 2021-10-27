@@ -17,6 +17,27 @@ struct SyntaxTextView: NSViewRepresentable {
     var onCommit        : () -> Void       = {}
     var onTextChange    : (String) -> Void = { _ in }
     
+    init(string: Binding<String>, isEditable: Bool, adaptor: SyntaxAdaptor) {
+        self._text = string
+        self.isEditable = isEditable
+        self.adaptor = adaptor
+    }
+    
+    init(data: Binding<Data>, isEditable: Bool, adaptor: SyntaxAdaptor) {
+        self._text = Binding<String>(
+            get: { String(decoding: data.wrappedValue, as: UTF8.self) },
+            set: { value in
+                if let updated = value.data(using: .utf8) {
+                    data.wrappedValue = updated
+                } else {
+                    data.wrappedValue = Data()
+                }
+            }
+        )
+        self.isEditable = isEditable
+        self.adaptor = adaptor
+    }
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -44,7 +65,7 @@ struct SyntaxTextView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SyntaxTextView(
-                text: .constant("{ \"foo\": 123}"),
+                string: .constant("{ \"foo\": 123}"),
                 isEditable: true,
                 adaptor: JSONSyntaxAdaptor()
             )

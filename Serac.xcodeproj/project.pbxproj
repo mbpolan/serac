@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
+		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
 		27945AB42709179D00F97E78 /* SeracApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AB32709179D00F97E78 /* SeracApp.swift */; };
 		27945AB62709179D00F97E78 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AB52709179D00F97E78 /* ContentView.swift */; };
 		27945AB8270917A000F97E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27945AB7270917A000F97E78 /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
+		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
 		27945AB02709179D00F97E78 /* Serac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Serac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27945AB32709179D00F97E78 /* SeracApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeracApp.swift; sourceTree = "<group>"; };
 		27945AB52709179D00F97E78 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -126,6 +130,7 @@
 				27BB5A4E272634CF00F26AC7 /* SessionView.swift */,
 				27BB5A50272636A500F26AC7 /* SidebarView.swift */,
 				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
+				2788FFC82728E83D00F77060 /* ResponseBodyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -145,6 +150,7 @@
 				27945AC72709448500F97E78 /* HTTPMethod.swift */,
 				27BB5A3C2725D42400F26AC7 /* RequestBodyType.swift */,
 				27C014FD272645B300F693A0 /* KeyValuePair.swift */,
+				2788FFC62728E3B800F77060 /* ResponseBodyType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -264,7 +270,9 @@
 				27BB5A4627262DFF00F26AC7 /* HTTPClient.swift in Sources */,
 				27BB5A532726381600F26AC7 /* Session.swift in Sources */,
 				27C014FC2726430400F693A0 /* QueryParameterView.swift in Sources */,
+				2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */,
 				27BB5A3D2725D42400F26AC7 /* RequestBodyType.swift in Sources */,
+				2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */,
 				27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */,
 				27945AC32709281700F97E78 /* SyntaxTextView.swift in Sources */,
 				27945AB42709179D00F97E78 /* SeracApp.swift in Sources */,

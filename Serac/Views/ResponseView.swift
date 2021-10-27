@@ -17,6 +17,10 @@ struct ResponseView: View {
         VStack {
             if response.valid {
                 TabView(selection: $viewModel.tab) {
+                    ResponseBodyView(response: response)
+                        .tabItem { Text("Body") }
+                        .tag(ResponseViewModel.Tab.body)
+                    
                     HeadersView(editable: false,
                                 message: response)
                         .tabItem { Text("Headers") }
@@ -28,13 +32,12 @@ struct ResponseView: View {
                     .centered(.both)
                     .padding(15)
             }
-            // SyntaxTextView(text: $responseBody, isEditable: false)
         }
     }
 }
 
 class ResponseViewModel: ObservableObject {
-    @Published var tab: Tab = .headers
+    @Published var tab: Tab = .body
     
     enum Tab {
         case body
