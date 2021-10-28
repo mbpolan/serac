@@ -25,7 +25,16 @@ struct NoopSyntaxAdaptor: SyntaxAdaptor {
 
 struct JSONSyntaxAdaptor: SyntaxAdaptor {
     
-    func decorate(_ text: String) -> NSMutableAttributedString {
+    func decorate(_ rawText: String) -> NSMutableAttributedString {
+        var text = rawText
+        
+        // pretty print the json string
+        if let data = text.data(using: .utf8),
+           let object = try? JSONSerialization.jsonObject(with: data, options: []),
+           let json = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+            text = String(decoding: json, as: UTF8.self)
+        }
+        
         let attributedString = NSMutableAttributedString(string: text)
         let fullRange = NSRange(text.startIndex..., in: text)
         
@@ -48,7 +57,6 @@ struct JSONSyntaxAdaptor: SyntaxAdaptor {
         let stringRegex = try! NSRegularExpression(pattern: #""([^"\\]*(?:\\.[^"\\]*)*)""#)
         stringRegex.matches(in: text,
                             range: NSRange(text.startIndex..., in: text)).forEach { match in
-            print(match.range)
             attributedString.addAttribute(.foregroundColor, value: NSColor.systemGreen, range: match.range)
         }
         
