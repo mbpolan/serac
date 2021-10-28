@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
+		2788FFCB272A34C200F77060 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFCA272A34C200F77060 /* Events.swift */; };
+		2788FFCD272A354C00F77060 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFCC272A354C00F77060 /* AppCommands.swift */; };
 		27945AB42709179D00F97E78 /* SeracApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AB32709179D00F97E78 /* SeracApp.swift */; };
 		27945AB62709179D00F97E78 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AB52709179D00F97E78 /* ContentView.swift */; };
 		27945AB8270917A000F97E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27945AB7270917A000F97E78 /* Assets.xcassets */; };
@@ -38,6 +40,8 @@
 /* Begin PBXFileReference section */
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
+		2788FFCA272A34C200F77060 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
+		2788FFCC272A354C00F77060 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 		27945AB02709179D00F97E78 /* Serac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Serac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27945AB32709179D00F97E78 /* SeracApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeracApp.swift; sourceTree = "<group>"; };
 		27945AB52709179D00F97E78 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				27945AB32709179D00F97E78 /* SeracApp.swift */,
+				2788FFCA272A34C200F77060 /* Events.swift */,
+				2788FFCC272A354C00F77060 /* AppCommands.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -257,6 +263,8 @@
 				27BB5A41272628BD00F26AC7 /* RequestBodyView.swift in Sources */,
 				27C015002726577E00F693A0 /* OperationView.swift in Sources */,
 				27BB5A51272636A500F26AC7 /* SidebarView.swift in Sources */,
+				2788FFCB272A34C200F77060 /* Events.swift in Sources */,
+				2788FFCD272A354C00F77060 /* AppCommands.swift in Sources */,
 				27945AC82709448500F97E78 /* HTTPMethod.swift in Sources */,
 				27C015022727999B00F693A0 /* HeadersView.swift in Sources */,
 				27BB5A4B27262EC500F26AC7 /* AppState.swift in Sources */,

@@ -15,6 +15,7 @@ struct SeracApp: App {
                 .environmentObject(AppState())
         }
         .commands {
+            AppCommands()
             SidebarCommands()
         }
     }

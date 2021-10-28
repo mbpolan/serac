@@ -25,6 +25,9 @@ struct SessionView: View {
             
             Spacer()
         }
+        .onSendRequest {
+            handleSend(session.request)
+        }
     }
     
     private func handleSend(_ request: Request) {

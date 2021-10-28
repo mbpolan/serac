@@ -26,8 +26,10 @@ struct OperationView: View {
             TextField("", text: $request.url)
                 .layoutPriority(3)
             
-            Button("Send", action: { onSend(request) })
-                .layoutPriority(1)
+            Button(action: { onSend(request) }) {
+                Image(systemName: "paperplane.fill")
+            }
+            .layoutPriority(1)
         }
         .padding([.top, .trailing], 5)
         .padding([.bottom], 5)
