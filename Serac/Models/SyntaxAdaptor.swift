@@ -45,9 +45,10 @@ struct JSONSyntaxAdaptor: SyntaxAdaptor {
         }
         
         // find tokens that represent json strings
-        let stringRegex = try! NSRegularExpression(pattern: "(\"[^\"]*\")")
+        let stringRegex = try! NSRegularExpression(pattern: #""([^"\\]*(?:\\.[^"\\]*)*)""#)
         stringRegex.matches(in: text,
                             range: NSRange(text.startIndex..., in: text)).forEach { match in
+            print(match.range)
             attributedString.addAttribute(.foregroundColor, value: NSColor.systemGreen, range: match.range)
         }
         

@@ -69,8 +69,6 @@ struct SyntaxTextView_Previews: PreviewProvider {
                 isEditable: true,
                 adaptor: JSONSyntaxAdaptor()
             )
-                .environment(\.colorScheme, .dark)
-                .previewDisplayName("Dark Mode")
         }
     }
 }
