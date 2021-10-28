@@ -29,6 +29,7 @@ struct OperationView: View {
             Button(action: { onSend(request) }) {
                 Image(systemName: "paperplane.fill")
             }
+            .padding(.trailing, 5)
             .layoutPriority(1)
         }
         .padding([.top, .trailing], 5)

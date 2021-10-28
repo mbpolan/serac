@@ -25,7 +25,11 @@ struct ContentView: View {
                 }
             }
             
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .principal) {
+                TextField("", text: $appState.activeSession.request.name)
+            }
+            
+            ToolbarItem(placement: .automatic) {
                 Button(action: handleAdd) {
                     Image(systemName: "plus")
                 }
@@ -40,7 +44,9 @@ struct ContentView: View {
     }
     
     private func handleAdd() {
-        
+        let session = Session()
+        appState.sessions.append(session)
+        appState.activeSession = session
     }
 }
 
@@ -49,5 +55,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AppState())
     }
 }

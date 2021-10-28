@@ -19,8 +19,10 @@ struct SessionView: View {
             
             HSplitView {
                 RequestView(request: session.request)
+                    .padding(.trailing, 2)
                 
                 ResponseView(response: session.response)
+                    .padding(.leading, 2)
             }
             
             Spacer()

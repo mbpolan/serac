@@ -14,7 +14,16 @@ struct SidebarView: View {
     
     var body: some View {
         List(appState.sessions) { session in
-            Text(session.request.name)
+            HStack {
+                Text(session.request.method.rawValue)
+                
+                Spacer()
+                
+                Text(session.request.name)
+            }
+            .onTapGesture {
+                appState.activeSession = session
+            }
         }
     }
 }
