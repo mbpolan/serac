@@ -12,4 +12,5 @@ class Request: HTTPMessage {
     @Published var method: HTTPMethod = .get
     @Published var url: String = ""
     @Published var body: String?
+    @Published var bodyContentType: RequestBodyType = .none
 }

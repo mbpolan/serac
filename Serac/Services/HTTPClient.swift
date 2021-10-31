@@ -25,6 +25,19 @@ struct HTTPClient {
         
         if let body = request.body {
             urlRequest.httpBody = body.data(using: .utf8)
+            
+            // if a content-type header is not present, set one automatically depending on
+            // the request body
+            if !request.headers.keys.contains(where: { $0.lowercased() == "content-type" }) {
+                switch request.bodyContentType {
+                case .json:
+                    urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
+                case .formURLEncoded:
+                    urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "content-type")
+                default:
+                    break
+                }
+            }
         }
         
         // mark the time the request was initiated

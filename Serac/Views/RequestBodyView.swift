@@ -11,19 +11,16 @@ import SwiftUI
 
 struct RequestBodyView: View {
     @ObservedObject var request: Request
-    @State private var requestBodyType: RequestBodyType = .none
     @State private var requestBody: String = ""
     
     var body: some View {
         VStack {
             HStack {
-                Text("Request")
-                
                 Spacer()
                 
-                Picker(selection: $requestBodyType, label: Text("")) {
+                Picker(selection: $request.bodyContentType, label: Text("")) {
                     ForEach(RequestBodyType.allCases, id: \.self) { type in
-                        Text(type.rawValue)
+                        Text(requestBodyTypeText(type))
                             .tag(type)
                     }
                 }
@@ -33,7 +30,7 @@ struct RequestBodyView: View {
             .padding([.leading, .trailing], 5)
             
             VStack {
-                if requestBodyType != .none {
+                if request.bodyContentType != .none {
                     SyntaxTextView(string: $requestBody, isEditable: true, adaptor: adaptor)
                 } else {
                     VStack {
@@ -45,12 +42,15 @@ struct RequestBodyView: View {
             }
             .layoutPriority(2)
         }
+        .onChange(of: requestBody) { body in
+            request.body = body
+        }
     }
     
     private var adaptor: Binding<SyntaxAdaptor> {
         .init(
             get: {
-                switch requestBodyType {
+                switch request.bodyContentType {
                 case .json:
                     return JSONSyntaxAdaptor()
                 default:
@@ -58,6 +58,19 @@ struct RequestBodyView: View {
                 }
             },
             set: { _ in })
+    }
+    
+    private func requestBodyTypeText(_ type: RequestBodyType) -> String {
+        switch type {
+        case .none:
+            return "None"
+        case .raw:
+            return "Raw"
+        case .json:
+            return "JSON"
+        case .formURLEncoded:
+            return "Form"
+        }
     }
 }
 

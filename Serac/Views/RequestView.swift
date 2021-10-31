@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct RequestView: View {
-    @StateObject var request: Request
+    @ObservedObject var request: Request
     @StateObject private var viewModel: RequestViewModel = RequestViewModel()
     
     var body: some View {
