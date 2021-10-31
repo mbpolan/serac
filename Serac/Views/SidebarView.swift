@@ -89,15 +89,24 @@ fileprivate struct ListItemView: View {
     let onAddRequest: (_ parent: CollectionItem?) -> Void
     let onRemove: (_ item: CollectionItem) -> Void
     
+    @State private var editing: Bool = false
+    @State private var editedText: String = ""
+    
     var body: some View {
         if item.type == .group {
             HStack {
                 Image(systemName: "folder")
-                Text(item.groupName ?? "")
+                
+                if editing {
+                    TextField("", text: $editedText, onCommit: handleFinishRename)
+                } else {
+                    Text(item.groupName ?? "")
+                }
             }
             .contextMenu {
                 Button("Add Group", action: { onAddGroup(item) })
                 Button("Add Request", action: { onAddRequest(item) })
+                Button("Rename", action: { handleStartRename() })
                 Button("Remove", action: { onRemove(item) })
             }
         } else if let request = item.request {
@@ -107,12 +116,33 @@ fileprivate struct ListItemView: View {
                 
                 Spacer()
                 
-                Text(request.name)
+                if editing {
+                    TextField("", text: $editedText, onCommit: handleFinishRename)
+                } else {
+                    Text(item.request?.name ?? "")
+                }
             }
             .contextMenu {
+                Button("Rename", action: { handleStartRename() })
                 Button("Remove", action: { onRemove(item) })
             }
         }
+    }
+    
+    private func handleStartRename() {
+        editing = true
+        editedText = (item.type == .group ? item.groupName : item.request?.name) ?? ""
+    }
+    
+    private func handleFinishRename() {
+        if item.type == .group {
+            item.groupName = editedText
+        } else {
+            item.request?.name = editedText
+        }
+        
+        editing = false
+        editedText = ""
     }
 }
 
