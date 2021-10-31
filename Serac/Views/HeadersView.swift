@@ -11,7 +11,7 @@ import SwiftUI
 
 struct HeadersView: View {
     let editable: Bool
-    @StateObject var message: HTTPMessage
+    @ObservedObject var message: HTTPMessage
     @StateObject private var viewModel: HeadersViewModel = HeadersViewModel()
     
     var body: some View {
@@ -48,8 +48,11 @@ struct HeadersView: View {
                 }
             }
         }
+        .onReceive(message.$headers) { headers in
+            updateModel(from: headers)
+        }
         .onAppear {
-            updateModel(from: message)
+            updateModel(from: message.headers)
         }
     }
     
@@ -66,10 +69,11 @@ struct HeadersView: View {
         return columns
     }
     
-    private func updateModel(from message: HTTPMessage) {
-        viewModel.headers = message.headers.map { (k, v) in
+    private func updateModel(from headers: Dictionary<String, String>) {
+        viewModel.headers = headers.map { (k, v) in
             return KeyValuePair(k, v)
         }
+        .sorted(by: { $0.key < $1.key })
     }
     
     private func handleAdd() {

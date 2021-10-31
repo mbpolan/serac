@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  Serac
+
+  Created by Mike Polan on 10/30/21.
+  
+*/
+
+"HTTPStatusCode_100" = "Continue";
+"HTTPStatusCode_101" = "Switching Protocols";
+"HTTPStatusCode_200" = "OK";
+"HTTPStatusCode_201" = "Created";
+"HTTPStatusCode_202" = "Accepted";
+"HTTPStatusCode_203" = "Non-Authoritative Information ";
+"HTTPStatusCode_204" = "No Content";
+"HTTPStatusCode_205" = "Reset Content";
+"HTTPStatusCode_206" = "Partial Content";
+"HTTPStatusCode_300" = "Multiple Choices";
+"HTTPStatusCode_301" = "Moved Permanently";
+"HTTPStatusCode_302" = "Found";
+"HTTPStatusCode_303" = "See Other";
+"HTTPStatusCode_304" = "Not Modified";
+"HTTPStatusCode_305" = "Use Proxy";
+"HTTPStatusCode_307" = "Temporary Redirect";
+"HTTPStatusCode_400" = "Bad Request";
+"HTTPStatusCode_401" = "Unauthorized";
+"HTTPStatusCode_402" = "Payment Required";
+"HTTPStatusCode_403" = "Forbidden";
+"HTTPStatusCode_404" = "Not Found";
+"HTTPStatusCode_405" = "Method Not Allowed";
+"HTTPStatusCode_406" = "Not Acceptable";
+"HTTPStatusCode_407" = "Proxy Authentication Required ";
+"HTTPStatusCode_408" = "Request Timeout";
+"HTTPStatusCode_409" = "Conflict";
+"HTTPStatusCode_410" = "Gone";
+"HTTPStatusCode_411" = "Length Required";
+"HTTPStatusCode_412" = "Precondition Failed";
+"HTTPStatusCode_413" = "Payload Too Large";
+"HTTPStatusCode_414" = "URI Too Long";
+"HTTPStatusCode_415" = "Unsupported Media Type";
+"HTTPStatusCode_416" = "Range Not Satisfiable";
+"HTTPStatusCode_417" = "Expectation Failed";
+"HTTPStatusCode_426" = "Upgrade Required";
+"HTTPStatusCode_500" = "Internal Server Error";
+"HTTPStatusCode_501" = "Not Implemented";
+"HTTPStatusCode_502" = "Bad Gateway";
+"HTTPStatusCode_503" = "Service Unavailable";
+"HTTPStatusCode_504" = "Gateway Timeout";
+"HTTPStatusCode_505" = "HTTP Version Not Supported";

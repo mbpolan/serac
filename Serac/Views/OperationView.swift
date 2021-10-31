@@ -10,14 +10,15 @@ import SwiftUI
 // MARK: - View
 
 struct OperationView: View {
-    @StateObject var request: Request
+    @ObservedObject var request: Request
     let onSend: (_ request: Request) -> Void
     
     var body: some View {
         HStack {
             Picker(selection: $request.method, label: Text("")) {
                 ForEach(HTTPMethod.allCases, id: \.self) { verb in
-                    Text(verb.rawValue).tag(verb)
+                    Text(verb.rawValue)
+                        .tag(verb)
                 }
             }
             .frame(minWidth: 80)

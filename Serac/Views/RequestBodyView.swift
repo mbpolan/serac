@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct RequestBodyView: View {
-    @StateObject var request: Request
+    @ObservedObject var request: Request
     @State private var requestBodyType: RequestBodyType = .none
     @State private var requestBody: String = ""
     
@@ -32,11 +32,9 @@ struct RequestBodyView: View {
             .layoutPriority(1)
             .padding([.leading, .trailing], 5)
             
-            Group {
-                if requestBodyType == .json {
-                    SyntaxTextView(string: $requestBody, isEditable: true, adaptor: JSONSyntaxAdaptor())
-                } else if requestBodyType == .raw {
-                    SyntaxTextView(string: $requestBody, isEditable: true, adaptor: NoopSyntaxAdaptor())
+            VStack {
+                if requestBodyType != .none {
+                    SyntaxTextView(string: $requestBody, isEditable: true, adaptor: adaptor)
                 } else {
                     VStack {
                         Spacer()
@@ -47,6 +45,19 @@ struct RequestBodyView: View {
             }
             .layoutPriority(2)
         }
+    }
+    
+    private var adaptor: Binding<SyntaxAdaptor> {
+        .init(
+            get: {
+                switch requestBodyType {
+                case .json:
+                    return JSONSyntaxAdaptor()
+                default:
+                    return NoopSyntaxAdaptor()
+                }
+            },
+            set: { _ in })
     }
 }
 

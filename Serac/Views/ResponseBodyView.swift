@@ -10,27 +10,12 @@ import SwiftUI
 // MARK: - View
 
 struct ResponseBodyView: View {
-    @State private var adaptor: SyntaxAdaptor = NoopSyntaxAdaptor()
-    @State private var data: Data = Data()
-    @State private var hasBody: Bool = true
-    
-    init(response: Response) {
-        self._data = State(initialValue: response.data ?? Data())
-        
-        switch response.contentType {
-        case .json:
-            self._adaptor = State(initialValue: JSONSyntaxAdaptor())
-        case .unknown:
-            self._adaptor = State(initialValue: NoopSyntaxAdaptor())
-        default:
-            self._hasBody = State(initialValue: false)
-        }
-    }
+    @ObservedObject var response: Response
     
     var body: some View {
-        return Group {
-            if hasBody {
-                SyntaxTextView(data: $data,
+        VStack {
+            if response.contentType != .none {
+                SyntaxTextView(data: data,
                                isEditable: false,
                                adaptor: adaptor)
             } else {
@@ -38,6 +23,29 @@ struct ResponseBodyView: View {
                     .foregroundColor(.secondary)
             }
         }
+    }
+    
+    private var hasBody: Bool {
+        response.contentType != .none
+    }
+    
+    private var data: Binding<Data> {
+        .init(
+            get: { response.data ?? Data() },
+            set: { _ in })
+    }
+    
+    private var adaptor: Binding<SyntaxAdaptor> {
+        .init(
+            get: {
+                switch response.contentType {
+                case .json:
+                    return JSONSyntaxAdaptor()
+                default:
+                    return NoopSyntaxAdaptor()
+                }
+            },
+            set: { _ in })
     }
 }
 

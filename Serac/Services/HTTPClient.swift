@@ -10,7 +10,7 @@ import Foundation
 struct HTTPClient {
     static let shared = HTTPClient()
     
-    func send(_ request: Request, completionHandler: @escaping(_ result: Result<Response, Error>) -> Void) {
+    func send(_ request: Request, completionHandler: @escaping(_ result: Result<HTTPResponse, Error>) -> Void) {
         guard let url = URL(string: request.url) else {
             return
         }
@@ -27,12 +27,14 @@ struct HTTPClient {
             urlRequest.httpBody = body.data(using: .utf8)
         }
         
+        // mark the time the request was initiated
+        let startTime = Date()
+        
         URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             if let error = error {
                 completionHandler(.failure(error))
             } else if let response = response as? HTTPURLResponse {
                 let headerKeys = response.allHeaderFields.map { String(describing: $0.key).lowercased() }
-                
                 let headers = Dictionary(uniqueKeysWithValues: headerKeys.map {
                     ($0, response.value(forHTTPHeaderField: $0) ?? "")
                 })
@@ -40,12 +42,16 @@ struct HTTPClient {
                 // extract known headers
                 let contentType = response.value(forHTTPHeaderField: "Content-Type")
                 
-                completionHandler(.success(
-                    Response(statusCode: response.statusCode,
-                             contentLength: data?.count,
-                             contentType: ResponseBodyType.parse(from: contentType),
-                             headers: headers,
-                             data: data)))
+                let response = HTTPResponse(
+                    statusCode: response.statusCode,
+                    headers: headers,
+                    contentLength: data?.count,
+                    contentType: ResponseBodyType.parse(from: contentType),
+                    startTime: startTime,
+                    endTime: Date(),
+                    data: data)
+                
+                completionHandler(.success(response))
             }
         }.resume()
     }

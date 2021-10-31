@@ -10,12 +10,14 @@ import SwiftUI
 // MARK: - View
 
 struct ResponseView: View {
-    @StateObject var response: Response
+    @ObservedObject var response: Response
     @StateObject private var viewModel: ResponseViewModel = ResponseViewModel()
     
     var body: some View {
         VStack {
             if response.valid {
+                ResponseMetricsView(response: response)
+                
                 TabView(selection: $viewModel.tab) {
                     ResponseBodyView(response: response)
                         .tabItem { Text("Body") }
@@ -36,6 +38,67 @@ struct ResponseView: View {
     }
 }
 
+struct ResponseMetricsView: View {
+    @ObservedObject var response: Response
+    
+    var body: some View {
+        HStack {
+            Group {
+                Image(systemName: image)
+                Text(statusCode)
+                Text(NSLocalizedString("HTTPStatusCode_\(response.statusCode ?? 0)", comment: ""))
+            }
+            .foregroundColor(color)
+            
+            Spacer()
+            
+            Text("\(response.endTime.timeIntervalSince(response.startTime)) sec")
+        }
+    }
+    
+    private var statusCode: String {
+        guard let statusCode = response.statusCode else {
+            return ""
+        }
+        
+        return String(statusCode)
+    }
+    
+    private var color: Color {
+        switch response.statusCode ?? 0 {
+        case 100...199:
+            return .primary
+        case 200...299:
+            return .green
+        case 300...399:
+            return .yellow
+        case 400...499:
+            return .orange
+        case 500...599:
+            return .red
+        default:
+            return .primary
+        }
+    }
+    
+    private var image: String {
+        switch response.statusCode ?? 0 {
+        case 100...199:
+            return "circle.fill"
+        case 200...299:
+            return  "checkmark.circle.fill"
+        case 300...399:
+            return  "arrowleft.arrowright.circle.fill"
+        case 400...499:
+            return "exclamationmark.circle.fill"
+        case 500...599:
+            return "x.circle.fill"
+        default:
+            return "questionmark.circle.fill"
+        }
+    }
+}
+
 class ResponseViewModel: ObservableObject {
     @Published var tab: Tab = .body
     
@@ -49,7 +112,7 @@ class ResponseViewModel: ObservableObject {
 
 struct ResponseView_Preview: PreviewProvider {
     @State static var response: Response = Response()
-    
+
     static var previews: some View {
         ResponseView(response: response)
     }

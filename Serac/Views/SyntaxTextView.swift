@@ -10,20 +10,20 @@ import SwiftUI
 
 struct SyntaxTextView: NSViewRepresentable {
     @Binding var text: String
+    @Binding var adaptor: SyntaxAdaptor
     var isEditable: Bool = true
-    let adaptor: SyntaxAdaptor
     
     var onEditingChanged: () -> Void       = {}
     var onCommit        : () -> Void       = {}
     var onTextChange    : (String) -> Void = { _ in }
     
-    init(string: Binding<String>, isEditable: Bool, adaptor: SyntaxAdaptor) {
+    init(string: Binding<String>, isEditable: Bool, adaptor: Binding<SyntaxAdaptor>) {
         self._text = string
         self.isEditable = isEditable
-        self.adaptor = adaptor
+        self._adaptor = adaptor
     }
     
-    init(data: Binding<Data>, isEditable: Bool, adaptor: SyntaxAdaptor) {
+    init(data: Binding<Data>, isEditable: Bool, adaptor: Binding<SyntaxAdaptor>) {
         self._text = Binding<String>(
             get: { String(decoding: data.wrappedValue, as: UTF8.self) },
             set: { value in
@@ -35,7 +35,7 @@ struct SyntaxTextView: NSViewRepresentable {
             }
         )
         self.isEditable = isEditable
-        self.adaptor = adaptor
+        self._adaptor = adaptor
     }
     
     func makeCoordinator() -> Coordinator {
@@ -56,6 +56,7 @@ struct SyntaxTextView: NSViewRepresentable {
     func updateNSView(_ view: CustomTextView, context: Context) {
         view.text = text
         view.selectedRanges = context.coordinator.selectedRanges
+        view.adaptor = adaptor
     }
 }
 
@@ -67,7 +68,7 @@ struct SyntaxTextView_Previews: PreviewProvider {
             SyntaxTextView(
                 string: .constant("{ \"foo\": 123}"),
                 isEditable: true,
-                adaptor: JSONSyntaxAdaptor()
+                adaptor: .constant(JSONSyntaxAdaptor())
             )
         }
     }
@@ -118,11 +119,15 @@ extension SyntaxTextView {
 
 final class CustomTextView: NSView {
     private var isEditable: Bool
-    private var adaptor: SyntaxAdaptor
-    
     weak var delegate: NSTextViewDelegate?
     
     var text: String {
+        didSet {
+            textView.textStorage?.setAttributedString(adaptor.decorate(text))
+        }
+    }
+    
+    var adaptor: SyntaxAdaptor {
         didSet {
             textView.textStorage?.setAttributedString(adaptor.decorate(text))
         }

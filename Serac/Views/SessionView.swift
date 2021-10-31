@@ -10,7 +10,8 @@ import SwiftUI
 // MARK: - View
 
 struct SessionView: View {
-    @StateObject var session: Session
+    @EnvironmentObject private var appState: AppState
+    @ObservedObject var session: Session
     
     var body: some View {
         VStack {
@@ -37,12 +38,14 @@ struct SessionView: View {
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
-                    session.response.valid = true
-                    session.response.statusCode = response.statusCode
-                    session.response.contentLength = response.contentLength
-                    session.response.contentType = response.contentType
-                    session.response.headers = response.headers
-                    session.response.data = response.data
+                    session.response = Response(
+                        statusCode: response.statusCode,
+                        contentLength: response.contentLength,
+                        contentType: response.contentType,
+                        headers: response.headers,
+                        data: response.data,
+                        startTime: response.startTime,
+                        endTime: response.endTime)
                 }
             case .failure(let error):
                 print(error.localizedDescription)
