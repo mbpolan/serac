@@ -17,23 +17,23 @@ struct ContentView: View {
             SidebarView()
             
             SessionView(session: appState.activeSession)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Button(action: handleSidebar) {
-                    Image(systemName: "sidebar.leading")
+                .toolbar {
+                    ToolbarItem(placement: .navigation) {
+                        Button(action: handleSidebar) {
+                            Image(systemName: "sidebar.leading")
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .principal) {
+                        TextField("", text: $appState.activeSession.request.name)
+                    }
+                    
+                    ToolbarItem(placement: .automatic) {
+                        Button(action: handleAdd) {
+                            Image(systemName: "plus")
+                        }
+                    }
                 }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                TextField("", text: $appState.activeSession.request.name)
-            }
-            
-            ToolbarItem(placement: .automatic) {
-                Button(action: handleAdd) {
-                    Image(systemName: "plus")
-                }
-            }
         }
     }
     

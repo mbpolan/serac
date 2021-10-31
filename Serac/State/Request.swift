@@ -8,6 +8,8 @@
 import Foundation
 
 class Request: HTTPMessage {
+    var id: String = UUID().uuidString
+    
     @Published var name: String = "Untitled"
     @Published var method: HTTPMethod = .get
     @Published var url: String = ""
