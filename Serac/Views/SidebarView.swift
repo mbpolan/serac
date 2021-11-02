@@ -39,31 +39,45 @@ struct SidebarView: View {
     }
     
     private func handleRemove(_ item: CollectionItem) {
-        if let index = appState.collections.firstIndex(where: { $0.id == item.id }) {
-            appState.collections.remove(at: index)
-        } else if let parent = appState.collections.first(where: { isParentItem(of: item, from: $0 ) }),
-                  let index = parent.children?.firstIndex(where: { $0.id == item.id }) {
-            
-            parent.children?.remove(at: index)
-            parent.objectWillChange.send()
-            appState.objectWillChange.send()
-        } else {
-            print("WARN: could not find parent of item \(item.id)")
+        guard let (parent, index) = findParentItem(of: item) else {
+            print("WARN: cannot find parent of item \(item.id)")
+            return
         }
+        
+        print("Found parent: \(parent.id) of type \(parent.type) at index \(index)")
+        if parent.type == .root {
+            appState.collections.remove(at: index)
+        } else {
+            parent.children?.remove(at: index)
+        }
+        
+        appState.objectWillChange.send()
     }
     
-    private func isParentItem(of item: CollectionItem, from node: CollectionItem) -> Bool {
-        return node.children?.contains {
-            if $0.id == item.id {
-                return true
+    private func findParentItem(of item: CollectionItem) -> (CollectionItem, Int)? {
+        let root = CollectionItem()
+        root.children = appState.collections
+        
+        return findParentItem(of: item, from: root)
+    }
+    
+    private func findParentItem(of item: CollectionItem, from node: CollectionItem) -> (CollectionItem, Int)? {
+        guard let children = node.children else {
+            return nil
+        }
+        
+        for (index, child) in children.enumerated() {
+            if child.id == item.id {
+                return (node, index)
             }
             
-            if $0.type == .group {
-                return isParentItem(of: item, from: $0)
+            if child.type == .group,
+               let found = findParentItem(of: item, from: child) {
+               return found
             }
-            
-            return false
-        } ?? false
+        }
+        
+        return nil
     }
     
     private func addToCollections(_ item: CollectionItem, under parent: CollectionItem? = nil) {

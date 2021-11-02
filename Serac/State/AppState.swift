@@ -27,6 +27,10 @@ class CollectionItem: ObservableObject, Identifiable, Hashable {
     @Published var request: Request?
     @Published var children: [CollectionItem]?
     
+    init() {
+        self.type = .root
+    }
+    
     init(groupName: String) {
         self.type = .group
         self.groupName = groupName
@@ -48,6 +52,7 @@ class CollectionItem: ObservableObject, Identifiable, Hashable {
 
 extension CollectionItem {
     enum ItemType {
+        case root
         case group
         case request
     }
