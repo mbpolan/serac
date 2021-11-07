@@ -12,4 +12,12 @@ class Session: ObservableObject, Identifiable {
     
     @Published var request: Request = Request()
     @Published var response: Response = Response()
+    
+    init() {
+    }
+    
+    init(id: String, request: Request) {
+        self.id = id
+        self.request = request
+    }
 }

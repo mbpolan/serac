@@ -8,5 +8,5 @@
 import Foundation
 
 class HTTPMessage: ObservableObject {
-    @Published var headers: Dictionary<String, String> = [:]
+    @Published var headers: [KeyValuePair] = []
 }

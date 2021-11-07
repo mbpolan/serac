@@ -19,8 +19,8 @@ struct HTTPClient {
         urlRequest.httpMethod = request.method.rawValue
         
         // set header values
-        request.headers.forEach { (key, value) in
-            urlRequest.setValue(value, forHTTPHeaderField: key)
+        request.headers.forEach { header in
+            urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
         }
         
         if let body = request.body {
@@ -28,7 +28,7 @@ struct HTTPClient {
             
             // if a content-type header is not present, set one automatically depending on
             // the request body
-            if !request.headers.keys.contains(where: { $0.lowercased() == "content-type" }) {
+            if !request.headers.contains(where: { $0.key.lowercased() == "content-type" }) {
                 switch request.bodyContentType {
                 case .json:
                     urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
@@ -48,9 +48,9 @@ struct HTTPClient {
                 completionHandler(.failure(error))
             } else if let response = response as? HTTPURLResponse {
                 let headerKeys = response.allHeaderFields.map { String(describing: $0.key).lowercased() }
-                let headers = Dictionary(uniqueKeysWithValues: headerKeys.map {
-                    ($0, response.value(forHTTPHeaderField: $0) ?? "")
-                })
+                let headers = headerKeys.map {
+                    KeyValuePair($0, response.value(forHTTPHeaderField: $0) ?? "")
+                }
                 
                 // extract known headers
                 let contentType = response.value(forHTTPHeaderField: "Content-Type")

@@ -26,6 +26,25 @@ struct SidebarView: View {
                 Button("Add Request", action: { handleAddRequest() })
             }
         }
+        .onChange(of: selected) { item in
+            handleOpen(item)
+        }
+    }
+    
+    private func handleOpen(_ id: String?) {
+        guard let id = id,
+              let item = findItem(by: id),
+              item.type == .request else {
+                  print("WARN: could not find item \(id ?? "nil")")
+                  return
+              }
+        
+        if let existingSession = appState.sessions.first(where: { $0.id == id }) {
+            // TODO: save current session if any
+            appState.activeSession = existingSession
+        } else {
+            appState.activeSession = Session(id: id, request: item.request ?? Request())
+        }
     }
     
     private func handleAddGroup(under parent: CollectionItem? = nil) {
@@ -44,7 +63,6 @@ struct SidebarView: View {
             return
         }
         
-        print("Found parent: \(parent.id) of type \(parent.type) at index \(index)")
         if parent.type == .root {
             appState.collections.remove(at: index)
         } else {
@@ -54,10 +72,27 @@ struct SidebarView: View {
         appState.objectWillChange.send()
     }
     
-    private func findParentItem(of item: CollectionItem) -> (CollectionItem, Int)? {
-        let root = CollectionItem()
-        root.children = appState.collections
+    private func findItem(by id: String, from node: CollectionItem? = nil) -> CollectionItem? {
+        let parent = node ?? CollectionItem(children: appState.collections)
         
+        if parent.id == id {
+            return parent
+        }
+        
+        for child in parent.children ?? [] {
+            if child.id == id {
+                return child
+            } else if child.type == .group,
+                      let found = findItem(by: id, from: child) {
+                return found
+            }
+        }
+        
+        return nil
+    }
+    
+    private func findParentItem(of item: CollectionItem) -> (CollectionItem, Int)? {
+        let root = CollectionItem(children: appState.collections)
         return findParentItem(of: item, from: root)
     }
     
@@ -73,7 +108,7 @@ struct SidebarView: View {
             
             if child.type == .group,
                let found = findParentItem(of: item, from: child) {
-               return found
+                return found
             }
         }
         

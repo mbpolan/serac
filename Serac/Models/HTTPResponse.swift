@@ -9,7 +9,7 @@ import Foundation
 
 struct HTTPResponse {
     let statusCode: Int
-    let headers: Dictionary<String, String>
+    let headers: [KeyValuePair]
     let contentLength: Int?
     let contentType: ResponseBodyType
     let startTime: Date

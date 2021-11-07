@@ -12,7 +12,6 @@ import SwiftUI
 struct HeadersView: View {
     let editable: Bool
     @ObservedObject var message: HTTPMessage
-    @StateObject private var viewModel: HeadersViewModel = HeadersViewModel()
     
     var body: some View {
         ScrollView {
@@ -25,34 +24,30 @@ struct HeadersView: View {
                         Button(action: handleAdd) {
                             Image(systemName: "plus")
                         }
+                        .clipShape(Rectangle())
                         .buttonStyle(BorderlessButtonStyle())
                         .frame(width: 32, height: 32)
                     }
                 }
                 
-                ForEach(viewModel.headers.indices, id: \.self) { index in
+                ForEach(message.headers.indices, id: \.self) { index in
                     TextField("",
-                              text: $viewModel.headers[index].key)
+                              text: $message.headers[index].key)
                         .disabled(!editable)
                     TextField("",
-                              text: $viewModel.headers[index].value)
+                              text: $message.headers[index].value)
                         .disabled(!editable)
                     
                     if editable {
                         Button(action: { handleRemove(index) }) {
                             Image(systemName: "minus")
                         }
+                        .clipShape(Rectangle())
                         .buttonStyle(BorderlessButtonStyle())
                         .frame(width: 32, height: 32)
                     }
                 }
             }
-        }
-        .onReceive(message.$headers) { headers in
-            updateModel(from: headers)
-        }
-        .onAppear {
-            updateModel(from: message.headers)
         }
     }
     
@@ -69,26 +64,15 @@ struct HeadersView: View {
         return columns
     }
     
-    private func updateModel(from headers: Dictionary<String, String>) {
-        viewModel.headers = headers.map { (k, v) in
-            return KeyValuePair(k, v)
-        }
-        .sorted(by: { $0.key < $1.key })
-    }
-    
     private func handleAdd() {
-        viewModel.headers.append(KeyValuePair("", ""))
+        message.headers.append(KeyValuePair("", ""))
     }
     
     private func handleRemove(_ index: Int) {
-        viewModel.headers.remove(at: index)
+        DispatchQueue.main.async {
+            message.headers.remove(at: index)
+        }
     }
-}
-
-// MARK: - View Model
-
-class HeadersViewModel: ObservableObject {
-    @Published var headers: [KeyValuePair] = []
 }
 
 // MARK: - Preview
@@ -97,7 +81,7 @@ struct HeadersView_Preview: PreviewProvider {
     @State static var request: Request = Request()
     
     static var previews: some View {
-        request.headers = [:]
+        request.headers = []
         return HeadersView(editable: true, message: request)
     }
 }

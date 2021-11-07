@@ -20,6 +20,11 @@ struct RequestView: View {
                     .tabItem { Text("Body") }
                     .tag(RequestViewModel.Tab.body)
                 
+                HeadersView(editable: true,
+                            message: request)
+                    .tabItem { Text("Headers") }
+                    .tag(RequestViewModel.Tab.headers)
+                
                 QueryParameterView(request: request)
                     .tabItem { Text("Query") }
                     .tag(RequestViewModel.Tab.query)
@@ -35,6 +40,7 @@ class RequestViewModel: ObservableObject {
     
     enum Tab: Hashable {
         case body
+        case headers
         case query
     }
 }

@@ -26,7 +26,7 @@ class Response: HTTPMessage {
     init(statusCode: Int?,
          contentLength: Int?,
          contentType: ResponseBodyType,
-         headers: Dictionary<String, String>,
+         headers: [KeyValuePair],
          data: Data?,
          startTime: Date,
          endTime: Date) {

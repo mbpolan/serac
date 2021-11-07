@@ -27,8 +27,9 @@ class CollectionItem: ObservableObject, Identifiable, Hashable {
     @Published var request: Request?
     @Published var children: [CollectionItem]?
     
-    init() {
+    init(children: [CollectionItem]) {
         self.type = .root
+        self.children = children
     }
     
     init(groupName: String) {
