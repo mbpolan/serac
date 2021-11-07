@@ -33,7 +33,7 @@ struct JSONSyntaxAdaptor: SyntaxAdaptor {
         if prettyPrint,
            let data = text.data(using: .utf8),
            let object = try? JSONSerialization.jsonObject(with: data, options: []),
-           let json = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
+           let json = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .withoutEscapingSlashes]) {
             text = String(decoding: json, as: UTF8.self)
         }
         
