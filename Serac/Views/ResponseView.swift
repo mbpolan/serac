@@ -52,8 +52,9 @@ struct ResponseMetricsView: View {
             
             Spacer()
             
-            Text("\(response.endTime.timeIntervalSince(response.startTime)) sec")
+            Text(duration)
         }
+        .padding([.leading, .trailing], 5)
     }
     
     private var statusCode: String {
@@ -62,6 +63,11 @@ struct ResponseMetricsView: View {
         }
         
         return String(statusCode)
+    }
+    
+    private var duration: String {
+        let delta = response.endTime.timeIntervalSince(response.startTime) * 1000
+        return String(format: "%.2f ms", delta)
     }
     
     private var color: Color {

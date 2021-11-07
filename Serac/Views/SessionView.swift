@@ -25,8 +25,6 @@ struct SessionView: View {
                 ResponseView(response: session.response)
                     .padding(.leading, 2)
             }
-            
-            Spacer()
         }
         .onSendRequest {
             handleSend(session.request)
