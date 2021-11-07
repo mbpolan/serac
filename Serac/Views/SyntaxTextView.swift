@@ -129,6 +129,10 @@ final class CustomTextView: NSView {
     
     var adaptor: SyntaxAdaptor {
         didSet {
+            guard type(of: adaptor) != type(of: self.adaptor) else {
+                return
+            }
+            
             textView.textStorage?.setAttributedString(adaptor.decorate(text))
         }
     }

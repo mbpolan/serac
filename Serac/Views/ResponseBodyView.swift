@@ -40,7 +40,7 @@ struct ResponseBodyView: View {
             get: {
                 switch response.contentType {
                 case .json:
-                    return JSONSyntaxAdaptor()
+                    return JSONSyntaxAdaptor(prettyPrint: true)
                 default:
                     return NoopSyntaxAdaptor()
                 }

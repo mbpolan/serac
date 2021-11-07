@@ -28,7 +28,11 @@ struct ContentView: View {
                         TextField("", text: $appState.activeSession.request.name)
                     }
                     
-                    ToolbarItem(placement: .automatic) {
+                    ToolbarItem {
+                        Spacer()
+                    }
+                    
+                    ToolbarItem(placement: .primaryAction) {
                         Button(action: handleAdd) {
                             Image(systemName: "plus")
                         }

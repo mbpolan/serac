@@ -24,12 +24,14 @@ struct NoopSyntaxAdaptor: SyntaxAdaptor {
 }
 
 struct JSONSyntaxAdaptor: SyntaxAdaptor {
+    var prettyPrint: Bool = false
     
     func decorate(_ rawText: String) -> NSMutableAttributedString {
         var text = rawText
         
         // pretty print the json string
-        if let data = text.data(using: .utf8),
+        if prettyPrint,
+           let data = text.data(using: .utf8),
            let object = try? JSONSerialization.jsonObject(with: data, options: []),
            let json = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]) {
             text = String(decoding: json, as: UTF8.self)
