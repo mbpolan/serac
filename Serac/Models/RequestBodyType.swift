@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RequestBodyType: CaseIterable {
+enum RequestBodyType: CaseIterable, Codable {
     case `none`
     case raw
     case json

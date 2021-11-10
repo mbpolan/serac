@@ -50,11 +50,15 @@ struct SidebarView: View {
     private func handleAddGroup(under parent: CollectionItem? = nil) {
         let group = CollectionItem(groupName: "New Group")
         addToCollections(group, under: parent)
+        
+        PersistAppStateNotification().notify()
     }
     
     private func handleAddRequest(under parent: CollectionItem? = nil) {
         let request = CollectionItem(request: Request())
         addToCollections(request, under: parent)
+        
+        PersistAppStateNotification().notify()
     }
     
     private func handleRemove(_ item: CollectionItem) {
@@ -70,6 +74,7 @@ struct SidebarView: View {
         }
         
         appState.objectWillChange.send()
+        PersistAppStateNotification().notify()
     }
     
     private func findItem(by id: String, from node: CollectionItem? = nil) -> CollectionItem? {
@@ -127,6 +132,8 @@ struct SidebarView: View {
         }
         
         appState.objectWillChange.send()
+        
+        PersistAppStateNotification().notify()
     }
 }
 

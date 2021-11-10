@@ -9,10 +9,20 @@ import SwiftUI
 
 @main
 struct SeracApp: App {
+    private let appState: AppState
+    
+    init() {
+        self.appState = AppState()
+        self.appState.load()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(AppState())
+                .environmentObject(appState)
+                .onPersistAppState {
+                    appState.save()
+                }
         }
         .commands {
             AppCommands()

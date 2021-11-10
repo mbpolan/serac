@@ -13,6 +13,18 @@ protocol Notifiable {
     func notify()
 }
 
+struct PersistAppStateNotification: Notifiable {
+    static var name = Notification.Name("persistAppState")
+    
+    func notify() {
+        NotificationCenter.default.post(name: PersistAppStateNotification.name, object: nil)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: PersistAppStateNotification.name, object: nil)
+    }
+}
+
 struct SendRequestNotification: Notifiable {
     static var name = Notification.Name("sendRequest")
     
@@ -30,6 +42,10 @@ extension View {
         return onReceive(NotificationCenter.default.publisher(for: name)) { event in
             perform()
         }
+    }
+    
+    func onPersistAppState(perform: @escaping() -> Void) -> some View {
+        return onNotification(PersistAppStateNotification.name, perform: perform)
     }
     
     func onSendRequest(perform: @escaping() -> Void) -> some View {

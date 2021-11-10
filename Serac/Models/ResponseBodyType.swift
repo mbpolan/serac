@@ -5,7 +5,7 @@
 //  Created by Mike Polan on 10/26/21.
 //
 
-enum ResponseBodyType {
+enum ResponseBodyType: Codable {
     case none
     case unknown
     case json
