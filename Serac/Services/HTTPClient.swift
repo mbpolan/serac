@@ -23,6 +23,15 @@ struct HTTPClient {
             urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
         }
         
+        // apply authentication
+        switch request.authenticationType {
+        case .basic:
+            let value = Data("\(request.authentication.basic.username):\(request.authentication.basic.password)".utf8).base64EncodedString()
+            urlRequest.setValue("Basic \(value)", forHTTPHeaderField: "Authorization")
+        default:
+            break
+        }
+        
         if let body = request.body {
             urlRequest.httpBody = body.data(using: .utf8)
             

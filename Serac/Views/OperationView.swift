@@ -25,7 +25,7 @@ struct OperationView: View {
             .frame(minWidth: 80)
             .layoutPriority(2)
             
-            TextField("", text: $request.url)
+            TextField(text: $request.url)
                 .layoutPriority(3)
             
             Button(action: { onSend(request) }) {

@@ -25,7 +25,7 @@ struct ContentView: View {
                     }
                     
                     ToolbarItem(placement: .principal) {
-                        TextField("", text: $appState.activeSession.request.name)
+                        TextField(text: $appState.activeSession.request.name)
                     }
                     
                     ToolbarItem {

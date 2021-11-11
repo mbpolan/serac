@@ -33,14 +33,14 @@ struct RequestBodyView: View {
                 if request.bodyContentType != .none {
                     SyntaxTextView(string: $requestBody, isEditable: true, adaptor: adaptor)
                 } else {
-                    VStack {
-                        Spacer()
-                    Text("")
-                        Spacer()
-                    }
+                    EmptyView()
+                        .centered(.vertical)
                 }
             }
             .layoutPriority(2)
+        }
+        .onChange(of: request.bodyContentType) { _ in
+            PersistAppStateNotification().notify()
         }
         .onChange(of: requestBody) { body in
             request.body = body

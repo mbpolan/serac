@@ -62,6 +62,12 @@ struct JSONSyntaxAdaptor: SyntaxAdaptor {
             attributedString.addAttribute(.foregroundColor, value: NSColor.systemGreen, range: match.range)
         }
         
+        let booleanRegex = try! NSRegularExpression(pattern: #":[\s\n\t]*(false|true)"#)
+        booleanRegex.matches(in: text,
+                            range: NSRange(text.startIndex..., in: text)).forEach { match in
+            attributedString.addAttribute(.foregroundColor, value: NSColor.systemTeal, range: match.range)
+        }
+        
         return attributedString
     }
     

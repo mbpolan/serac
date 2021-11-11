@@ -15,6 +15,8 @@ class Request: HTTPMessage, Codable {
     @Published var url: String = ""
     @Published var body: String?
     @Published var bodyContentType: RequestBodyType = .none
+    @Published var authentication: RequestAuthentication = RequestAuthentication()
+    @Published var authenticationType: RequestAuthenticationType = .none
     
     enum CodingKeys: CodingKey {
         case name
@@ -22,6 +24,8 @@ class Request: HTTPMessage, Codable {
         case url
         case body
         case bodyContentType
+        case authentication
+        case authenticationType
     }
     
     override init() {
@@ -36,6 +40,8 @@ class Request: HTTPMessage, Codable {
         url = try container.decode(String.self, forKey: .url)
         body = try container.decodeIfPresent(String.self, forKey: .body)
         bodyContentType = try container.decode(RequestBodyType.self, forKey: .bodyContentType)
+        authentication = try container.decode(RequestAuthentication.self, forKey: .authentication)
+        authenticationType = try container.decode(RequestAuthenticationType.self, forKey: .authenticationType)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -46,5 +52,7 @@ class Request: HTTPMessage, Codable {
         try container.encode(url, forKey: .url)
         try container.encode(body, forKey: .body)
         try container.encode(bodyContentType, forKey: .bodyContentType)
+        try container.encode(authentication, forKey: .authentication)
+        try container.encode(authenticationType, forKey: .authenticationType)
     }
 }

@@ -20,6 +20,10 @@ struct RequestView: View {
                     .tabItem { Text("Body") }
                     .tag(RequestViewModel.Tab.body)
                 
+                AuthenticationView(request: request)
+                    .tabItem { Text("Auth") }
+                    .tag(RequestViewModel.Tab.authentication)
+                
                 HeadersView(editable: true,
                             message: request)
                     .tabItem { Text("Headers") }
@@ -40,6 +44,7 @@ class RequestViewModel: ObservableObject {
     
     enum Tab: Hashable {
         case body
+        case authentication
         case headers
         case query
     }
