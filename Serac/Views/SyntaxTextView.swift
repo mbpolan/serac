@@ -17,10 +17,15 @@ struct SyntaxTextView: NSViewRepresentable {
     var onCommit        : () -> Void       = {}
     var onTextChange    : (String) -> Void = { _ in }
     
-    init(string: Binding<String>, isEditable: Bool, adaptor: Binding<SyntaxAdaptor>) {
+    init(string: Binding<String>,
+         isEditable: Bool,
+         adaptor: Binding<SyntaxAdaptor>,
+         onCommit: @escaping() -> Void = {}) {
+        
         self._text = string
         self.isEditable = isEditable
         self._adaptor = adaptor
+        self.onCommit = onCommit
     }
     
     init(data: Binding<Data>, isEditable: Bool, adaptor: Binding<SyntaxAdaptor>) {

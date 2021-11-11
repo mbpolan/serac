@@ -32,8 +32,8 @@ struct HTTPClient {
             break
         }
         
-        if let body = request.body {
-            urlRequest.httpBody = body.data(using: .utf8)
+        if request.bodyContentType != .none {
+            urlRequest.httpBody = request.body.data(using: .utf8)
             
             // if a content-type header is not present, set one automatically depending on
             // the request body

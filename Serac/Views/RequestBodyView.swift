@@ -11,7 +11,6 @@ import SwiftUI
 
 struct RequestBodyView: View {
     @ObservedObject var request: Request
-    @State private var requestBody: String = ""
     
     var body: some View {
         VStack {
@@ -31,7 +30,10 @@ struct RequestBodyView: View {
             
             VStack {
                 if request.bodyContentType != .none {
-                    SyntaxTextView(string: $requestBody, isEditable: true, adaptor: adaptor)
+                    SyntaxTextView(string: $request.body,
+                                   isEditable: true,
+                                   adaptor: adaptor,
+                                   onCommit: handlePersistState)
                 } else {
                     EmptyView()
                         .centered(.vertical)
@@ -40,10 +42,7 @@ struct RequestBodyView: View {
             .layoutPriority(2)
         }
         .onChange(of: request.bodyContentType) { _ in
-            PersistAppStateNotification().notify()
-        }
-        .onChange(of: requestBody) { body in
-            request.body = body
+            handlePersistState()
         }
     }
     
@@ -58,6 +57,10 @@ struct RequestBodyView: View {
                 }
             },
             set: { _ in })
+    }
+    
+    private func handlePersistState() {
+        PersistAppStateNotification().notify()
     }
     
     private func requestBodyTypeText(_ type: RequestBodyType) -> String {

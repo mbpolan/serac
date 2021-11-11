@@ -13,7 +13,7 @@ class Request: HTTPMessage, Codable {
     @Published var name: String = "Untitled"
     @Published var method: HTTPMethod = .get
     @Published var url: String = ""
-    @Published var body: String?
+    @Published var body: String = ""
     @Published var bodyContentType: RequestBodyType = .none
     @Published var authentication: RequestAuthentication = RequestAuthentication()
     @Published var authenticationType: RequestAuthenticationType = .none
@@ -38,7 +38,7 @@ class Request: HTTPMessage, Codable {
         name = try container.decode(String.self, forKey: .name)
         method = try container.decode(HTTPMethod.self, forKey: .method)
         url = try container.decode(String.self, forKey: .url)
-        body = try container.decodeIfPresent(String.self, forKey: .body)
+        body = try container.decode(String.self, forKey: .body)
         bodyContentType = try container.decode(RequestBodyType.self, forKey: .bodyContentType)
         authentication = try container.decode(RequestAuthentication.self, forKey: .authentication)
         authenticationType = try container.decode(RequestAuthenticationType.self, forKey: .authenticationType)
