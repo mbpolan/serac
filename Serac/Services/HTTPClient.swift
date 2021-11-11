@@ -10,9 +10,9 @@ import Foundation
 struct HTTPClient {
     static let shared = HTTPClient()
     
-    func send(_ request: Request, completionHandler: @escaping(_ result: Result<HTTPResponse, Error>) -> Void) {
+    func send(_ request: Request, completionHandler: @escaping(_ result: Result<HTTPResponse, Error>) -> Void) -> URLSessionDataTask? {
         guard let url = URL(string: request.url) else {
-            return
+            return nil
         }
         
         var urlRequest = URLRequest(url: url)
@@ -43,7 +43,7 @@ struct HTTPClient {
         // mark the time the request was initiated
         let startTime = Date()
         
-        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             if let error = error {
                 completionHandler(.failure(error))
             } else if let response = response as? HTTPURLResponse {
@@ -66,6 +66,9 @@ struct HTTPClient {
                 
                 completionHandler(.success(response))
             }
-        }.resume()
+        }
+        
+        task.resume()
+        return task
     }
 }

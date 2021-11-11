@@ -25,6 +25,8 @@ struct SidebarView: View {
                 Button("Add Group", action: { handleAddGroup() })
                 Button("Add Request", action: { handleAddRequest() })
             }
+            
+            Divider()
         }
         .onChange(of: selected) { item in
             handleOpen(item)

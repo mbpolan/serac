@@ -11,6 +11,7 @@ import SwiftUI
 
 struct OperationView: View {
     @ObservedObject var request: Request
+    @Binding var disableSend: Bool
     let onSend: (_ request: Request) -> Void
     
     var body: some View {
@@ -30,6 +31,7 @@ struct OperationView: View {
             Button(action: { onSend(request) }) {
                 Image(systemName: "paperplane.fill")
             }
+            .disabled(disableSend)
             .padding(.trailing, 5)
             .layoutPriority(1)
         }
@@ -42,9 +44,11 @@ struct OperationView: View {
 
 struct OperationView_Preview: PreviewProvider {
     @State static var request: Request = Request()
+    @State static var loading: Bool = false
     
     static var previews: some View {
         OperationView(request: request,
+                      disableSend: $loading,
                       onSend: { _ in })
     }
 }

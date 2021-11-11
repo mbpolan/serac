@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		274FF30E273C942700D8AC2A /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF30D273C942600D8AC2A /* ActivityView.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		274FF30D273C942600D8AC2A /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				27BB5A50272636A500F26AC7 /* SidebarView.swift */,
 				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
 				2788FFC82728E83D00F77060 /* ResponseBodyView.swift */,
+				274FF30D273C942600D8AC2A /* ActivityView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				278394D927389BE600533A28 /* CollectionItem.swift in Sources */,
 				27BB5A4327262A6A00F26AC7 /* ResponseView.swift in Sources */,
 				2788FFD3272E285700F77060 /* HTTPResponse.swift in Sources */,
+				274FF30E273C942700D8AC2A /* ActivityView.swift in Sources */,
 				27945AB62709179D00F97E78 /* ContentView.swift in Sources */,
 				27BB5A4627262DFF00F26AC7 /* HTTPClient.swift in Sources */,
 				27BB5A532726381600F26AC7 /* Session.swift in Sources */,

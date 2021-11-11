@@ -12,18 +12,24 @@ import SwiftUI
 struct SessionView: View {
     @EnvironmentObject private var appState: AppState
     @ObservedObject var session: Session
+    @StateObject private var viewModel: SessionViewModel = SessionViewModel()
     
     var body: some View {
         VStack {
             OperationView(request: session.request,
+                          disableSend: $viewModel.loading,
                           onSend: handleSend)
             
             HSplitView {
                 RequestView(request: session.request)
                     .padding(.trailing, 2)
                 
-                ResponseView(response: session.response)
-                    .padding(.leading, 2)
+                ActivityView(loading: $viewModel.loading,
+                             onAbort: handleStopRequest) {
+                    
+                    ResponseView(response: session.response)
+                        .padding(.leading, 2)
+                }
             }
         }
         .onSendRequest {
@@ -31,11 +37,21 @@ struct SessionView: View {
         }
     }
     
+    private func handleStopRequest() {
+        if let task = viewModel.task {
+            task.cancel()
+        }
+        
+        viewModel.loading = false
+    }
+    
     private func handleSend(_ request: Request) {
-        HTTPClient.shared.send(request) { result in
-            switch result {
-            case .success(let response):
-                DispatchQueue.main.async {
+        viewModel.loading = true
+        
+        viewModel.task = HTTPClient.shared.send(request) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
                     session.response = Response(
                         statusCode: response.statusCode,
                         contentLength: response.contentLength,
@@ -44,12 +60,21 @@ struct SessionView: View {
                         data: response.data,
                         startTime: response.startTime,
                         endTime: response.endTime)
+                case .failure(let error):
+                    print(error.localizedDescription)
                 }
-            case .failure(let error):
-                print(error.localizedDescription)
+                
+                viewModel.loading = false
             }
         }
     }
+}
+
+// MARK: - View Model
+
+class SessionViewModel: ObservableObject {
+    @Published var loading: Bool = false
+    @Published var task: URLSessionDataTask?
 }
 
 // MARK: - Preview
