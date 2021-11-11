@@ -19,7 +19,8 @@ struct SidebarView: View {
                 ListItemView(item: item,
                              onAddGroup: { handleAddGroup(under: $0) },
                              onAddRequest: { handleAddRequest(under: $0) },
-                             onRemove: { handleRemove($0) })
+                             onRemove: { handleRemove($0) },
+                             onDuplicate: { handleDuplicate($0) })
             }
             .contextMenu {
                 Button("Add Group", action: { handleAddGroup() })
@@ -73,6 +74,32 @@ struct SidebarView: View {
             appState.collections.remove(at: index)
         } else {
             parent.children?.remove(at: index)
+        }
+        
+        appState.objectWillChange.send()
+        PersistAppStateNotification().notify()
+    }
+    
+    private func handleDuplicate(_ item: CollectionItem) {
+        guard let request = item.request,
+              let (parent, index) = findParentItem(of: item),
+              parent.type != .request else {
+                  return
+              }
+        
+        let dupe = Request()
+        dupe.name = "Copy of \(request.name)"
+        dupe.method = request.method
+        dupe.url = request.url
+        dupe.bodyContentType = request.bodyContentType
+        dupe.body = request.body
+        
+        let newItem = CollectionItem(request: dupe)
+        
+        if parent.type == .root {
+            appState.collections.insert(newItem, at: index + 1)
+        } else {
+            parent.children?.insert(newItem, at: index + 1)
         }
         
         appState.objectWillChange.send()
@@ -146,6 +173,7 @@ fileprivate struct ListItemView: View {
     let onAddGroup: (_ parent: CollectionItem?) -> Void
     let onAddRequest: (_ parent: CollectionItem?) -> Void
     let onRemove: (_ item: CollectionItem) -> Void
+    let onDuplicate: (_ item: CollectionItem) -> Void
     
     @State private var editing: Bool = false
     @State private var editedText: String = ""
@@ -164,7 +192,9 @@ fileprivate struct ListItemView: View {
             .contextMenu {
                 Button("Add Group", action: { onAddGroup(item) })
                 Button("Add Request", action: { onAddRequest(item) })
+                Divider()
                 Button("Rename", action: { handleStartRename() })
+                Divider()
                 Button("Remove", action: { onRemove(item) })
             }
         } else if let request = item.request {
@@ -182,6 +212,8 @@ fileprivate struct ListItemView: View {
             }
             .contextMenu {
                 Button("Rename", action: { handleStartRename() })
+                Button("Duplicate", action: { onDuplicate(item) })
+                Divider()
                 Button("Remove", action: { onRemove(item) })
             }
         }
