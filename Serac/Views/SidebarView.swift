@@ -182,6 +182,7 @@ fileprivate struct ListItemView: View {
         if item.type == .group {
             HStack {
                 Image(systemName: "folder")
+                    .padding(.leading, 5)
                 
                 if editing {
                     TextField("", text: $editedText, onCommit: handleFinishRename)
@@ -233,6 +234,8 @@ fileprivate struct ListItemView: View {
         
         editing = false
         editedText = ""
+        
+        PersistAppStateNotification().notify()
     }
 }
 
