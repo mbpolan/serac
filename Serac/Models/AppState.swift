@@ -9,7 +9,7 @@ import Foundation
 
 class AppState: ObservableObject, Codable {
     @Published var sessions: [Session]
-    @Published var activeSession: Session
+    @Published var activeSession: Session?
     @Published var collections: [CollectionItem]
     
     enum CodingKeys: CodingKey {
@@ -19,9 +19,8 @@ class AppState: ObservableObject, Codable {
     }
     
     init() {
-        let session = Session()
-        sessions = [session]
-        activeSession = session
+        sessions = []
+        activeSession = nil
         collections = []
     }
     
@@ -29,7 +28,7 @@ class AppState: ObservableObject, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         sessions = try container.decode([Session].self, forKey: .sessions)
-        activeSession = try container.decode(Session.self, forKey: .activeSession)
+        activeSession = try container.decodeIfPresent(Session.self, forKey: .activeSession)
         collections = try container.decode([CollectionItem].self, forKey: .collections)
     }
     
@@ -50,7 +49,7 @@ extension AppState {
                                                  appropriateFor: nil,
                                                  create: false)
         
-        return url.appendingPathComponent("serac.bin")
+        return url.appendingPathComponent("serac.json")
     }
     
     func load() {

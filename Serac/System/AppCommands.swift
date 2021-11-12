@@ -15,6 +15,17 @@ struct AppCommands: Commands {
                 SendRequestNotification().notify()
             }
             .keyboardShortcut(.return, modifiers: .command)
+            
+            Button("Close") {
+                CloseRequestNotification().notify()
+            }
+            .keyboardShortcut("w", modifiers: .command)
+            
+            Divider()
+            
+            Button("Clear Sessions") {
+                ClearSessionsNotification().notify()
+            }
         }
     }
 }

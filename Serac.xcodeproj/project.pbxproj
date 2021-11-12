@@ -18,6 +18,7 @@
 		274FF321273DC41500D8AC2A /* OAuth2AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */; };
 		274FF323273DEC8C00D8AC2A /* ResponseErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */; };
 		274FF325273DEE0100D8AC2A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF324273DEE0100D8AC2A /* String.swift */; };
+		274FF329273EEDD700D8AC2A /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF328273EEDD700D8AC2A /* SplashView.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -63,6 +64,7 @@
 		274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2AuthenticationView.swift; sourceTree = "<group>"; };
 		274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseErrorView.swift; sourceTree = "<group>"; };
 		274FF324273DEE0100D8AC2A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		274FF328273EEDD700D8AC2A /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				27BB5A4227262A6A00F26AC7 /* ResponseView.swift */,
 				27BB5A4E272634CF00F26AC7 /* SessionView.swift */,
 				27BB5A50272636A500F26AC7 /* SidebarView.swift */,
+				274FF328273EEDD700D8AC2A /* SplashView.swift */,
 				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
 			);
 			path = Views;
@@ -311,6 +314,7 @@
 				2788FFCB272A34C200F77060 /* Events.swift in Sources */,
 				2788FFCD272A354C00F77060 /* AppCommands.swift in Sources */,
 				27945AC82709448500F97E78 /* HTTPMethod.swift in Sources */,
+				274FF329273EEDD700D8AC2A /* SplashView.swift in Sources */,
 				27C015022727999B00F693A0 /* HeadersView.swift in Sources */,
 				274FF310273CB34C00D8AC2A /* AuthenticationView.swift in Sources */,
 				27BB5A4B27262EC500F26AC7 /* AppState.swift in Sources */,

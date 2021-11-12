@@ -35,18 +35,26 @@ struct SidebarView: View {
     }
     
     private func handleOpen(_ id: String?) {
+        // find the item that was clicked based on its id
         guard let id = id,
               let item = findItem(by: id),
               item.type == .request else {
-                  print("WARN: could not find item \(id ?? "nil")")
                   return
               }
         
-        if let existingSession = appState.sessions.first(where: { $0.id == id }) {
-            // TODO: save current session if any
+        // handle three possible cases when opening a request:
+        // 1. this request is already open as the active session: do nothing
+        // 2. this request was open previously in a session: restore that previous session
+        // 3. this request was not yet open: create a new session
+        if appState.activeSession?.request.id == id {
+            return
+        } else if let existingSession = appState.sessions.first(where: { $0.id == id }) {
             appState.activeSession = existingSession
         } else {
-            appState.activeSession = Session(id: id, request: item.request ?? Request())
+            let session = Session(id: id, request: item.request ?? Request())
+            
+            appState.sessions.append(session)
+            appState.activeSession = session
         }
     }
     

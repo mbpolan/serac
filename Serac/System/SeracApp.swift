@@ -24,6 +24,7 @@ struct SeracApp: App {
                     appState.save()
                 }
         }
+        .windowToolbarStyle(UnifiedCompactWindowToolbarStyle())
         .commands {
             AppCommands()
             SidebarCommands()

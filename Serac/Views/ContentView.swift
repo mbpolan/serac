@@ -16,29 +16,58 @@ struct ContentView: View {
         NavigationView {
             SidebarView()
             
-            SessionView(session: appState.activeSession)
-                .toolbar {
-                    ToolbarItem(placement: .navigation) {
-                        Button(action: handleSidebar) {
-                            Image(systemName: "sidebar.leading")
+            Group {
+                if let activeSession = appState.activeSession {
+                    SessionView(session: activeSession)
+                } else {
+                    SplashView()
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    Button(action: handleSidebar) {
+                        Image(systemName: "sidebar.leading")
+                    }
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    TextField(text: sessionName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                
+                ToolbarItem {
+                    Spacer()
+                }
+                
+                ToolbarItem(placement: .primaryAction) {
+                    HStack {
+                        if appState.activeSession != nil {
+                            Button(action: handleClose) {
+                                Image(systemName: "xmark")
+                            }
+                            .help("Close the current request")
                         }
-                    }
-                    
-                    ToolbarItem(placement: .principal) {
-                        TextField(text: $appState.activeSession.request.name)
-                    }
-                    
-                    ToolbarItem {
-                        Spacer()
-                    }
-                    
-                    ToolbarItem(placement: .primaryAction) {
+                        
                         Button(action: handleAdd) {
                             Image(systemName: "plus")
                         }
+                        .help("Create a new request")
                     }
                 }
+            }
         }
+        .onCloseRequest(perform: handleClose)
+        .onClearSessions(perform: handleClearSessions)
+    }
+    
+    private var sessionName: Binding<String> {
+        return Binding<String>(
+            get: { appState.activeSession?.request.name ?? "" },
+            set: {
+                appState.activeSession?.request.name = $0
+                appState.objectWillChange.send()
+            }
+        )
     }
     
     private func handleSidebar() {
@@ -48,9 +77,26 @@ struct ContentView: View {
     }
     
     private func handleAdd() {
-        let session = Session()
-        appState.sessions.append(session)
+        let request = Request()
+        let session = Session(id: request.id, request: request)
+        
+        appState.collections.insert(CollectionItem(request: request), at: 0)
         appState.activeSession = session
+        
+        PersistAppStateNotification().notify()
+    }
+    
+    private func handleClose() {
+        appState.activeSession = nil
+        
+        PersistAppStateNotification().notify()
+    }
+    
+    private func handleClearSessions() {
+        appState.sessions = []
+        appState.activeSession = nil
+        
+        PersistAppStateNotification().notify()
     }
 }
 
