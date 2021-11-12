@@ -5,6 +5,7 @@
 //  Created by Mike Polan on 10/24/21.
 //
 
+import Combine
 import SwiftUI
 
 // MARK: - View
@@ -24,11 +25,17 @@ struct SessionView: View {
                 RequestView(request: session.request)
                     .padding(.trailing, 2)
                 
-                ActivityView(loading: $viewModel.loading,
-                             onAbort: handleStopRequest) {
-                    
-                    ResponseView(response: session.response)
-                        .padding(.leading, 2)
+                Group {
+                    if let error = viewModel.error {
+                        ResponseErrorView(message: error)
+                    } else {
+                        ActivityView(loading: $viewModel.loading,
+                                     onAbort: handleStopRequest) {
+                            
+                            ResponseView(response: session.response)
+                                .padding(.leading, 2)
+                        }
+                    }
                 }
             }
         }
@@ -47,26 +54,32 @@ struct SessionView: View {
     
     private func handleSend(_ request: Request) {
         viewModel.loading = true
+        viewModel.error = nil
         
-        viewModel.task = HTTPClient.shared.send(request) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    session.response = Response(
-                        statusCode: response.statusCode,
-                        contentLength: response.contentLength,
-                        contentType: response.contentType,
-                        headers: response.headers,
-                        data: response.data,
-                        startTime: response.startTime,
-                        endTime: response.endTime)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-                
+        viewModel.task = HTTPClient.shared.send(request)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
                 viewModel.loading = false
-            }
-        }
+                
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    switch error {
+                    case NetworkError.authRequestFailed(let response):
+                        session.response = Response(from: response)
+                    case NetworkError.authRequestError(let message),
+                        NetworkError.requestFailed(let message):
+                        viewModel.error = message
+                    case NetworkError.invalidURL(let url):
+                        viewModel.error = "Invalid URL: \(url)"
+                    default:
+                        viewModel.error = "An unknown error has occurred"
+                    }
+                }
+            }, receiveValue: { response in
+                session.response = Response(from: response)
+            })
     }
 }
 
@@ -74,7 +87,8 @@ struct SessionView: View {
 
 class SessionViewModel: ObservableObject {
     @Published var loading: Bool = false
-    @Published var task: URLSessionDataTask?
+    @Published var error: String?
+    @Published var task: AnyCancellable?
 }
 
 // MARK: - Preview

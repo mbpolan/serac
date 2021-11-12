@@ -15,6 +15,9 @@
 		274FF318273CC6D600D8AC2A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 274FF317273CC6D600D8AC2A /* README.md */; };
 		274FF31D273D8A6A00D8AC2A /* SecureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF31C273D8A6A00D8AC2A /* SecureField.swift */; };
 		274FF31F273D8AA400D8AC2A /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF31E273D8AA400D8AC2A /* TextField.swift */; };
+		274FF321273DC41500D8AC2A /* OAuth2AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */; };
+		274FF323273DEC8C00D8AC2A /* ResponseErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */; };
+		274FF325273DEE0100D8AC2A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF324273DEE0100D8AC2A /* String.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -57,6 +60,9 @@
 		274FF317273CC6D600D8AC2A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		274FF31C273D8A6A00D8AC2A /* SecureField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureField.swift; sourceTree = "<group>"; };
 		274FF31E273D8AA400D8AC2A /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2AuthenticationView.swift; sourceTree = "<group>"; };
+		274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseErrorView.swift; sourceTree = "<group>"; };
+		274FF324273DEE0100D8AC2A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -108,6 +114,7 @@
 			children = (
 				274FF31C273D8A6A00D8AC2A /* SecureField.swift */,
 				274FF31E273D8AA400D8AC2A /* TextField.swift */,
+				274FF324273DEE0100D8AC2A /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -162,11 +169,13 @@
 				274FF313273CB64F00D8AC2A /* BasicAuthenticationView.swift */,
 				27945AB52709179D00F97E78 /* ContentView.swift */,
 				27C015012727999B00F693A0 /* HeadersView.swift */,
+				274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */,
 				27C014FF2726577E00F693A0 /* OperationView.swift */,
 				27C014FB2726430400F693A0 /* QueryParameterView.swift */,
 				27BB5A40272628BD00F26AC7 /* RequestBodyView.swift */,
 				27BB5A3A2724EEA600F26AC7 /* RequestView.swift */,
 				2788FFC82728E83D00F77060 /* ResponseBodyView.swift */,
+				274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */,
 				27BB5A4227262A6A00F26AC7 /* ResponseView.swift */,
 				27BB5A4E272634CF00F26AC7 /* SessionView.swift */,
 				27BB5A50272636A500F26AC7 /* SidebarView.swift */,
@@ -178,9 +187,9 @@
 		27945AC52709447400F97E78 /* System */ = {
 			isa = PBXGroup;
 			children = (
-				27945AB32709179D00F97E78 /* SeracApp.swift */,
-				2788FFCA272A34C200F77060 /* Events.swift */,
 				2788FFCC272A354C00F77060 /* AppCommands.swift */,
+				2788FFCA272A34C200F77060 /* Events.swift */,
+				27945AB32709179D00F97E78 /* SeracApp.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -294,6 +303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				274FF325273DEE0100D8AC2A /* String.swift in Sources */,
 				27BB5A3F272609DC00F26AC7 /* SyntaxAdaptor.swift in Sources */,
 				27BB5A41272628BD00F26AC7 /* RequestBodyView.swift in Sources */,
 				27C015002726577E00F693A0 /* OperationView.swift in Sources */,
@@ -321,12 +331,14 @@
 				27BB5A532726381600F26AC7 /* Session.swift in Sources */,
 				27C014FC2726430400F693A0 /* QueryParameterView.swift in Sources */,
 				2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */,
+				274FF321273DC41500D8AC2A /* OAuth2AuthenticationView.swift in Sources */,
 				27BB5A3D2725D42400F26AC7 /* RequestBodyType.swift in Sources */,
 				2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */,
 				27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */,
 				274FF31D273D8A6A00D8AC2A /* SecureField.swift in Sources */,
 				27945AC32709281700F97E78 /* SyntaxTextView.swift in Sources */,
 				27945AB42709179D00F97E78 /* SeracApp.swift in Sources */,
+				274FF323273DEC8C00D8AC2A /* ResponseErrorView.swift in Sources */,
 				27C014FE272645B300F693A0 /* KeyValuePair.swift in Sources */,
 				274FF312273CB49100D8AC2A /* AuthorizationType.swift in Sources */,
 			);

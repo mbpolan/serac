@@ -10,4 +10,5 @@ import Foundation
 enum RequestAuthenticationType: Codable, CaseIterable {
     case none
     case basic
+    case oauth2
 }

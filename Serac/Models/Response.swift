@@ -53,6 +53,18 @@ class Response: HTTPMessage, Codable {
         self.headers = headers
     }
     
+    init(from httpResponse: HTTPResponse) {
+        self.valid = true
+        self.statusCode = httpResponse.statusCode
+        self.contentLength = httpResponse.contentLength
+        self.contentType = httpResponse.contentType
+        self.data = httpResponse.data
+        self.startTime = httpResponse.startTime
+        self.endTime = httpResponse.endTime
+        super.init()
+        self.headers = httpResponse.headers
+    }
+    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         

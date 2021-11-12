@@ -31,6 +31,8 @@ struct AuthenticationView: View {
                 EmptyView()
             } else if request.authenticationType == .basic {
                 BasicAuthenticationView(request: request)
+            } else if request.authenticationType == .oauth2 {
+                OAuth2AuthenticationView(request: request)
             }
             
             Spacer()
@@ -46,6 +48,8 @@ struct AuthenticationView: View {
             return "None"
         case .basic:
             return "Basic"
+        case .oauth2:
+            return "OAuth2"
         }
     }
 }

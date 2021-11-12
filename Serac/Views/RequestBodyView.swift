@@ -15,6 +15,16 @@ struct RequestBodyView: View {
     var body: some View {
         VStack {
             HStack {
+                // if the current request body content type supports pretty printing, show
+                // a button to allow doing so on demand
+                if canFormat {
+                    Button(action: handleFormat) {
+                        Image(systemName: "paintbrush")
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .help("Reformat the request body")
+                }
+                
                 Spacer()
                 
                 Picker(selection: $request.bodyContentType, label: Text("")) {
@@ -46,6 +56,10 @@ struct RequestBodyView: View {
         }
     }
     
+    private var canFormat: Bool {
+        return request.bodyContentType == .json
+    }
+    
     private var adaptor: Binding<SyntaxAdaptor> {
         .init(
             get: {
@@ -57,6 +71,11 @@ struct RequestBodyView: View {
                 }
             },
             set: { _ in })
+    }
+    
+    private func handleFormat() {
+        request.body = JSONSyntaxAdaptor(prettyPrint: true)
+            .decorate(request.body).string
     }
     
     private func handlePersistState() {
@@ -84,5 +103,6 @@ struct RequestBodyView_Preview: PreviewProvider {
     
     static var previews: some View {
         RequestBodyView(request: request)
+            .previewDisplayName("None")
     }
 }
