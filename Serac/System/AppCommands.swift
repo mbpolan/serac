@@ -10,6 +10,14 @@ import SwiftUI
 struct AppCommands: Commands {
     
     var body: some Commands {
+        CommandGroup(before: .newItem) {
+            Menu("Import...") {
+                Button("Postman Collection v2.1") {
+                    ImportDataNotification(type: .postmanCollectionV21).notify()
+                }
+            }
+        }
+        
         CommandMenu("Request") {
             Button("Send") {
                 SendRequestNotification().notify()

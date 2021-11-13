@@ -8,6 +8,8 @@
 import Combine
 import SwiftUI
 
+// based on: https://gist.github.com/unnamedd/6e8c3fbc806b8deb60fa65d6b9affab0
+
 struct SyntaxTextView: NSViewRepresentable {
     @Binding var text: String
     @Binding var adaptor: SyntaxAdaptor
@@ -184,18 +186,18 @@ final class CustomTextView: NSView {
                                         textContainer: textContainer,
                                         adaptor: adaptor)
         
-        textView.autoresizingMask        = .width
-        textView.backgroundColor         = NSColor.textBackgroundColor
-        textView.delegate                = self.delegate
-        textView.drawsBackground         = true
-        textView.isEditable              = self.isEditable
+        textView.autoresizingMask = .width
+        textView.backgroundColor = NSColor.textBackgroundColor
+        textView.delegate = self.delegate
+        textView.drawsBackground = true
+        textView.isEditable = self.isEditable
         textView.isHorizontallyResizable = false
-        textView.isVerticallyResizable   = true
-        textView.maxSize                 = NSSize(width: CGFloat.greatestFiniteMagnitude,
-                                                  height: CGFloat.greatestFiniteMagnitude)
-        textView.minSize                 = NSSize(width: 0,
-                                                  height: contentSize.height)
-        textView.allowsUndo              = true
+        textView.isVerticallyResizable = true
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude,
+                                  height: CGFloat.greatestFiniteMagnitude)
+        textView.minSize = NSSize(width: 0,
+                                  height: contentSize.height)
+        textView.allowsUndo = true
         
         return textView
     }()

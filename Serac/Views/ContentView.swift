@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var appState: AppState
+    @StateObject private var viewModel: ContentViewModel = ContentViewModel()
     
     var body: some View {
         NavigationView {
@@ -55,9 +56,15 @@ struct ContentView: View {
                     }
                 }
             }
+            .alert(isPresented: $viewModel.alertShown) {
+                Alert(title: Text("Something went wrong!"),
+                      message: Text(viewModel.error?.errorDescription ?? "An unknown error has occurred"),
+                      dismissButton: .default(Text("OK")))
+            }
         }
         .onCloseRequest(perform: handleClose)
         .onClearSessions(perform: handleClearSessions)
+        .onImportData(perform: handleImportData)
     }
     
     private var sessionName: Binding<String> {
@@ -98,6 +105,41 @@ struct ContentView: View {
         
         PersistAppStateNotification().notify()
     }
+    
+    private func handleImportData(_ type: ImportDataNotification.SourceDataType) {
+        switch type {
+        case .postmanCollectionV21:
+            handleImportPostmanCollectionV21()
+        }
+    }
+    
+    private func handleImportPostmanCollectionV21() {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.allowedContentTypes = [.json]
+        panel.message = "Choose the Postman Collection v2.1 to import"
+        
+        if panel.runModal() == .OK,
+           let url = panel.url {
+            let result = PostmanV21DataManager.shared.load(contentsOf: url)
+            
+            switch result {
+            case .success(let data):
+                appState.collections.append(contentsOf: data)
+            case .failure(let error):
+                viewModel.alertShown = true
+                viewModel.error = AppError.dataImportError(error: error)
+            }
+        }
+    }
+}
+
+// MARK: - View Model
+
+class ContentViewModel: ObservableObject {
+    @Published var alertShown: Bool = false
+    @Published var error: AppError?
 }
 
 // MARK: - Preview

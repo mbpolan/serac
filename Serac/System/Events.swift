@@ -25,6 +25,24 @@ struct PersistAppStateNotification: Notifiable {
     }
 }
 
+struct ImportDataNotification: Notifiable {
+    static var name = Notification.Name("importDataNotification")
+    
+    let type: SourceDataType
+    
+    enum SourceDataType {
+        case postmanCollectionV21
+    }
+    
+    func notify() {
+        NotificationCenter.default.post(name: ImportDataNotification.name, object: type)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: ImportDataNotification.name, object: nil)
+    }
+}
+
 struct SendRequestNotification: Notifiable {
     static var name = Notification.Name("sendRequest")
     
@@ -82,5 +100,13 @@ extension View {
     
     func onClearSessions(perform: @escaping() -> Void) -> some View {
         return onNotification(ClearSessionsNotification.name, perform: perform)
+    }
+    
+    func onImportData(perform: @escaping(_ type: ImportDataNotification.SourceDataType) -> Void) -> some View {
+        return onReceive(NotificationCenter.default.publisher(for: ImportDataNotification.name)) { event in
+            if let object = event.object as? ImportDataNotification.SourceDataType {
+                perform(object)
+            }
+        }
     }
 }

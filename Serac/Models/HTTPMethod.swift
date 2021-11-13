@@ -11,4 +11,6 @@ enum HTTPMethod: String, CaseIterable, Codable {
     case post = "POST"
     case delete = "DELETE"
     case patch = "PATCH"
+    case head = "HEAD"
+    case options = "OPTIONS"
 }

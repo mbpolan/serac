@@ -19,6 +19,9 @@
 		274FF323273DEC8C00D8AC2A /* ResponseErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */; };
 		274FF325273DEE0100D8AC2A /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF324273DEE0100D8AC2A /* String.swift */; };
 		274FF329273EEDD700D8AC2A /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF328273EEDD700D8AC2A /* SplashView.swift */; };
+		274FF32B273F062C00D8AC2A /* PostmanV21DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF32A273F062C00D8AC2A /* PostmanV21DataManager.swift */; };
+		274FF32D273F064C00D8AC2A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF32C273F064C00D8AC2A /* DataManager.swift */; };
+		274FF32F274037BA00D8AC2A /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF32E274037BA00D8AC2A /* AppError.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -65,6 +68,9 @@
 		274FF322273DEC8C00D8AC2A /* ResponseErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseErrorView.swift; sourceTree = "<group>"; };
 		274FF324273DEE0100D8AC2A /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		274FF328273EEDD700D8AC2A /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		274FF32A273F062C00D8AC2A /* PostmanV21DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostmanV21DataManager.swift; sourceTree = "<group>"; };
+		274FF32C273F064C00D8AC2A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		274FF32E274037BA00D8AC2A /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -200,6 +206,7 @@
 		27945AC62709447900F97E78 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				274FF32E274037BA00D8AC2A /* AppError.swift */,
 				27BB5A4A27262EC500F26AC7 /* AppState.swift */,
 				274FF311273CB49100D8AC2A /* AuthorizationType.swift */,
 				278394D827389BE600533A28 /* CollectionItem.swift */,
@@ -220,7 +227,9 @@
 		27BB5A4427262DAA00F26AC7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				274FF32C273F064C00D8AC2A /* DataManager.swift */,
 				27BB5A4527262DFF00F26AC7 /* HTTPClient.swift */,
+				274FF32A273F062C00D8AC2A /* PostmanV21DataManager.swift */,
 				27BB5A3E272609DC00F26AC7 /* SyntaxAdaptor.swift */,
 			);
 			path = Services;
@@ -306,6 +315,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				274FF32B273F062C00D8AC2A /* PostmanV21DataManager.swift in Sources */,
 				274FF325273DEE0100D8AC2A /* String.swift in Sources */,
 				27BB5A3F272609DC00F26AC7 /* SyntaxAdaptor.swift in Sources */,
 				27BB5A41272628BD00F26AC7 /* RequestBodyView.swift in Sources */,
@@ -325,6 +335,7 @@
 				274FF31F273D8AA400D8AC2A /* TextField.swift in Sources */,
 				27C0150427279B6B00F693A0 /* HTTPMessage.swift in Sources */,
 				278394D927389BE600533A28 /* CollectionItem.swift in Sources */,
+				274FF32F274037BA00D8AC2A /* AppError.swift in Sources */,
 				27BB5A4327262A6A00F26AC7 /* ResponseView.swift in Sources */,
 				2788FFD3272E285700F77060 /* HTTPResponse.swift in Sources */,
 				274FF30E273C942700D8AC2A /* ActivityView.swift in Sources */,
@@ -342,6 +353,7 @@
 				274FF31D273D8A6A00D8AC2A /* SecureField.swift in Sources */,
 				27945AC32709281700F97E78 /* SyntaxTextView.swift in Sources */,
 				27945AB42709179D00F97E78 /* SeracApp.swift in Sources */,
+				274FF32D273F064C00D8AC2A /* DataManager.swift in Sources */,
 				274FF323273DEC8C00D8AC2A /* ResponseErrorView.swift in Sources */,
 				27C014FE272645B300F693A0 /* KeyValuePair.swift in Sources */,
 				274FF312273CB49100D8AC2A /* AuthorizationType.swift in Sources */,

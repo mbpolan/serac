@@ -9,7 +9,7 @@ import Foundation
 
 enum RequestBodyType: CaseIterable, Codable {
     case `none`
-    case raw
+    case text
     case json
     case formURLEncoded
 }

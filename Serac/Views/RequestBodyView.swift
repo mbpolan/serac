@@ -86,8 +86,8 @@ struct RequestBodyView: View {
         switch type {
         case .none:
             return "None"
-        case .raw:
-            return "Raw"
+        case .text:
+            return "Text"
         case .json:
             return "JSON"
         case .formURLEncoded:
