@@ -15,7 +15,10 @@ protocol SyntaxAdaptor {
 struct NoopSyntaxAdaptor: SyntaxAdaptor {
     
     func decorate(_ text: String) -> NSMutableAttributedString {
-        return NSMutableAttributedString(string: text)
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttribute(.foregroundColor, value: NSColor.textColor, range: NSRange(text.startIndex..., in: text))
+        
+        return attributedString
     }
     
     func update(string: String) -> String {

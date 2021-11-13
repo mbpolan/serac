@@ -78,6 +78,8 @@ struct HTTPClient {
             // the request body
             if !request.headers.contains(where: { $0.key.lowercased() == "content-type" }) {
                 switch request.bodyContentType {
+                case .text:
+                    urlRequest.setValue("text/plain", forHTTPHeaderField: "content-type")
                 case .json:
                     urlRequest.setValue("application/json", forHTTPHeaderField: "content-type")
                 case .formURLEncoded:
