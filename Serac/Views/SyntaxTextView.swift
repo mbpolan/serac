@@ -61,7 +61,14 @@ struct SyntaxTextView: NSViewRepresentable {
     }
     
     func updateNSView(_ view: CustomTextView, context: Context) {
-        view.text = text
+        // for uneditable views, only update the text on the view if it has changed. this
+        // method can get called for a variety of reasons, and to avoid unnecessary updates
+        // to the text view, we can check if the contents of the text have changed. rendering
+        // large text (unchanging) content is expensive, so we need to avoid it as much as possible.
+        if isEditable || text != view.text {
+            view.text = text
+        }
+        
         view.selectedRanges = context.coordinator.selectedRanges
         view.adaptor = adaptor
     }
@@ -130,7 +137,7 @@ final class CustomTextView: NSView {
     
     var text: String {
         didSet {
-            textView.textStorage?.setAttributedString(adaptor.decorate(text))
+            updateTextStorage(text)
         }
     }
     
@@ -193,6 +200,8 @@ final class CustomTextView: NSView {
         textView.isEditable = self.isEditable
         textView.isHorizontallyResizable = false
         textView.isVerticallyResizable = true
+        textView.isContinuousSpellCheckingEnabled = false
+        textView.isAutomaticTextCompletionEnabled = false
         textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude,
                                   height: CGFloat.greatestFiniteMagnitude)
         textView.minSize = NSSize(width: 0,
@@ -208,6 +217,12 @@ final class CustomTextView: NSView {
         self.adaptor = adaptor
         
         super.init(frame: .zero)
+        
+        // for uneditable text views, force an initial update of the underlying
+        // text storage
+        if !isEditable {
+            updateTextStorage(text)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -236,6 +251,10 @@ final class CustomTextView: NSView {
     
     func setupTextView() {
         scrollView.documentView = textView
+    }
+    
+    private func updateTextStorage(_ text: String) {
+        textView.textStorage?.setAttributedString(adaptor.decorate(text))
     }
 }
 
