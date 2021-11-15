@@ -27,7 +27,6 @@ struct URLTextFieldView: NSViewRepresentable {
     }
     
     func updateNSView(_ field: NSTextField, context: Context) {
-        print("Update")
         field.attributedStringValue = attributedString
     }
     
