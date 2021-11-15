@@ -10,9 +10,11 @@ import Foundation
 class RequestAuthentication: ObservableObject, Codable {
     @Published var basic: BasicRequestAuthentication = BasicRequestAuthentication()
     @Published var oauth2: OAuth2RequestAuthentication = OAuth2RequestAuthentication()
+    @Published var bearer: BearerTokenAuthentication = BearerTokenAuthentication()
     
     enum CodingKeys: CodingKey {
         case basic
+        case bearer
         case oauth2
     }
     
@@ -23,6 +25,7 @@ class RequestAuthentication: ObservableObject, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         self.basic = try container.decode(BasicRequestAuthentication.self, forKey: .basic)
+        self.bearer = try container.decode(BearerTokenAuthentication.self, forKey: .bearer)
         self.oauth2 = try container.decode(OAuth2RequestAuthentication.self, forKey: .oauth2)
     }
     
@@ -30,7 +33,31 @@ class RequestAuthentication: ObservableObject, Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(basic, forKey: .basic)
+        try container.encode(bearer, forKey: .bearer)
         try container.encode(oauth2, forKey: .oauth2)
+    }
+}
+
+class BearerTokenAuthentication: ObservableObject, Codable {
+    @Published var token: String = ""
+    
+    enum CodingKeys: CodingKey {
+        case token
+    }
+    
+    init() {
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.token = try container.decode(String.self, forKey: .token)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(token, forKey: .token)
     }
 }
 

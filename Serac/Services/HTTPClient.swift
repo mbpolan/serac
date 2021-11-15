@@ -115,6 +115,12 @@ struct HTTPClient {
             urlRequestMutable.setValue("Basic \(value)", forHTTPHeaderField: "Authorization")
             
             return sendRequest(request, authURLRequest: urlRequestMutable)
+        
+        case .bearerToken:
+            var urlRequestMutable = urlRequest
+            urlRequestMutable.setValue("Bearer \(request.authentication.bearer.token)", forHTTPHeaderField: "Authorization")
+            
+            return sendRequest(request, authURLRequest: urlRequestMutable)
             
         case .oauth2:
             let startTime = Date()

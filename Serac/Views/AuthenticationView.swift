@@ -23,9 +23,9 @@ struct AuthenticationView: View {
                             .tag(type)
                     }
                 }
-                .frame(width: 100)
+                .frame(width: 150)
             }
-            .padding([.leading, .trailing], 5)
+            .padding([.leading, .trailing, .bottom], 5)
             
             if request.authenticationType == .none {
                 EmptyView()
@@ -33,6 +33,8 @@ struct AuthenticationView: View {
                 BasicAuthenticationView(request: request)
             } else if request.authenticationType == .oauth2 {
                 OAuth2AuthenticationView(request: request)
+            } else if request.authenticationType == .bearerToken {
+                BearerTokenAuthenticationView(request: request)
             }
             
             Spacer()
@@ -48,6 +50,8 @@ struct AuthenticationView: View {
             return "None"
         case .basic:
             return "Basic"
+        case .bearerToken:
+            return "Bearer Token"
         case .oauth2:
             return "OAuth2"
         }
