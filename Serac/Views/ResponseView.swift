@@ -23,8 +23,8 @@ struct ResponseView: View {
                         .tabItem { Text("Body") }
                         .tag(ResponseViewModel.Tab.body)
                     
-                    HeadersView(editable: false,
-                                message: response)
+                    HeadersView(message: response,
+                                editable: false)
                         .tabItem { Text("Headers") }
                         .tag(ResponseViewModel.Tab.headers)
                 }

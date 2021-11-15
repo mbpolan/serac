@@ -10,8 +10,8 @@ import SwiftUI
 // MARK: - View
 
 struct HeadersView: View {
-    let editable: Bool
     @ObservedObject var message: HTTPMessage
+    let editable: Bool
     
     var body: some View {
         ScrollView {
@@ -30,6 +30,6 @@ struct HeadersView_Preview: PreviewProvider {
     
     static var previews: some View {
         request.headers = []
-        return HeadersView(editable: true, message: request)
+        return HeadersView(message: request, editable: true)
     }
 }

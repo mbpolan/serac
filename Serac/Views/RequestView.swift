@@ -24,8 +24,8 @@ struct RequestView: View {
                     .tabItem { Text("Auth") }
                     .tag(RequestViewModel.Tab.authentication)
                 
-                HeadersView(editable: true,
-                            message: request)
+                HeadersView(message: request,
+                            editable: true)
                     .tabItem { Text("Headers") }
                     .tag(RequestViewModel.Tab.headers)
                 

@@ -13,6 +13,8 @@ struct KeyValueTableView: View {
     @Binding var data: [KeyValuePair]
     let labels: [String]
     let editable: Bool
+    var persistAppState: Bool = true
+    var onChange: () -> Void = {}
     
     var body: some View {
         LazyVGrid(columns: columns) {
@@ -31,9 +33,14 @@ struct KeyValueTableView: View {
             }
             
             ForEach(data.indices, id: \.self) { index in
-                TextField(text: $data[index].key)
+                TextField("",
+                          text: $data[index].key,
+                          onCommit: handleCommit)
                     .disabled(!editable)
-                TextField(text: $data[index].value)
+                
+                TextField("",
+                          text: $data[index].value,
+                          onCommit: handleCommit)
                     .disabled(!editable)
                 
                 if editable {
@@ -63,14 +70,23 @@ struct KeyValueTableView: View {
     private func handleAdd() {
         data.append(KeyValuePair("", ""))
         
-        PersistAppStateNotification().notify()
+        if persistAppState {
+            PersistAppStateNotification().notify()
+        }
     }
     
     private func handleRemove(_ index: Int) {
         DispatchQueue.main.async {
             data.remove(at: index)
-            PersistAppStateNotification().notify()
+            
+            if persistAppState {
+                PersistAppStateNotification().notify()
+            }
         }
+    }
+    
+    private func handleCommit() {
+        onChange()
     }
 }
 

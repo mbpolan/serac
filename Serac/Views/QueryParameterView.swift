@@ -15,42 +15,21 @@ struct QueryParameterView: View {
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [
-                .init(.flexible()),
-                .init(.flexible()),
-                .init(.fixed(40))]) {
-                    
-                    Section {
-                        Text("Parameter")
-                        Text("Value")
-                        Button(action: handleAdd) {
-                            Image(systemName: "plus")
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .frame(width: 32, height: 32)
-                    }
-                    
-                    ForEach(viewModel.parameters.indices, id: \.self) { index in
-                        TextField("",
-                                  text: $viewModel.parameters[index].key,
-                                  onCommit: handleUpdateUrl)
-                        TextField("",
-                                  text: $viewModel.parameters[index].value,
-                                  onCommit: handleUpdateUrl)
-                        
-                        Button(action: { handleRemove(index) }) {
-                            Image(systemName: "minus")
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .frame(width: 32, height: 32)
-                    }
-                }
+            KeyValueTableView(data: $viewModel.parameters,
+                              labels: ["Parameter", "Value"],
+                              editable: true,
+                              persistAppState: false,
+                              onChange: handleUpdateUrl)
+                .padding([.leading, .trailing], 10)
         }
         .onReceive(request.$url) { url in
             updateModel(from: url)
         }
         .onAppear {
             updateModel(from: request.url)
+        }
+        .onChange(of: viewModel.parameters) { params in
+            handleUpdateUrl()
         }
     }
     
@@ -80,15 +59,8 @@ struct QueryParameterView: View {
         
         if let url = components.string {
             request.url = url
+            PersistAppStateNotification().notify()
         }
-    }
-    
-    private func handleAdd() {
-        viewModel.parameters.append(KeyValuePair("", ""))
-    }
-    
-    private func handleRemove(_ index: Int) {
-        viewModel.parameters.remove(at: index)
     }
 }
 
