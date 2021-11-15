@@ -16,7 +16,11 @@ struct NoopSyntaxAdaptor: SyntaxAdaptor {
     
     func decorate(_ text: String) -> NSMutableAttributedString {
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.foregroundColor, value: NSColor.textColor, range: NSRange(text.startIndex..., in: text))
+        let fullRange = NSRange(text.startIndex..., in: text)
+        
+        // set default foreground color and font
+        attributedString.addAttribute(.font, value: NSFont.userFixedPitchFont(ofSize: 14), range: fullRange)
+        attributedString.addAttribute(.foregroundColor, value: NSColor.textColor, range: fullRange)
         
         return attributedString
     }
