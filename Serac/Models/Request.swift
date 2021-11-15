@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Request: HTTPMessage, Codable {
+class Request: HTTPMessage {
     var id: String = UUID().uuidString
     
     @Published var name: String = "Untitled"
@@ -29,10 +29,12 @@ class Request: HTTPMessage, Codable {
     }
     
     override init() {
+        super.init()
     }
     
     required init(from decoder: Decoder) throws {
-        super.init()
+        try super.init(from: decoder)
+        
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         name = try container.decode(String.self, forKey: .name)
@@ -44,7 +46,9 @@ class Request: HTTPMessage, Codable {
         authenticationType = try container.decode(RequestAuthenticationType.self, forKey: .authenticationType)
     }
     
-    func encode(to encoder: Encoder) throws {
+    override func encode(to encoder: Encoder) throws {
+        try super.encode(to: encoder)
+        
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(name, forKey: .name)

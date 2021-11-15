@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Response: HTTPMessage, Codable {
+class Response: HTTPMessage {
     @Published var valid: Bool
     @Published var statusCode: Int?
     @Published var contentLength: Int?
@@ -32,6 +32,8 @@ class Response: HTTPMessage, Codable {
         self.startTime = Date()
         self.endTime = Date()
         self.contentType = .unknown
+        
+        super.init()
     }
     
     init(statusCode: Int?,
@@ -80,7 +82,7 @@ class Response: HTTPMessage, Codable {
         headers = try container.decode([KeyValuePair].self, forKey: .headers)
     }
     
-    func encode(to encoder: Encoder) throws {
+    override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(valid, forKey: .valid)
