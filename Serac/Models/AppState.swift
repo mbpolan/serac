@@ -58,9 +58,11 @@ extension AppState {
                 guard let self = self else { return }
                 let data = try JSONDecoder().decode(AppState.self, from: Data(contentsOf: self.getSaveFile()))
                 
-                self.sessions = data.sessions
-                self.activeSession = data.activeSession
-                self.collections = data.collections
+                DispatchQueue.main.async {
+                    self.sessions = data.sessions
+                    self.activeSession = data.activeSession
+                    self.collections = data.collections
+                }
             } catch {
                 print("Failed to load data: \(error)")
             }
