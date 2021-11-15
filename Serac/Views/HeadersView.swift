@@ -17,7 +17,7 @@ struct HeadersView: View {
         ScrollView {
             KeyValueTableView(data: $message.headers,
                               labels: ["Header", "Value"],
-                              editable: true)
+                              editable: editable)
                 .padding([.leading, .trailing], 10)
         }
     }
