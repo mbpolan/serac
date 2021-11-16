@@ -19,6 +19,13 @@ struct AppCommands: Commands {
         }
         
         CommandMenu("Request") {
+            Button("Edit URL") {
+                FocusURLNotification().notify()
+            }
+            .keyboardShortcut("l", modifiers: .command)
+            
+            Divider()
+            
             Button("Send") {
                 SendRequestNotification().notify()
             }

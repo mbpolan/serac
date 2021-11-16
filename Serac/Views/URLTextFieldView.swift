@@ -11,6 +11,7 @@ import SwiftUI
 
 struct URLTextFieldView: NSViewRepresentable {
     @Binding var text: String
+    var introspect: (_ nsTextField: NSTextField) -> Void = { _ in }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -22,6 +23,8 @@ struct URLTextFieldView: NSViewRepresentable {
         field.bezelStyle = .roundedBezel
         field.allowsEditingTextAttributes = true
         field.delegate = context.coordinator
+        
+        introspect(field)
         
         return field
     }

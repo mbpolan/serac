@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct OperationView: View {
+    @StateObject private var viewModel: OperationViewModel = OperationViewModel()
     @ObservedObject var request: Request
     @Binding var disableSend: Bool
     let onSend: (_ request: Request) -> Void
@@ -25,8 +26,10 @@ struct OperationView: View {
             .frame(minWidth: 80)
             .layoutPriority(2)
             
-            URLTextFieldView(text: $request.url)
-                .layoutPriority(3)
+            URLTextFieldView(text: $request.url) { textField in
+                viewModel.urlTextField = textField
+            }
+            .layoutPriority(3)
             
             Button(action: { onSend(request) }) {
                 Image(systemName: "paperplane.fill")
@@ -37,7 +40,20 @@ struct OperationView: View {
         }
         .padding([.top, .trailing], 5)
         .padding([.bottom], 5)
+        .onFocusURLField {
+            handleFocusURLField()
+        }
     }
+    
+    private func handleFocusURLField() {
+        viewModel.urlTextField?.becomeFirstResponder()
+    }
+}
+
+// MARK: - View Model
+
+class OperationViewModel: ObservableObject {
+    @Published var urlTextField: NSTextField?
 }
 
 // MARK: - Preview
