@@ -29,5 +29,9 @@ struct SeracApp: App {
             AppCommands()
             SidebarCommands()
         }
+        
+        Settings {
+            SettingsView()
+        }
     }
 }
