@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct ContentView: View {
+    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel: ContentViewModel = ContentViewModel()
     
@@ -42,6 +43,22 @@ struct ContentView: View {
                 
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
+                        // show a picker for choosing the current variable set
+                        Picker(selection: $appState.variableSet, label: Text("Variable Set")) {
+                            Text("No Variables")
+                                .tag(nil as String?)
+                            
+                            if variableSets.count > 0 {
+                                Divider()
+                            }
+                            
+                            ForEach(variableSets, id: \.id) { vs in
+                                Text(vs.name)
+                                    .tag(vs.id as String?)
+                            }
+                        }
+                        
+                        // show a close button to destroy the current session
                         if appState.activeSession != nil {
                             Button(action: handleClose) {
                                 Image(systemName: "xmark")
@@ -49,6 +66,7 @@ struct ContentView: View {
                             .help("Close the current request")
                         }
                         
+                        // show a button to quickly add a new session
                         Button(action: handleAdd) {
                             Image(systemName: "plus")
                         }

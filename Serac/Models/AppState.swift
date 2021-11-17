@@ -8,6 +8,7 @@
 import Foundation
 
 class AppState: ObservableObject, Codable {
+    @Published var variableSet: String?
     @Published var sessions: [Session]
     @Published var activeSession: Session?
     @Published var collections: [CollectionItem]

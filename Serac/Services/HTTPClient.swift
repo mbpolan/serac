@@ -32,8 +32,11 @@ enum NetworkError: Error {
 struct HTTPClient {
     static let shared = HTTPClient()
     
-    func send(_ request: Request) -> AnyPublisher<HTTPResponse, Error> {
-        guard let url = URL(string: request.url) else {
+    func send(_ request: Request, variables: VariableSet?) -> AnyPublisher<HTTPResponse, Error> {
+        // substitute variables in the url
+        let requestURL = variables?.apply(to: request.url) ?? request.url
+        
+        guard let url = URL(string: requestURL) else {
             return Fail(error: NetworkError.invalidURL(url: request.url))
                 .eraseToAnyPublisher()
         }

@@ -26,7 +26,7 @@ struct OperationView: View {
             .frame(minWidth: 80)
             .layoutPriority(2)
             
-            URLTextFieldView(text: $request.url) { textField in
+            URLTextField(text: $request.url) { textField in
                 viewModel.urlTextField = textField
             }
             .layoutPriority(3)

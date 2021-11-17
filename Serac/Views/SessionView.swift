@@ -11,9 +11,10 @@ import SwiftUI
 // MARK: - View
 
 struct SessionView: View {
+    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @EnvironmentObject private var appState: AppState
-    @ObservedObject var session: Session
     @StateObject private var viewModel: SessionViewModel = SessionViewModel()
+    @ObservedObject var session: Session
     
     var body: some View {
         VStack {
@@ -56,7 +57,10 @@ struct SessionView: View {
         viewModel.loading = true
         viewModel.error = nil
         
-        viewModel.task = HTTPClient.shared.send(request)
+        // take the current variable set, if one is selected
+        let variables = variableSets.first { $0.id == appState.variableSet ?? "" }
+        
+        viewModel.task = HTTPClient.shared.send(request, variables: variables)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 viewModel.loading = false

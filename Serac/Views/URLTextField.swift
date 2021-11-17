@@ -1,5 +1,5 @@
 //
-//  URLTextFieldView.swift
+//  URLTextField.swift
 //  Serac
 //
 //  Created by Mike Polan on 11/15/21.
@@ -9,7 +9,10 @@ import SwiftUI
 
 // MARK: - View
 
-struct URLTextFieldView: NSViewRepresentable {
+struct URLTextField: NSViewRepresentable {
+    @AppStorage("variableSets") var variableSets: [VariableSet] = []
+    @EnvironmentObject var appState: AppState
+    
     @Binding var text: String
     var introspect: (_ nsTextField: NSTextField) -> Void = { _ in }
     
@@ -34,7 +37,7 @@ struct URLTextFieldView: NSViewRepresentable {
     }
     
     var attributedString: NSMutableAttributedString {
-        let str = NSMutableAttributedString(string: text)
+        var str = NSMutableAttributedString(string: text)
         let fullRange = NSRange(text.startIndex..., in: text)
         
         // set default font
@@ -46,6 +49,15 @@ struct URLTextFieldView: NSViewRepresentable {
         str.addAttribute(.foregroundColor,
                          value: NSColor.textColor,
                          range: fullRange)
+        
+        str = decorateURL(str)
+        str = decorateVariables(str)
+        
+        return str
+    }
+    
+    private func decorateURL(_ str: NSMutableAttributedString) -> NSMutableAttributedString {
+        let fullRange = NSRange(text.startIndex..., in: text)
         
         // parse the url and extract components
         let regex = try! NSRegularExpression(pattern: #"^(?<protocol>[^:]+://)(?<host>[^:/]+)(?<port>:[0-9]+)?(?<path>[^?]*)(?<query>\?.*)?.*$"#,
@@ -74,16 +86,54 @@ struct URLTextFieldView: NSViewRepresentable {
         
         return str
     }
+    
+    private func decorateVariables(_ str: NSMutableAttributedString) -> NSMutableAttributedString {
+        let fullRange = NSRange(text.startIndex..., in: text)
+        
+        // look for embedded variables
+        guard let match = try! NSRegularExpression(pattern: #"(\$\{.*\})"#)
+                .matches(in: text, range: fullRange).first else {
+                    return str
+                }
+        
+        for index in 0..<match.numberOfRanges {
+            let matched = match.range(at: index)
+            
+            // extract the variable name between the curly braces
+            let variableName = NSMakeRange(matched.lowerBound + 2, matched.length - 3)
+            
+            if let substring = Range(variableName, in: text) {
+                let variable = String(text[substring])
+                
+                // is this variable defined in our current variable set?
+                if let selectedVariableSet = appState.variableSet,
+                   let variableSet = variableSets.first(where: { $0.id == selectedVariableSet }),
+                   let value = variableSet.variables.first(where: { $0.key == variable }) {
+                    
+                    str.addAttributes([
+                        .attachment: value,
+                        .foregroundColor: NSColor.systemOrange,
+                    ], range: matched)
+                } else {
+                    str.addAttributes([
+                        .foregroundColor: NSColor.systemRed,
+                    ], range: matched)
+                }
+            }
+        }
+        
+        return str
+    }
 }
 
 // MARK: - Coordinator
 
-extension URLTextFieldView {
+extension URLTextField {
     
     class Coordinator: NSObject, NSTextFieldDelegate {
-        let parent: URLTextFieldView
+        let parent: URLTextField
         
-        init(_ parent: URLTextFieldView) {
+        init(_ parent: URLTextField) {
             self.parent = parent
         }
         
@@ -109,6 +159,7 @@ extension URLTextFieldView {
             }
             
             self.parent.text = view.attributedStringValue.string
+            PersistAppStateNotification().notify()
         }
     }
 }
@@ -119,11 +170,11 @@ struct URLTextFieldView_Preview: PreviewProvider {
     @State static var text: String = "https://mbpolan.com:8080/api/v1/users?query=foo=bar"
     
     static var previews: some View {
-        URLTextFieldView(text: $text)
+        URLTextField(text: $text)
             .preferredColorScheme(.dark)
             .previewDisplayName("Dark")
         
-        URLTextFieldView(text: $text)
+        URLTextField(text: $text)
             .preferredColorScheme(.light)
             .previewDisplayName("Light")
     }

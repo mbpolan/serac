@@ -16,8 +16,17 @@ struct VariableSettingsView: View {
     var body: some View {
         HStack {
             VStack {
-                List(variableSets.indices, id: \.self, selection: $viewModel.selected) { index in
-                    Text(variableSets[index].name)
+                List(viewModel.variableSets.indices, id: \.self, selection: $viewModel.selected) { index in
+                    if viewModel.edited == index {
+                        AppTextField(text: $viewModel.variableSets[index].name,
+                                     introspect: handleFocusTextField,
+                                     onCommit: handleFinishEditing)
+                    } else {
+                        Text(viewModel.variableSets[index].name)
+                            .contextMenu {
+                                Button("Rename") { handleRename(index) }
+                            }
+                    }
                 }
                 
                 Divider()
@@ -27,14 +36,14 @@ struct VariableSettingsView: View {
                         Image(systemName: "plus")
                             .frame(width: 16, height: 16)
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .buttonStyle(BorderlessButtonStyle())
                     .help("Add a new variable set")
                     
                     Button(action: handleRemove) {
                         Image(systemName: "minus")
                             .frame(width: 16, height: 16)
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .buttonStyle(BorderlessButtonStyle())
                     .disabled(viewModel.selected == nil)
                     .help("Remove the selected variable set")
                     
@@ -49,59 +58,64 @@ struct VariableSettingsView: View {
             Divider()
             
             VStack {
-                if viewModel.selected == nil {
-                    Text("Select or create a variable set")
-                        .foregroundColor(.secondary)
-                        .centered(.both)
-                } else {
+                if let selected = viewModel.selected {
                     ScrollView {
-                        KeyValueTableView(data: currentVariableSet,
+                        KeyValueTableView(data: $viewModel.variableSets[selected].variables,
                                           labels: ["Variable", "Value"],
                                           editable: true,
                                           persistAppState: false,
                                           onChange: handleChange)
                     }
+                } else {
+                    Text("Select or create a variable set")
+                        .foregroundColor(.secondary)
+                        .centered(.both)
                 }
             }
             .layoutPriority(3)
         }
+        .onAppear {
+            viewModel.variableSets = variableSets
+        }
+        .onDisappear(perform: updateAppStorage)
     }
     
-    private var currentVariableSet: Binding<[KeyValuePair]> {
-        return Binding<[KeyValuePair]>(
-            get: {
-                guard let selected = viewModel.selected else {
-                    return []
-                }
-                
-                return variableSets[selected].variables
-            },
-            set: {
-                guard let selected = viewModel.selected else {
-                    return
-                }
-                
-                variableSets[selected].variables = $0
-                variableSets[selected].objectWillChange.send()
-                
-                viewModel.objectWillChange.send()
-            }
-        )
+    private func updateAppStorage() {
+        variableSets = viewModel.variableSets
     }
     
     private func handleAdd() {
-        variableSets.append(VariableSet(name: "Untitled"))
+        viewModel.variableSets.append(VariableSet(name: "Untitled"))
+        updateAppStorage()
     }
     
     private func handleRemove() {
         guard let selected = viewModel.selected else { return }
         
-        variableSets.remove(at: selected)
+        viewModel.selected = nil
+        viewModel.variableSets.remove(at: selected)
+        updateAppStorage()
+    }
+    
+    private func handleRename(_ index: Int) {
+        viewModel.edited = index
+    }
+    
+    private func handleFocusTextField(_ nsTextField: NSTextField) {
+        // kinda ugly but we need to delay updating the first responder until the system
+        // has finished drawing the text field
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            nsTextField.becomeFirstResponder()
+        }
+    }
+    
+    private func handleFinishEditing() {
+        viewModel.edited = nil
+        updateAppStorage()
     }
     
     private func handleChange() {
-        let vs = variableSets
-        self.variableSets = vs
+        updateAppStorage()
     }
 }
 
@@ -109,6 +123,7 @@ struct VariableSettingsView: View {
 
 class VariableSettingsViewModel: ObservableObject {
     @Published var selected: Int?
+    @Published var edited: Int?
     @Published var variableSets: [VariableSet] = []
 }
 
