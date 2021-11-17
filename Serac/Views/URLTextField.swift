@@ -10,8 +10,8 @@ import SwiftUI
 // MARK: - View
 
 struct URLTextField: NSViewRepresentable {
+    @AppStorage("activeVariableSet") var activeVariableSet: String?
     @AppStorage("variableSets") var variableSets: [VariableSet] = []
-    @EnvironmentObject var appState: AppState
     
     @Binding var text: String
     var introspect: (_ nsTextField: NSTextField) -> Void = { _ in }
@@ -106,14 +106,16 @@ struct URLTextField: NSViewRepresentable {
                 let variable = String(text[substring])
                 
                 // is this variable defined in our current variable set?
-                if let selectedVariableSet = appState.variableSet,
+                if let selectedVariableSet = activeVariableSet,
                    let variableSet = variableSets.first(where: { $0.id == selectedVariableSet }),
-                   let value = variableSet.variables.first(where: { $0.key == variable }) {
+                   let variable = variableSet.variables.first(where: { $0.key == variable }) {
                     
                     str.addAttributes([
-                        .attachment: value,
+                        .toolTip: variable.value as NSString,
+                        .cursor: NSCursor.pointingHand,
                         .foregroundColor: NSColor.systemOrange,
                     ], range: matched)
+                    
                 } else {
                     str.addAttributes([
                         .foregroundColor: NSColor.systemRed,

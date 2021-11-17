@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct ContentView: View {
+    @AppStorage("activeVariableSet") private var activeVariableSet: String?
     @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel: ContentViewModel = ContentViewModel()
@@ -44,7 +45,7 @@ struct ContentView: View {
                 ToolbarItem(placement: .primaryAction) {
                     HStack {
                         // show a picker for choosing the current variable set
-                        Picker(selection: $appState.variableSet, label: Text("Variable Set")) {
+                        Picker(selection: $activeVariableSet, label: Text("Variable Set")) {
                             Text("No Variables")
                                 .tag(nil as String?)
                             
