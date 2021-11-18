@@ -74,7 +74,7 @@ struct URLTextField: NSViewRepresentable {
                          range: match.range(withName: "protocol"))
         
         str.addAttribute(.foregroundColor,
-                         value: NSColor.systemMint,
+                         value: NSColor.systemGreen,
                          range: match.range(withName: "host"))
         
         str.addAttribute(.foregroundColor,
