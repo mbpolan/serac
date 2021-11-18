@@ -12,7 +12,6 @@ import SwiftUI
 struct URLTextField: NSViewRepresentable {
     @AppStorage("activeVariableSet") var activeVariableSet: String?
     @AppStorage("variableSets") var variableSets: [VariableSet] = []
-    
     @Binding var text: String
     var introspect: (_ nsTextField: NSTextField) -> Void = { _ in }
     
@@ -50,8 +49,10 @@ struct URLTextField: NSViewRepresentable {
                          value: NSColor.textColor,
                          range: fullRange)
         
+        let variables = variableSets.first(where: { $0.id == activeVariableSet ?? "" }) ?? .empty
+        
         str = decorateURL(str)
-        str = decorateVariables(str)
+        str = str.decorateVariables(variables: variables)
         
         return str
     }
@@ -83,46 +84,6 @@ struct URLTextField: NSViewRepresentable {
         str.addAttribute(.foregroundColor,
                          value: NSColor.systemTeal,
                          range: match.range(withName: "query"))
-        
-        return str
-    }
-    
-    private func decorateVariables(_ str: NSMutableAttributedString) -> NSMutableAttributedString {
-        let fullRange = NSRange(text.startIndex..., in: text)
-        
-        // look for embedded variables
-        guard let match = try! NSRegularExpression(pattern: #"(\$\{.*\})"#)
-                .matches(in: text, range: fullRange).first else {
-                    return str
-                }
-        
-        for index in 0..<match.numberOfRanges {
-            let matched = match.range(at: index)
-            
-            // extract the variable name between the curly braces
-            let variableName = NSMakeRange(matched.lowerBound + 2, matched.length - 3)
-            
-            if let substring = Range(variableName, in: text) {
-                let variable = String(text[substring])
-                
-                // is this variable defined in our current variable set?
-                if let selectedVariableSet = activeVariableSet,
-                   let variableSet = variableSets.first(where: { $0.id == selectedVariableSet }),
-                   let variable = variableSet.variables.first(where: { $0.key == variable }) {
-                    
-                    str.addAttributes([
-                        .toolTip: variable.value as NSString,
-                        .cursor: NSCursor.pointingHand,
-                        .foregroundColor: NSColor.systemOrange,
-                    ], range: matched)
-                    
-                } else {
-                    str.addAttributes([
-                        .foregroundColor: NSColor.systemRed,
-                    ], range: matched)
-                }
-            }
-        }
         
         return str
     }

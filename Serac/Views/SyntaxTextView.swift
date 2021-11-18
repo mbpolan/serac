@@ -11,9 +11,12 @@ import SwiftUI
 // based on: https://gist.github.com/unnamedd/6e8c3fbc806b8deb60fa65d6b9affab0
 
 struct SyntaxTextView: NSViewRepresentable {
+    @AppStorage("activeVariableSet") var activeVariableSet: String?
+    @AppStorage("variableSets") var variableSets: [VariableSet] = []
     @Binding var text: String
     @Binding var adaptor: SyntaxAdaptor
     var isEditable: Bool = true
+    var observeVariables: Bool = true
     
     var onEditingChanged: () -> Void       = {}
     var onCommit        : () -> Void       = {}
@@ -22,15 +25,21 @@ struct SyntaxTextView: NSViewRepresentable {
     init(string: Binding<String>,
          isEditable: Bool,
          adaptor: Binding<SyntaxAdaptor>,
+         observeVariables: Bool,
          onCommit: @escaping() -> Void = {}) {
         
         self._text = string
         self.isEditable = isEditable
         self._adaptor = adaptor
+        self.observeVariables = observeVariables
         self.onCommit = onCommit
     }
     
-    init(data: Binding<Data>, isEditable: Bool, adaptor: Binding<SyntaxAdaptor>) {
+    init(data: Binding<Data>,
+         isEditable: Bool,
+         adaptor: Binding<SyntaxAdaptor>,
+         observeVariables: Bool) {
+        
         self._text = Binding<String>(
             get: { String(decoding: data.wrappedValue, as: UTF8.self) },
             set: { value in
@@ -43,6 +52,7 @@ struct SyntaxTextView: NSViewRepresentable {
         )
         self.isEditable = isEditable
         self._adaptor = adaptor
+        self.observeVariables = observeVariables
     }
     
     func makeCoordinator() -> Coordinator {
@@ -53,8 +63,10 @@ struct SyntaxTextView: NSViewRepresentable {
         let textView = CustomTextView(
             text: text,
             isEditable: isEditable,
-            adaptor: adaptor
+            adaptor: adaptor,
+            variables: variables
         )
+        
         textView.delegate = context.coordinator
         
         return textView
@@ -65,12 +77,21 @@ struct SyntaxTextView: NSViewRepresentable {
         // method can get called for a variety of reasons, and to avoid unnecessary updates
         // to the text view, we can check if the contents of the text have changed. rendering
         // large text (unchanging) content is expensive, so we need to avoid it as much as possible.
-        if isEditable || text != view.text {
+        if isEditable || text != view.text || view.variables?.id != activeVariableSet {
             view.text = text
+            view.variables = variables
         }
         
         view.selectedRanges = context.coordinator.selectedRanges
         view.adaptor = adaptor
+    }
+    
+    private var variables: VariableSet? {
+        if observeVariables {
+            return variableSets.first(where: { $0.id == activeVariableSet ?? "" }) ?? .empty
+        }
+        
+        return nil
     }
 }
 
@@ -82,8 +103,8 @@ struct SyntaxTextView_Previews: PreviewProvider {
             SyntaxTextView(
                 string: .constant("{ \"foo\": 123}"),
                 isEditable: true,
-                adaptor: .constant(JSONSyntaxAdaptor())
-            )
+                adaptor: .constant(JSONSyntaxAdaptor()),
+                observeVariables: false)
         }
     }
 }
@@ -147,7 +168,13 @@ final class CustomTextView: NSView {
                 return
             }
             
-            textView.textStorage?.setAttributedString(adaptor.decorate(text))
+            textView.textStorage?.setAttributedString(adaptor.decorate(text, variables: variables))
+        }
+    }
+    
+    var variables: VariableSet? {
+        didSet {
+            updateTextStorage(text)
         }
     }
     
@@ -211,10 +238,11 @@ final class CustomTextView: NSView {
         return textView
     }()
     
-    init(text: String, isEditable: Bool, adaptor: SyntaxAdaptor) {
+    init(text: String, isEditable: Bool, adaptor: SyntaxAdaptor, variables: VariableSet?) {
         self.isEditable = isEditable
         self.text = text
         self.adaptor = adaptor
+        self.variables = variables
         
         super.init(frame: .zero)
         
@@ -254,7 +282,7 @@ final class CustomTextView: NSView {
     }
     
     private func updateTextStorage(_ text: String) {
-        textView.textStorage?.setAttributedString(adaptor.decorate(text))
+        textView.textStorage?.setAttributedString(adaptor.decorate(text, variables: variables))
     }
 }
 

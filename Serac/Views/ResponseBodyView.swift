@@ -17,7 +17,8 @@ struct ResponseBodyView: View {
             if response.contentType != .none {
                 SyntaxTextView(data: data,
                                isEditable: false,
-                               adaptor: adaptor)
+                               adaptor: adaptor,
+                               observeVariables: false)
             } else {
                 Text("No data")
                     .foregroundColor(.secondary)

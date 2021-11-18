@@ -8,8 +8,9 @@
 import Foundation
 
 class VariableSet: ObservableObject, Identifiable, Codable {
-    var id: String = UUID().uuidString
+    static let empty = VariableSet(name: "")
     
+    var id: String = UUID().uuidString
     @Published var name: String
     @Published var variables: [KeyValuePair]
     

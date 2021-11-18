@@ -41,7 +41,7 @@ struct HTTPClient {
                 .eraseToAnyPublisher()
         }
         
-        return prepareAuthentication(request, to: URLRequest(url: url))
+        return prepareAuthentication(request, to: URLRequest(url: url), variables: variables)
     }
     
     private func convertHTTPURLResponse(_ response: HTTPURLResponse, data: Data?, startTime: Date) -> HTTPResponse {
@@ -64,7 +64,8 @@ struct HTTPClient {
     }
     
     private func sendRequest(_ request: Request,
-                            authURLRequest: URLRequest) -> AnyPublisher<HTTPResponse, Error> {
+                            authURLRequest: URLRequest,
+                             variables: VariableSet?) -> AnyPublisher<HTTPResponse, Error> {
         
         var urlRequest = authURLRequest
         urlRequest.httpMethod = request.method.rawValue
@@ -75,7 +76,8 @@ struct HTTPClient {
         }
         
         if request.bodyContentType != .none {
-            urlRequest.httpBody = request.body.data(using: .utf8)
+            // substitute variables in the request body
+            urlRequest.httpBody = (variables?.apply(to: request.body) ?? request.body).data(using: .utf8)
             
             // if a content-type header is not present, set one automatically depending on
             // the request body
@@ -108,22 +110,27 @@ struct HTTPClient {
     }
     
     private func prepareAuthentication(_ request: Request,
-                                       to urlRequest: URLRequest) -> AnyPublisher<HTTPResponse, Error> {
+                                       to urlRequest: URLRequest,
+                                       variables: VariableSet?) -> AnyPublisher<HTTPResponse, Error> {
         
         switch request.authenticationType {
         case .basic:
-            let value = Data("\(request.authentication.basic.username):\(request.authentication.basic.password)".utf8).base64EncodedString()
+            // substitute variables in the basic auth fields
+            let basicAuth = "\(request.authentication.basic.username):\(request.authentication.basic.password)"
+            let value = Data((variables?.apply(to: basicAuth) ?? basicAuth).utf8).base64EncodedString()
             
             var urlRequestMutable = urlRequest
             urlRequestMutable.setValue("Basic \(value)", forHTTPHeaderField: "Authorization")
             
-            return sendRequest(request, authURLRequest: urlRequestMutable)
+            return sendRequest(request, authURLRequest: urlRequestMutable, variables: variables)
         
         case .bearerToken:
+            // substitute variables in the bearer token
+            let token = request.authentication.bearer.token
             var urlRequestMutable = urlRequest
-            urlRequestMutable.setValue("Bearer \(request.authentication.bearer.token)", forHTTPHeaderField: "Authorization")
+            urlRequestMutable.setValue("Bearer \(variables?.apply(to: token) ?? token)", forHTTPHeaderField: "Authorization")
             
-            return sendRequest(request, authURLRequest: urlRequestMutable)
+            return sendRequest(request, authURLRequest: urlRequestMutable, variables: variables)
             
         case .oauth2:
             let startTime = Date()
@@ -168,7 +175,8 @@ struct HTTPClient {
                 return "\(key)=\(value)"
             }.joined(separator: "&")
             
-            tokenRequest.httpBody = body.data(using: .utf8)
+            // substitute variables in the form data
+            tokenRequest.httpBody = (variables?.apply(to: body) ?? body).data(using: .utf8)
             
             return URLSession.shared.dataTaskPublisher(for: tokenRequest)
                 .tryMap { (data, response) in
@@ -186,12 +194,12 @@ struct HTTPClient {
                     return urlRequestMutable
                 }
                 .flatMap { urlRequest in
-                    return sendRequest(request, authURLRequest: urlRequest)
+                    return sendRequest(request, authURLRequest: urlRequest, variables: variables)
                 }
                 .eraseToAnyPublisher()
             
         default:
-            return sendRequest(request, authURLRequest: urlRequest)
+            return sendRequest(request, authURLRequest: urlRequest, variables: variables)
         }
     }
 }

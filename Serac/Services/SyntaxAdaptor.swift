@@ -8,13 +8,13 @@
 import SwiftUI
 
 protocol SyntaxAdaptor {
-    func decorate(_ text: String) -> NSMutableAttributedString
+    func decorate(_ text: String, variables: VariableSet?) -> NSMutableAttributedString
     func update(string: String) -> String
 }
 
 struct NoopSyntaxAdaptor: SyntaxAdaptor {
     
-    func decorate(_ text: String) -> NSMutableAttributedString {
+    func decorate(_ text: String, variables: VariableSet?) -> NSMutableAttributedString {
         let attributedString = NSMutableAttributedString(string: text)
         let fullRange = NSRange(text.startIndex..., in: text)
         
@@ -33,7 +33,7 @@ struct NoopSyntaxAdaptor: SyntaxAdaptor {
 struct JSONSyntaxAdaptor: SyntaxAdaptor {
     var prettyPrint: Bool = false
     
-    func decorate(_ rawText: String) -> NSMutableAttributedString {
+    func decorate(_ rawText: String, variables: VariableSet?) -> NSMutableAttributedString {
         var text = rawText
         
         // pretty print the json string
@@ -71,19 +71,18 @@ struct JSONSyntaxAdaptor: SyntaxAdaptor {
         
         let booleanRegex = try! NSRegularExpression(pattern: #":[\s\n\t]*(false|true)"#)
         booleanRegex.matches(in: text,
-                            range: NSRange(text.startIndex..., in: text)).forEach { match in
+                             range: NSRange(text.startIndex..., in: text)).forEach { match in
             attributedString.addAttribute(.foregroundColor, value: NSColor.systemTeal, range: match.range)
         }
         
-        return attributedString
+        if let variables = variables {
+            return attributedString.decorateVariables(variables: variables)
+        } else {
+            return attributedString
+        }
     }
     
     func update(string: String) -> String {
-        if string == "{" {
-            // insert a closing brace automatically
-            return "{\n}"
-        } else {
-            return string
-        }
+        string
     }
 }

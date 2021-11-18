@@ -30,6 +30,7 @@
 		274FF33D2743543F00D8AC2A /* VariableSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF33C2743543F00D8AC2A /* VariableSet.swift */; };
 		274FF33F2743556700D8AC2A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF33E2743556700D8AC2A /* Array.swift */; };
 		274FF343274466C400D8AC2A /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF342274466C400D8AC2A /* AppTextField.swift */; };
+		274FF3472745C86600D8AC2A /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF3462745C86600D8AC2A /* NSMutableAttributedString.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -87,6 +88,7 @@
 		274FF33C2743543F00D8AC2A /* VariableSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableSet.swift; sourceTree = "<group>"; };
 		274FF33E2743556700D8AC2A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		274FF342274466C400D8AC2A /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
+		274FF3462745C86600D8AC2A /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				274FF33E2743556700D8AC2A /* Array.swift */,
+				274FF3462745C86600D8AC2A /* NSMutableAttributedString.swift */,
 				274FF31C273D8A6A00D8AC2A /* SecureField.swift */,
 				274FF324273DEE0100D8AC2A /* String.swift */,
 				274FF31E273D8AA400D8AC2A /* TextField.swift */,
@@ -378,6 +381,7 @@
 				274FF33B274344EF00D8AC2A /* VariableSettingsView.swift in Sources */,
 				274FF3312741F0BE00D8AC2A /* KeyValueTableView.swift in Sources */,
 				27BB5A3D2725D42400F26AC7 /* RequestBodyType.swift in Sources */,
+				274FF3472745C86600D8AC2A /* NSMutableAttributedString.swift in Sources */,
 				2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */,
 				274FF3352742E6B000D8AC2A /* BearerTokenAuthenticationView.swift in Sources */,
 				27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */,

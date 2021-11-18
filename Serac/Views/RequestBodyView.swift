@@ -10,6 +10,8 @@ import SwiftUI
 // MARK: - View
 
 struct RequestBodyView: View {
+    @AppStorage("activeVariableSet") private var activeVariableSet: String?
+    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @ObservedObject var request: Request
     
     var body: some View {
@@ -43,6 +45,7 @@ struct RequestBodyView: View {
                     SyntaxTextView(string: $request.body,
                                    isEditable: true,
                                    adaptor: adaptor,
+                                   observeVariables: true,
                                    onCommit: handlePersistState)
                 } else {
                     EmptyView()
@@ -74,8 +77,10 @@ struct RequestBodyView: View {
     }
     
     private func handleFormat() {
+        let variables = variableSets.first(where: { $0.id == activeVariableSet ?? "" })
+        
         request.body = JSONSyntaxAdaptor(prettyPrint: true)
-            .decorate(request.body).string
+            .decorate(request.body, variables: variables).string
     }
     
     private func handlePersistState() {
