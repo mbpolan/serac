@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v1
+    
+      - name: Find tag version
+        id: find_tag_version
+        run: echo ::set-output name=tag_version::${GITHUB_REF#refs/tags/}
+
+      - name: Build
+        run: |
+          set -ex -o pipefail
+          xcodebuild -project Serac.xcodeproj/ -scheme Serac -configuration Release build CONFIGURATION_BUILD_DIR=./build
+          tar -C build -czf serac-${{ steps.find_tag_version.outputs.tag_version }}-darwin-x86-64.tar.gz Serac.app/
+
+      - name: Draft release
+        id: draft_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: <tofill>
+          release_name: <tofill>
+          draft: true
+          prerelease: false
+      
+      - name: Upload build artifact
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.draft_release.outputs.upload_url }}
+          asset_path: ./serac-${{ steps.find_tag_version.outputs.tag_version }}-darwin-x86-64.tar.gz
+          asset_name: serac-${{ steps.find_tag_version.outputs.tag_version }}-darwin-x86-64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Publish release
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.draft_release.outputs.id }}
