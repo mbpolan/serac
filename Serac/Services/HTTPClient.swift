@@ -72,7 +72,8 @@ struct HTTPClient {
         
         // set header values
         request.headers.forEach { header in
-            urlRequest.setValue(header.value, forHTTPHeaderField: header.key)
+            urlRequest.setValue(variables?.apply(to: header.value) ?? header.value,
+                                forHTTPHeaderField: variables?.apply(to: header.key) ?? header.key)
         }
         
         if request.bodyContentType != .none {
@@ -135,13 +136,14 @@ struct HTTPClient {
         case .oauth2:
             let startTime = Date()
             let oauth2 = request.authentication.oauth2
+            let oauth2TokenURL = variables?.apply(to: oauth2.tokenURL) ?? oauth2.tokenURL
             
-            if oauth2.tokenURL.isBlank() {
+            if oauth2TokenURL.isBlank() {
                 return Fail(error: NetworkError.requestFailed(message: "OAuth2 token URL is empty"))
                     .eraseToAnyPublisher()
             }
             
-            guard let tokenURL = URL(string: oauth2.tokenURL) else {
+            guard let tokenURL = URL(string: oauth2TokenURL) else {
                 return Fail(error: NetworkError.invalidURL(url: oauth2.tokenURL))
                     .eraseToAnyPublisher()
             }
@@ -153,19 +155,19 @@ struct HTTPClient {
             
             var data: [KeyValuePair] = []
             if !oauth2.grantType.isEmpty {
-                data.append(KeyValuePair("grant_type", oauth2.grantType))
+                data.append(KeyValuePair("grant_type", variables?.apply(to: oauth2.grantType) ?? oauth2.grantType))
             }
             
             if !oauth2.clientId.isEmpty {
-                data.append(KeyValuePair("client_id", oauth2.clientId))
+                data.append(KeyValuePair("client_id", variables?.apply(to: oauth2.clientId) ?? oauth2.clientId))
             }
             
             if !oauth2.clientSecret.isEmpty {
-                data.append(KeyValuePair("client_secret", oauth2.clientSecret))
+                data.append(KeyValuePair("client_secret", variables?.apply(to: oauth2.clientSecret) ?? oauth2.clientSecret))
             }
             
             if !oauth2.scope.isEmpty {
-                data.append(KeyValuePair("scope", oauth2.scope))
+                data.append(KeyValuePair("scope", variables?.apply(to: oauth2.scope) ?? oauth2.scope))
             }
             
             let body = data.map { field in

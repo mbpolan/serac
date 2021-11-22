@@ -19,7 +19,7 @@ struct BearerTokenAuthenticationView: View {
                 .init(.flexible(minimum: 250))
             ]) {
                 Text("Bearer Token")
-                TextField(text: $request.authentication.bearer.token)
+                VariableTextField(text: $request.authentication.bearer.token)
             }
             .frame(width: geo.size.width / 2, alignment: .center)
             .centered(.horizontal)

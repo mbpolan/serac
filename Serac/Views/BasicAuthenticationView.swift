@@ -19,7 +19,7 @@ struct BasicAuthenticationView: View {
                 .init(.flexible(minimum: 150))
             ]) {
                 Text("Username")
-                TextField(text: $request.authentication.basic.username)
+                VariableTextField(text: $request.authentication.basic.username)
                 
                 Text("Password")
                 SecureField(text: $request.authentication.basic.password)

@@ -19,19 +19,19 @@ struct OAuth2AuthenticationView: View {
                 .init(.flexible(minimum: 250)),
             ]) {
                 Text("Token URL")
-                TextField(text: $request.authentication.oauth2.tokenURL)
+                VariableTextField(text: $request.authentication.oauth2.tokenURL)
                 
                 Text("Client ID")
-                TextField(text: $request.authentication.oauth2.clientId)
+                VariableTextField(text: $request.authentication.oauth2.clientId)
                 
                 Text("Client Secret")
                 SecureField(text: $request.authentication.oauth2.clientSecret)
                 
                 Text("Scope")
-                TextField(text: $request.authentication.oauth2.scope)
+                VariableTextField(text: $request.authentication.oauth2.scope)
                 
                 Text("Grant Type")
-                TextField(text: $request.authentication.oauth2.grantType)
+                VariableTextField(text: $request.authentication.oauth2.grantType)
             }
             .frame(width: geo.size.width / 2, alignment: .center)
             .centered(.horizontal)

@@ -32,6 +32,7 @@
 		274FF343274466C400D8AC2A /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF342274466C400D8AC2A /* AppTextField.swift */; };
 		274FF3492749BA2800D8AC2A /* FormDataRequestBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF3482749BA2800D8AC2A /* FormDataRequestBodyView.swift */; };
 		274FF34B2749C82100D8AC2A /* TextFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF34A2749C82100D8AC2A /* TextFormatter.swift */; };
+		274FF351274B234800D8AC2A /* VariableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF350274B234800D8AC2A /* VariableTextField.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -91,6 +92,7 @@
 		274FF342274466C400D8AC2A /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
 		274FF3482749BA2800D8AC2A /* FormDataRequestBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataRequestBodyView.swift; sourceTree = "<group>"; };
 		274FF34A2749C82100D8AC2A /* TextFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormatter.swift; sourceTree = "<group>"; };
+		274FF350274B234800D8AC2A /* VariableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableTextField.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				27945AC22709281600F97E78 /* SyntaxTextView.swift */,
 				274FF3362743097C00D8AC2A /* URLTextField.swift */,
 				274FF33A274344EF00D8AC2A /* VariableSettingsView.swift */,
+				274FF350274B234800D8AC2A /* VariableTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 				274FF329273EEDD700D8AC2A /* SplashView.swift in Sources */,
 				27C015022727999B00F693A0 /* HeadersView.swift in Sources */,
 				274FF310273CB34C00D8AC2A /* AuthenticationView.swift in Sources */,
+				274FF351274B234800D8AC2A /* VariableTextField.swift in Sources */,
 				27BB5A4B27262EC500F26AC7 /* AppState.swift in Sources */,
 				27BB5A3B2724EEA600F26AC7 /* RequestView.swift in Sources */,
 				27BB5A4827262E2100F26AC7 /* Request.swift in Sources */,
