@@ -13,6 +13,7 @@ struct KeyValueTableView: View {
     @Binding var data: [KeyValuePair]
     let labels: [String]
     let editable: Bool
+    var formatter: TextFormatter? = nil
     var persistAppState: Bool = true
     var onChange: () -> Void = {}
     
@@ -33,14 +34,14 @@ struct KeyValueTableView: View {
             }
             
             ForEach(data.indices, id: \.self) { index in
-                TextField("",
-                          text: $data[index].key,
-                          onCommit: handleCommit)
+                AppTextField(text: $data[index].key,
+                             formatter: formatter,
+                             onCommit: handleCommit)
                     .disabled(!editable)
                 
-                TextField("",
-                          text: $data[index].value,
-                          onCommit: handleCommit)
+                AppTextField(text: $data[index].value,
+                             formatter: formatter,
+                             onCommit: handleCommit)
                     .disabled(!editable)
                 
                 if editable {

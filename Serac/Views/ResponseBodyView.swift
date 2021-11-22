@@ -17,7 +17,7 @@ struct ResponseBodyView: View {
             if response.contentType != .none {
                 SyntaxTextView(data: data,
                                isEditable: false,
-                               adaptor: adaptor,
+                               formatter: formatter,
                                observeVariables: false)
             } else {
                 Text("No data")
@@ -36,14 +36,17 @@ struct ResponseBodyView: View {
             set: { _ in })
     }
     
-    private var adaptor: Binding<SyntaxAdaptor> {
+    private var formatter: Binding<TextFormatter> {
         .init(
             get: {
                 switch response.contentType {
                 case .json:
-                    return JSONSyntaxAdaptor(prettyPrint: true)
+                    return .init(adaptors: [
+                        JSONPrettyPrintFormatAdaptor(),
+                        JSONFormatAdaptor()
+                    ])
                 default:
-                    return NoopSyntaxAdaptor()
+                    return .none
                 }
             },
             set: { _ in })

@@ -41,10 +41,12 @@ struct RequestBodyView: View {
             .padding([.leading, .trailing], 5)
             
             VStack {
-                if request.bodyContentType != .none {
+                if request.bodyContentType == .formURLEncoded {
+                    FormDataRequestBodyView(request: request)
+                } else if request.bodyContentType != .none {
                     SyntaxTextView(string: $request.body,
                                    isEditable: true,
-                                   adaptor: adaptor,
+                                   formatter: formatter,
                                    observeVariables: true,
                                    onCommit: handlePersistState)
                 } else {
@@ -60,27 +62,39 @@ struct RequestBodyView: View {
     }
     
     private var canFormat: Bool {
-        return request.bodyContentType == .json
+        request.bodyContentType == .json
     }
     
-    private var adaptor: Binding<SyntaxAdaptor> {
+    private var variables: VariableSet? {
+        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
+    }
+    
+    private var formatter: Binding<TextFormatter> {
         .init(
             get: {
                 switch request.bodyContentType {
                 case .json:
-                    return JSONSyntaxAdaptor()
+                    return .init(adaptors: [
+                        JSONFormatAdaptor(),
+                        VariableFormatAdaptor(variables: variables)
+                    ])
                 default:
-                    return NoopSyntaxAdaptor()
+                    return .init(adaptors: [
+                        VariableFormatAdaptor(variables: variables)
+                    ])
                 }
             },
             set: { _ in })
     }
     
     private func handleFormat() {
-        let variables = variableSets.first(where: { $0.id == activeVariableSet ?? "" })
-        
-        request.body = JSONSyntaxAdaptor(prettyPrint: true)
-            .decorate(request.body, variables: variables).string
+        request.body = TextFormatter(adaptors: [
+            JSONPrettyPrintFormatAdaptor(),
+            JSONFormatAdaptor(),
+            VariableFormatAdaptor(variables: variables)
+        ])
+            .apply(to: request.body)
+            .string
     }
     
     private func handlePersistState() {

@@ -14,7 +14,7 @@ struct SyntaxTextView: NSViewRepresentable {
     @AppStorage("activeVariableSet") var activeVariableSet: String?
     @AppStorage("variableSets") var variableSets: [VariableSet] = []
     @Binding var text: String
-    @Binding var adaptor: SyntaxAdaptor
+    @Binding var formatter: TextFormatter
     var isEditable: Bool = true
     var observeVariables: Bool = true
     
@@ -24,20 +24,20 @@ struct SyntaxTextView: NSViewRepresentable {
     
     init(string: Binding<String>,
          isEditable: Bool,
-         adaptor: Binding<SyntaxAdaptor>,
+         formatter: Binding<TextFormatter>,
          observeVariables: Bool,
          onCommit: @escaping() -> Void = {}) {
         
         self._text = string
         self.isEditable = isEditable
-        self._adaptor = adaptor
+        self._formatter = formatter
         self.observeVariables = observeVariables
         self.onCommit = onCommit
     }
     
     init(data: Binding<Data>,
          isEditable: Bool,
-         adaptor: Binding<SyntaxAdaptor>,
+         formatter: Binding<TextFormatter>,
          observeVariables: Bool) {
         
         self._text = Binding<String>(
@@ -51,7 +51,7 @@ struct SyntaxTextView: NSViewRepresentable {
             }
         )
         self.isEditable = isEditable
-        self._adaptor = adaptor
+        self._formatter = formatter
         self.observeVariables = observeVariables
     }
     
@@ -63,7 +63,7 @@ struct SyntaxTextView: NSViewRepresentable {
         let textView = CustomTextView(
             text: text,
             isEditable: isEditable,
-            adaptor: adaptor,
+            formatter: formatter,
             variables: variables
         )
         
@@ -83,7 +83,7 @@ struct SyntaxTextView: NSViewRepresentable {
         }
         
         view.selectedRanges = context.coordinator.selectedRanges
-        view.adaptor = adaptor
+        view.formatter = formatter
     }
     
     private var variables: VariableSet? {
@@ -103,7 +103,7 @@ struct SyntaxTextView_Previews: PreviewProvider {
             SyntaxTextView(
                 string: .constant("{ \"foo\": 123}"),
                 isEditable: true,
-                adaptor: .constant(JSONSyntaxAdaptor()),
+                formatter: .constant(.none),
                 observeVariables: false)
         }
     }
@@ -162,13 +162,13 @@ final class CustomTextView: NSView {
         }
     }
     
-    var adaptor: SyntaxAdaptor {
+    var formatter: TextFormatter {
         didSet {
-            guard type(of: adaptor) != type(of: self.adaptor) else {
+            guard type(of: formatter) != type(of: self.formatter) else {
                 return
             }
             
-            textView.textStorage?.setAttributedString(adaptor.decorate(text, variables: variables))
+            textView.textStorage?.setAttributedString(formatter.apply(to: text))
         }
     }
     
@@ -218,7 +218,7 @@ final class CustomTextView: NSView {
         
         let textView = CustomNSTextView(frame: .zero,
                                         textContainer: textContainer,
-                                        adaptor: adaptor)
+                                        formatter: formatter)
         
         textView.autoresizingMask = .width
         textView.backgroundColor = NSColor.textBackgroundColor
@@ -238,10 +238,10 @@ final class CustomTextView: NSView {
         return textView
     }()
     
-    init(text: String, isEditable: Bool, adaptor: SyntaxAdaptor, variables: VariableSet?) {
+    init(text: String, isEditable: Bool, formatter: TextFormatter, variables: VariableSet?) {
         self.isEditable = isEditable
         self.text = text
-        self.adaptor = adaptor
+        self.formatter = formatter
         self.variables = variables
         
         super.init(frame: .zero)
@@ -282,31 +282,23 @@ final class CustomTextView: NSView {
     }
     
     private func updateTextStorage(_ text: String) {
-        textView.textStorage?.setAttributedString(adaptor.decorate(text, variables: variables))
+        textView.textStorage?.setAttributedString(formatter.apply(to: text))
     }
 }
 
 final class CustomNSTextView: NSTextView {
     
-    private var adaptor: SyntaxAdaptor
+    private var formatter: TextFormatter
     
     init(frame frameRect: NSRect,
          textContainer container: NSTextContainer?,
-         adaptor: SyntaxAdaptor) {
+         formatter: TextFormatter) {
         
-        self.adaptor = adaptor
+        self.formatter = formatter
         super.init(frame: frameRect, textContainer: container)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func insertText(_ string: Any, replacementRange: NSRange) {
-        if let string = string as? String {
-            super.insertText(adaptor.update(string: string), replacementRange: replacementRange)
-        } else {
-            super.insertText(string, replacementRange: replacementRange)
-        }
     }
 }

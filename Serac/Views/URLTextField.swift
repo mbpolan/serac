@@ -9,121 +9,32 @@ import SwiftUI
 
 // MARK: - View
 
-struct URLTextField: NSViewRepresentable {
+struct URLTextField: View {
     @AppStorage("activeVariableSet") var activeVariableSet: String?
     @AppStorage("variableSets") var variableSets: [VariableSet] = []
     @Binding var text: String
     var introspect: (_ nsTextField: NSTextField) -> Void = { _ in }
     
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+    var body: some View {
+        AppTextField(text: $text,
+                     formatter: formatter(variables),
+                     introspect: { nsTextField in
+            nsTextField.bezelStyle = .roundedBezel
+            introspect(nsTextField)
+        })
     }
     
-    func makeNSView(context: Context) -> NSTextField {
-        let field = NSTextField()
-        field.attributedStringValue = attributedString
-        field.bezelStyle = .roundedBezel
-        field.allowsEditingTextAttributes = true
-        field.delegate = context.coordinator
-        
-        introspect(field)
-        
-        return field
+    private var variables: VariableSet? {
+        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
-    func updateNSView(_ field: NSTextField, context: Context) {
-        field.attributedStringValue = attributedString
-    }
-    
-    var attributedString: NSMutableAttributedString {
-        var str = NSMutableAttributedString(string: text)
-        let fullRange = NSRange(text.startIndex..., in: text)
-        
-        // set default font
-        str.addAttribute(.font,
-                         value: NSFont.userFixedPitchFont(ofSize: NSFont.systemFontSize),
-                         range: fullRange)
-        
-        // and a baseline foreground color
-        str.addAttribute(.foregroundColor,
-                         value: NSColor.textColor,
-                         range: fullRange)
-        
-        let variables = variableSets.first(where: { $0.id == activeVariableSet ?? "" }) ?? .empty
-        
-        str = decorateURL(str)
-        str = str.decorateVariables(variables: variables)
-        
-        return str
-    }
-    
-    private func decorateURL(_ str: NSMutableAttributedString) -> NSMutableAttributedString {
-        let fullRange = NSRange(text.startIndex..., in: text)
-        
-        // parse the url and extract components
-        let regex = try! NSRegularExpression(pattern: #"^(?<protocol>[^:]+://)(?<host>[^:/]+)(?<port>:[0-9]+)?(?<path>[^?]*)(?<query>\?.*)?.*$"#,
-                                             options: .caseInsensitive)
-        
-        guard let match = regex.matches(in: text, range: fullRange).first else {
-            return str
-        }
-        
-        // apply colors for the various matched url components
-        str.addAttribute(.foregroundColor,
-                         value: NSColor.systemGray,
-                         range: match.range(withName: "protocol"))
-        
-        str.addAttribute(.foregroundColor,
-                         value: NSColor.systemGreen,
-                         range: match.range(withName: "host"))
-        
-        str.addAttribute(.foregroundColor,
-                         value: NSColor.systemIndigo,
-                         range: match.range(withName: "port"))
-        
-        str.addAttribute(.foregroundColor,
-                         value: NSColor.systemTeal,
-                         range: match.range(withName: "query"))
-        
-        return str
-    }
-}
-
-// MARK: - Coordinator
-
-extension URLTextField {
-    
-    class Coordinator: NSObject, NSTextFieldDelegate {
-        let parent: URLTextField
-        
-        init(_ parent: URLTextField) {
-            self.parent = parent
-        }
-        
-        func controlTextDidBeginEditing(_ obj: Notification) {
-            guard let view = obj.object as? NSTextField else {
-                return
-            }
-            
-            self.parent.text = view.attributedStringValue.string
-        }
-        
-        func controlTextDidChange(_ obj: Notification) {
-            guard let view = obj.object as? NSTextField else {
-                return
-            }
-            
-            self.parent.text = view.attributedStringValue.string
-        }
-        
-        func controlTextDidEndEditing(_ obj: Notification) {
-            guard let view = obj.object as? NSTextField else {
-                return
-            }
-            
-            self.parent.text = view.attributedStringValue.string
-            PersistAppStateNotification().notify()
-        }
+    private func formatter(_ variables: VariableSet?) -> TextFormatter {
+        return TextFormatter(adaptors: [
+            URLFormatAdaptor(),
+            VariableFormatAdaptor(variables: variables)
+        ], options: .init(
+            font: NSFont.userFixedPitchFont(ofSize: NSFont.systemFontSize),
+            foregroundColor: .textColor))
     }
 }
 

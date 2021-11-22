@@ -10,6 +10,8 @@ import SwiftUI
 // MARK: - View
 
 struct HeadersView: View {
+    @AppStorage("activeVariableSet") private var activeVariableSet: String?
+    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @ObservedObject var message: HTTPMessage
     let editable: Bool
     
@@ -17,9 +19,24 @@ struct HeadersView: View {
         ScrollView {
             KeyValueTableView(data: $message.headers,
                               labels: ["Header", "Value"],
-                              editable: editable)
+                              editable: editable,
+                              formatter: formatter)
                 .padding([.leading, .trailing], 10)
         }
+    }
+    
+    private var variables: VariableSet? {
+        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
+    }
+    
+    private var formatter: TextFormatter {
+        if editable {
+            return TextFormatter(adaptors: [
+                VariableFormatAdaptor(variables: variables)
+            ])
+        }
+        
+        return .none
     }
 }
 

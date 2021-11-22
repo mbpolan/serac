@@ -30,7 +30,8 @@
 		274FF33D2743543F00D8AC2A /* VariableSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF33C2743543F00D8AC2A /* VariableSet.swift */; };
 		274FF33F2743556700D8AC2A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF33E2743556700D8AC2A /* Array.swift */; };
 		274FF343274466C400D8AC2A /* AppTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF342274466C400D8AC2A /* AppTextField.swift */; };
-		274FF3472745C86600D8AC2A /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF3462745C86600D8AC2A /* NSMutableAttributedString.swift */; };
+		274FF3492749BA2800D8AC2A /* FormDataRequestBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF3482749BA2800D8AC2A /* FormDataRequestBodyView.swift */; };
+		274FF34B2749C82100D8AC2A /* TextFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274FF34A2749C82100D8AC2A /* TextFormatter.swift */; };
 		278394D927389BE600533A28 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278394D827389BE600533A28 /* CollectionItem.swift */; };
 		2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC62728E3B800F77060 /* ResponseBodyType.swift */; };
 		2788FFC92728E83D00F77060 /* ResponseBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2788FFC82728E83D00F77060 /* ResponseBodyView.swift */; };
@@ -46,7 +47,7 @@
 		27945AC82709448500F97E78 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27945AC72709448500F97E78 /* HTTPMethod.swift */; };
 		27BB5A3B2724EEA600F26AC7 /* RequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A3A2724EEA600F26AC7 /* RequestView.swift */; };
 		27BB5A3D2725D42400F26AC7 /* RequestBodyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A3C2725D42400F26AC7 /* RequestBodyType.swift */; };
-		27BB5A3F272609DC00F26AC7 /* SyntaxAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A3E272609DC00F26AC7 /* SyntaxAdaptor.swift */; };
+		27BB5A3F272609DC00F26AC7 /* FormatAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A3E272609DC00F26AC7 /* FormatAdaptor.swift */; };
 		27BB5A41272628BD00F26AC7 /* RequestBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A40272628BD00F26AC7 /* RequestBodyView.swift */; };
 		27BB5A4327262A6A00F26AC7 /* ResponseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A4227262A6A00F26AC7 /* ResponseView.swift */; };
 		27BB5A4627262DFF00F26AC7 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BB5A4527262DFF00F26AC7 /* HTTPClient.swift */; };
@@ -88,7 +89,8 @@
 		274FF33C2743543F00D8AC2A /* VariableSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableSet.swift; sourceTree = "<group>"; };
 		274FF33E2743556700D8AC2A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		274FF342274466C400D8AC2A /* AppTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
-		274FF3462745C86600D8AC2A /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		274FF3482749BA2800D8AC2A /* FormDataRequestBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataRequestBodyView.swift; sourceTree = "<group>"; };
+		274FF34A2749C82100D8AC2A /* TextFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormatter.swift; sourceTree = "<group>"; };
 		278394D827389BE600533A28 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		2788FFC62728E3B800F77060 /* ResponseBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyType.swift; sourceTree = "<group>"; };
 		2788FFC82728E83D00F77060 /* ResponseBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseBodyView.swift; sourceTree = "<group>"; };
@@ -106,7 +108,7 @@
 		27945AC72709448500F97E78 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		27BB5A3A2724EEA600F26AC7 /* RequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestView.swift; sourceTree = "<group>"; };
 		27BB5A3C2725D42400F26AC7 /* RequestBodyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBodyType.swift; sourceTree = "<group>"; };
-		27BB5A3E272609DC00F26AC7 /* SyntaxAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxAdaptor.swift; sourceTree = "<group>"; };
+		27BB5A3E272609DC00F26AC7 /* FormatAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatAdaptor.swift; sourceTree = "<group>"; };
 		27BB5A40272628BD00F26AC7 /* RequestBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBodyView.swift; sourceTree = "<group>"; };
 		27BB5A4227262A6A00F26AC7 /* ResponseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseView.swift; sourceTree = "<group>"; };
 		27BB5A4527262DFF00F26AC7 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
@@ -139,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				274FF33E2743556700D8AC2A /* Array.swift */,
-				274FF3462745C86600D8AC2A /* NSMutableAttributedString.swift */,
 				274FF31C273D8A6A00D8AC2A /* SecureField.swift */,
 				274FF324273DEE0100D8AC2A /* String.swift */,
 				274FF31E273D8AA400D8AC2A /* TextField.swift */,
@@ -198,6 +199,7 @@
 				274FF313273CB64F00D8AC2A /* BasicAuthenticationView.swift */,
 				274FF3342742E6B000D8AC2A /* BearerTokenAuthenticationView.swift */,
 				27945AB52709179D00F97E78 /* ContentView.swift */,
+				274FF3482749BA2800D8AC2A /* FormDataRequestBodyView.swift */,
 				27C015012727999B00F693A0 /* HeadersView.swift */,
 				274FF3302741F0BE00D8AC2A /* KeyValueTableView.swift */,
 				274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */,
@@ -255,9 +257,10 @@
 			isa = PBXGroup;
 			children = (
 				274FF32C273F064C00D8AC2A /* DataManager.swift */,
+				27BB5A3E272609DC00F26AC7 /* FormatAdaptor.swift */,
 				27BB5A4527262DFF00F26AC7 /* HTTPClient.swift */,
 				274FF32A273F062C00D8AC2A /* PostmanV21DataManager.swift */,
-				27BB5A3E272609DC00F26AC7 /* SyntaxAdaptor.swift */,
+				274FF34A2749C82100D8AC2A /* TextFormatter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -342,10 +345,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				274FF3492749BA2800D8AC2A /* FormDataRequestBodyView.swift in Sources */,
 				274FF32B273F062C00D8AC2A /* PostmanV21DataManager.swift in Sources */,
 				274FF3392743430800D8AC2A /* SettingsView.swift in Sources */,
+				274FF34B2749C82100D8AC2A /* TextFormatter.swift in Sources */,
 				274FF325273DEE0100D8AC2A /* String.swift in Sources */,
-				27BB5A3F272609DC00F26AC7 /* SyntaxAdaptor.swift in Sources */,
+				27BB5A3F272609DC00F26AC7 /* FormatAdaptor.swift in Sources */,
 				27BB5A41272628BD00F26AC7 /* RequestBodyView.swift in Sources */,
 				27C015002726577E00F693A0 /* OperationView.swift in Sources */,
 				27BB5A51272636A500F26AC7 /* SidebarView.swift in Sources */,
@@ -381,7 +386,6 @@
 				274FF33B274344EF00D8AC2A /* VariableSettingsView.swift in Sources */,
 				274FF3312741F0BE00D8AC2A /* KeyValueTableView.swift in Sources */,
 				27BB5A3D2725D42400F26AC7 /* RequestBodyType.swift in Sources */,
-				274FF3472745C86600D8AC2A /* NSMutableAttributedString.swift in Sources */,
 				2788FFC72728E3B800F77060 /* ResponseBodyType.swift in Sources */,
 				274FF3352742E6B000D8AC2A /* BearerTokenAuthenticationView.swift in Sources */,
 				27C014FA2726416400F693A0 /* CenteredViewModifier.swift in Sources */,

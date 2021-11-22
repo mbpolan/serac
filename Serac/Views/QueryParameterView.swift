@@ -10,6 +10,8 @@ import SwiftUI
 // MARK: - View
 
 struct QueryParameterView: View {
+    @AppStorage("activeVariableSet") private var activeVariableSet: String?
+    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @StateObject var request: Request
     @StateObject private var viewModel: QueryParameterViewModel = QueryParameterViewModel()
     
@@ -18,6 +20,7 @@ struct QueryParameterView: View {
             KeyValueTableView(data: $viewModel.parameters,
                               labels: ["Parameter", "Value"],
                               editable: true,
+                              formatter: formatter,
                               persistAppState: false,
                               onChange: handleUpdateUrl)
                 .padding([.leading, .trailing], 10)
@@ -31,6 +34,16 @@ struct QueryParameterView: View {
         .onChange(of: viewModel.parameters) { params in
             handleUpdateUrl()
         }
+    }
+    
+    private var variables: VariableSet? {
+        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
+    }
+    
+    private var formatter: TextFormatter {
+        TextFormatter(adaptors: [
+            VariableFormatAdaptor(variables: variables)
+        ])
     }
     
     private func updateModel(from url: String) {
