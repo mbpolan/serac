@@ -10,8 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct URLTextField: View {
-    @AppStorage("activeVariableSet") var activeVariableSet: String?
-    @AppStorage("variableSets") var variableSets: [VariableSet] = []
+    @ActiveVariableSet var variables: VariableSet?
     @Binding var text: String
     var introspect: (_ nsTextField: NSTextField) -> Void = { _ in }
     
@@ -22,10 +21,6 @@ struct URLTextField: View {
             nsTextField.bezelStyle = .roundedBezel
             introspect(nsTextField)
         })
-    }
-    
-    private var variables: VariableSet? {
-        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
     private func formatter(_ variables: VariableSet?) -> TextFormatter {

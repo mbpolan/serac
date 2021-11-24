@@ -10,10 +10,10 @@ import SwiftUI
 // MARK: - View
 
 struct QueryParameterView: View {
-    @AppStorage("activeVariableSet") private var activeVariableSet: String?
-    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
-    @StateObject var request: Request
+    @ActiveVariableSet private var variables: VariableSet?
     @StateObject private var viewModel: QueryParameterViewModel = QueryParameterViewModel()
+    @StateObject var request: Request
+    
     
     var body: some View {
         ScrollView {
@@ -34,10 +34,6 @@ struct QueryParameterView: View {
         .onChange(of: viewModel.parameters) { params in
             handleUpdateUrl()
         }
-    }
-    
-    private var variables: VariableSet? {
-        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
     private var formatter: TextFormatter {

@@ -11,8 +11,7 @@ import SwiftUI
 // MARK: - View
 
 struct SessionView: View {
-    @AppStorage("activeVariableSet") private var activeVariableSet: String?
-    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
+    @ActiveVariableSet private var variables: VariableSet?
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel: SessionViewModel = SessionViewModel()
     @ObservedObject var session: Session
@@ -57,9 +56,6 @@ struct SessionView: View {
     private func handleSend(_ request: Request) {
         viewModel.loading = true
         viewModel.error = nil
-        
-        // take the current variable set, if one is selected
-        let variables = variableSets.first { $0.id == activeVariableSet ?? "" }
         
         viewModel.task = HTTPClient.shared.send(request, variables: variables)
             .receive(on: DispatchQueue.main)

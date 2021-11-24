@@ -10,10 +10,9 @@ import SwiftUI
 // MARK: - View
 
 struct FormDataRequestBodyView: View {
-    @AppStorage("activeVariableSet") var activeVariableSet: String?
-    @AppStorage("variableSets") var variableSets: [VariableSet] = []
-    @ObservedObject var request: Request
+    @ActiveVariableSet private var variables: VariableSet?
     @StateObject private var viewModel: FormDataRequestBodyViewModel = FormDataRequestBodyViewModel()
+    @ObservedObject var request: Request
     
     var body: some View {
         ScrollView {
@@ -28,10 +27,6 @@ struct FormDataRequestBodyView: View {
         }
         .onAppear(perform: updateModel)
         .onChange(of: viewModel.formData, perform: updateRequest)
-    }
-    
-    private var variables: VariableSet? {
-        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
     private var formatter: TextFormatter {

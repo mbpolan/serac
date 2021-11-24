@@ -11,8 +11,7 @@ import SwiftUI
 // based on: https://gist.github.com/unnamedd/6e8c3fbc806b8deb60fa65d6b9affab0
 
 struct SyntaxTextView: NSViewRepresentable {
-    @AppStorage("activeVariableSet") var activeVariableSet: String?
-    @AppStorage("variableSets") var variableSets: [VariableSet] = []
+    @ActiveVariableSet var variables: VariableSet?
     @Binding var text: String
     @Binding var formatter: TextFormatter
     var isEditable: Bool = true
@@ -77,21 +76,13 @@ struct SyntaxTextView: NSViewRepresentable {
         // method can get called for a variety of reasons, and to avoid unnecessary updates
         // to the text view, we can check if the contents of the text have changed. rendering
         // large text (unchanging) content is expensive, so we need to avoid it as much as possible.
-        if isEditable || text != view.text || view.variables?.id != activeVariableSet {
+        if isEditable || text != view.text || view.variables?.id != variables?.id {
             view.text = text
             view.variables = variables
         }
         
         view.selectedRanges = context.coordinator.selectedRanges
         view.formatter = formatter
-    }
-    
-    private var variables: VariableSet? {
-        if observeVariables {
-            return variableSets.first(where: { $0.id == activeVariableSet ?? "" }) ?? .empty
-        }
-        
-        return nil
     }
 }
 

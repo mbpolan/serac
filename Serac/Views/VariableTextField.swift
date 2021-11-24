@@ -10,17 +10,12 @@ import SwiftUI
 // MARK: - View
 
 struct VariableTextField: View {
-    @AppStorage("activeVariableSet") private var activeVariableSet: String?
-    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
+    @ActiveVariableSet private var variables: VariableSet?
     @Binding var text: String
     
     var body: some View {
         AppTextField(text: $text,
                      formatter: formatter)
-    }
-    
-    private var variables: VariableSet? {
-        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
     private var formatter: TextFormatter {

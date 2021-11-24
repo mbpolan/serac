@@ -10,8 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct RequestBodyView: View {
-    @AppStorage("activeVariableSet") private var activeVariableSet: String?
-    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
+    @ActiveVariableSet private var variables: VariableSet?
     @ObservedObject var request: Request
     
     var body: some View {
@@ -63,10 +62,6 @@ struct RequestBodyView: View {
     
     private var canFormat: Bool {
         request.bodyContentType == .json
-    }
-    
-    private var variables: VariableSet? {
-        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
     private var formatter: Binding<TextFormatter> {

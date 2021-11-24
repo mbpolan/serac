@@ -10,8 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct HeadersView: View {
-    @AppStorage("activeVariableSet") private var activeVariableSet: String?
-    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
+    @ActiveVariableSet private var variables: VariableSet?
     @ObservedObject var message: HTTPMessage
     let editable: Bool
     
@@ -23,10 +22,6 @@ struct HeadersView: View {
                               formatter: formatter)
                 .padding([.leading, .trailing], 10)
         }
-    }
-    
-    private var variables: VariableSet? {
-        variableSets.first(where: { $0.id == activeVariableSet ?? "" })
     }
     
     private var formatter: TextFormatter {
