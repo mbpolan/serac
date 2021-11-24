@@ -26,16 +26,14 @@ struct SessionView: View {
                 RequestView(request: session.request)
                     .padding(.trailing, 2)
                 
-                Group {
+                ActivityView(loading: $viewModel.loading,
+                             onAbort: handleStopRequest) {
+                    
                     if let error = viewModel.error {
                         ResponseErrorView(message: error)
                     } else {
-                        ActivityView(loading: $viewModel.loading,
-                                     onAbort: handleStopRequest) {
-                            
-                            ResponseView(response: session.response)
-                                .padding(.leading, 2)
-                        }
+                        ResponseView(response: session.response)
+                            .padding(.leading, 2)
                     }
                 }
             }

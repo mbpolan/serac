@@ -9,10 +9,10 @@ import SwiftUI
 
 // MARK: - View
 
-struct ActivityView<Content>: View where Content: View {
+struct ActivityView<Content: View>: View {
     @Binding var loading: Bool
     let onAbort: () -> Void
-    var content: () -> Content
+    @ViewBuilder let content: () -> Content
     
     var body: some View {
         GeometryReader { geo in

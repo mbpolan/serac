@@ -13,15 +13,18 @@ struct ResponseErrorView: View {
     let message: String
     
     var body: some View {
-        VStack {
-            Image(systemName: "xmark.circle")
-                .font(.system(size: 32))
-            
-            Text(message)
-                .bold()
-                .padding(.top, 3)
+        HStack {
+            VStack {
+                Image(systemName: "xmark.circle")
+                    .font(.system(size: 32))
+                
+                Text(message)
+                    .bold()
+                    .padding(.top, 3)
+            }
+            .centered(.both)
+            .padding(15)
         }
-        .centered(.both)
     }
 }
 
