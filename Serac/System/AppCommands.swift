@@ -18,6 +18,13 @@ struct AppCommands: Commands {
             }
         }
         
+        CommandGroup(before: .sidebar) {
+            Button("Toggle Quick Find") {
+                ToggleQuickFindNotification().notify()
+            }
+            .keyboardShortcut("/", modifiers: .command)
+        }
+        
         CommandMenu("Request") {
             Button("Edit URL") {
                 FocusURLNotification().notify()

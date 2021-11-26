@@ -80,7 +80,12 @@ struct ContentView: View {
                       message: Text(viewModel.error?.errorDescription ?? "An unknown error has occurred"),
                       dismissButton: .default(Text("OK")))
             }
+            .sheet(isPresented: $viewModel.quickFindShown, onDismiss: handleHideQuickFind) {
+                QuickFindView(onDismiss: handleHideQuickFind)
+            }
         }
+        .onToggleQuickFind(perform: handleToggleQuickFind)
+        .onOpenCollectionItem(perform: handleOpenCollectionItem)
         .onCloseRequest(perform: handleClose)
         .onClearSessions(perform: handleClearSessions)
         .onImportData(perform: handleImportData)
@@ -94,6 +99,31 @@ struct ContentView: View {
                 appState.objectWillChange.send()
             }
         )
+    }
+    
+    private func handleToggleQuickFind() {
+        viewModel.quickFindShown = !viewModel.quickFindShown
+    }
+    
+    private func handleOpenCollectionItem(_ item: CollectionItem) {
+        // handle three possible cases when opening a request:
+        // 1. this request is already open as the active session: do nothing
+        // 2. this request was open previously in a session: restore that previous session
+        // 3. this request was not yet open: create a new session
+        if appState.activeSession?.request.id == item.id {
+            return
+        } else if let existingSession = appState.sessions.first(where: { $0.id == item.id }) {
+            appState.activeSession = existingSession
+        } else {
+            let session = Session(id: item.id, request: item.request ?? Request())
+            
+            appState.sessions.append(session)
+            appState.activeSession = session
+        }
+    }
+    
+    private func handleHideQuickFind() {
+        viewModel.quickFindShown = false
     }
     
     private func handleSidebar() {
@@ -157,6 +187,7 @@ struct ContentView: View {
 // MARK: - View Model
 
 class ContentViewModel: ObservableObject {
+    @Published var quickFindShown: Bool = false
     @Published var alertShown: Bool = false
     @Published var error: AppError?
 }

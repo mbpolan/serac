@@ -65,6 +65,7 @@
 		27C015002726577E00F693A0 /* OperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C014FF2726577E00F693A0 /* OperationView.swift */; };
 		27C015022727999B00F693A0 /* HeadersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C015012727999B00F693A0 /* HeadersView.swift */; };
 		27C0150427279B6B00F693A0 /* HTTPMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C0150327279B6B00F693A0 /* HTTPMessage.swift */; };
+		27FD7544274F1AC800FE095D /* QuickFindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD7543274F1AC800FE095D /* QuickFindView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +129,7 @@
 		27C014FF2726577E00F693A0 /* OperationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationView.swift; sourceTree = "<group>"; };
 		27C015012727999B00F693A0 /* HeadersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadersView.swift; sourceTree = "<group>"; };
 		27C0150327279B6B00F693A0 /* HTTPMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMessage.swift; sourceTree = "<group>"; };
+		27FD7543274F1AC800FE095D /* QuickFindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickFindView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +220,7 @@
 				274FF320273DC41500D8AC2A /* OAuth2AuthenticationView.swift */,
 				27C014FF2726577E00F693A0 /* OperationView.swift */,
 				27C014FB2726430400F693A0 /* QueryParameterView.swift */,
+				27FD7543274F1AC800FE095D /* QuickFindView.swift */,
 				27BB5A40272628BD00F26AC7 /* RequestBodyView.swift */,
 				27BB5A3A2724EEA600F26AC7 /* RequestView.swift */,
 				2788FFC82728E83D00F77060 /* ResponseBodyView.swift */,
@@ -412,6 +415,7 @@
 				274FF32D273F064C00D8AC2A /* DataManager.swift in Sources */,
 				274FF323273DEC8C00D8AC2A /* ResponseErrorView.swift in Sources */,
 				27C014FE272645B300F693A0 /* KeyValuePair.swift in Sources */,
+				27FD7544274F1AC800FE095D /* QuickFindView.swift in Sources */,
 				274FF312273CB49100D8AC2A /* AuthorizationType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

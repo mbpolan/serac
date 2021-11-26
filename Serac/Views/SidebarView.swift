@@ -42,20 +42,7 @@ struct SidebarView: View {
                   return
               }
         
-        // handle three possible cases when opening a request:
-        // 1. this request is already open as the active session: do nothing
-        // 2. this request was open previously in a session: restore that previous session
-        // 3. this request was not yet open: create a new session
-        if appState.activeSession?.request.id == id {
-            return
-        } else if let existingSession = appState.sessions.first(where: { $0.id == id }) {
-            appState.activeSession = existingSession
-        } else {
-            let session = Session(id: id, request: item.request ?? Request())
-            
-            appState.sessions.append(session)
-            appState.activeSession = session
-        }
+        OpenCollectionItemNotification(item: item).notify()
     }
     
     private func handleAddGroup(under parent: CollectionItem? = nil) {

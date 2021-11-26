@@ -43,6 +43,20 @@ struct ImportDataNotification: Notifiable {
     }
 }
 
+struct OpenCollectionItemNotification: Notifiable {
+    static var name = Notification.Name("openRequest")
+    
+    let item: CollectionItem
+    
+    func notify() {
+        NotificationCenter.default.post(name: OpenCollectionItemNotification.name, object: item)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: SendRequestNotification.name, object: nil)
+    }
+}
+
 struct SendRequestNotification: Notifiable {
     static var name = Notification.Name("sendRequest")
     
@@ -91,6 +105,18 @@ struct ClearSessionsNotification: Notifiable {
     }
 }
 
+struct ToggleQuickFindNotification: Notifiable {
+    static var name = Notification.Name("toggleQuickFind")
+    
+    func notify() {
+        NotificationCenter.default.post(name: ToggleQuickFindNotification.name, object: nil)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: ToggleQuickFindNotification.name, object: nil)
+    }
+}
+
 extension View {
     func onNotification(_ name: Notification.Name, perform: @escaping() -> Void) -> some View {
         return onReceive(NotificationCenter.default.publisher(for: name)) { event in
@@ -98,8 +124,19 @@ extension View {
         }
     }
     
+    func onNotification<T>(_ name: Notification.Name, perform: @escaping(_ object: T) -> Void) -> some View {
+        return onReceive(NotificationCenter.default.publisher(for: name, object: nil)) { event in
+            guard let object = event.object as? T else { return }
+            perform(object)
+        }
+    }
+    
     func onPersistAppState(perform: @escaping() -> Void) -> some View {
         return onNotification(PersistAppStateNotification.name, perform: perform)
+    }
+    
+    func onOpenCollectionItem(perform: @escaping(_ item: CollectionItem) -> Void) -> some View {
+        return onNotification(OpenCollectionItemNotification.name, perform: perform)
     }
     
     func onSendRequest(perform: @escaping() -> Void) -> some View {
@@ -119,10 +156,10 @@ extension View {
     }
     
     func onImportData(perform: @escaping(_ type: ImportDataNotification.SourceDataType) -> Void) -> some View {
-        return onReceive(NotificationCenter.default.publisher(for: ImportDataNotification.name)) { event in
-            if let object = event.object as? ImportDataNotification.SourceDataType {
-                perform(object)
-            }
-        }
+        return onNotification(ImportDataNotification.name, perform: perform)
+    }
+    
+    func onToggleQuickFind(perform: @escaping() -> Void) -> some View {
+        return onNotification(ToggleQuickFindNotification.name, perform: perform)
     }
 }
