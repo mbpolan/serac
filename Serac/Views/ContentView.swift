@@ -10,8 +10,6 @@ import SwiftUI
 // MARK: - View
 
 struct ContentView: View {
-    @AppStorage("activeVariableSet") private var activeVariableSet: String?
-    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel: ContentViewModel = ContentViewModel()
     
@@ -27,53 +25,9 @@ struct ContentView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .navigation) {
-                    Button(action: handleSidebar) {
-                        Image(systemName: "sidebar.leading")
-                    }
-                }
-                
-                ToolbarItem(placement: .principal) {
-                    TextField(text: sessionName)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                
-                ToolbarItem {
-                    Spacer()
-                }
-                
-                ToolbarItem(placement: .primaryAction) {
-                    HStack {
-                        // show a picker for choosing the current variable set
-                        Picker(selection: $activeVariableSet, label: Text("Variable Set")) {
-                            Text("No Variables")
-                                .tag(nil as String?)
-                            
-                            if variableSets.count > 0 {
-                                Divider()
-                            }
-                            
-                            ForEach(variableSets, id: \.id) { vs in
-                                Text(vs.name)
-                                    .tag(vs.id as String?)
-                            }
-                        }
-                        
-                        // show a close button to destroy the current session
-                        if appState.activeSession != nil {
-                            Button(action: handleClose) {
-                                Image(systemName: "xmark")
-                            }
-                            .help("Close the current request")
-                        }
-                        
-                        // show a button to quickly add a new session
-                        Button(action: handleAdd) {
-                            Image(systemName: "plus")
-                        }
-                        .help("Create a new request")
-                    }
-                }
+                ContentViewToolbar(appState: appState,
+                                   onAddSession: handleAdd,
+                                   onCloseSession: handleClose)
             }
             .alert(isPresented: $viewModel.alertShown) {
                 Alert(title: Text("Something went wrong!"),
@@ -89,16 +43,6 @@ struct ContentView: View {
         .onCloseRequest(perform: handleClose)
         .onClearSessions(perform: handleClearSessions)
         .onImportData(perform: handleImportData)
-    }
-    
-    private var sessionName: Binding<String> {
-        return Binding<String>(
-            get: { appState.activeSession?.request.name ?? "" },
-            set: {
-                appState.activeSession?.request.name = $0
-                appState.objectWillChange.send()
-            }
-        )
     }
     
     private func handleToggleQuickFind() {
@@ -128,12 +72,6 @@ struct ContentView: View {
     
     private func handleHideQuickFind() {
         viewModel.quickFindShown = false
-    }
-    
-    private func handleSidebar() {
-        NSApp.keyWindow?.firstResponder?.tryToPerform(
-            #selector(NSSplitViewController.toggleSidebar(_:)),
-            with: nil)
     }
     
     private func handleAdd() {
@@ -195,6 +133,82 @@ class ContentViewModel: ObservableObject {
     @Published var quickFindShown: Bool = false
     @Published var alertShown: Bool = false
     @Published var error: AppError?
+}
+
+// MARK: - Toolbar
+
+struct ContentViewToolbar: ToolbarContent {
+    @AppStorage("activeVariableSet") private var activeVariableSet: String?
+    @AppStorage("variableSets") private var variableSets: [VariableSet] = []
+    @ObservedObject var appState: AppState
+    let onAddSession: () -> Void
+    let onCloseSession: () -> Void
+    
+    var body: some ToolbarContent {
+        ToolbarItem(placement: .navigation) {
+            Button(action: handleSidebar) {
+                Image(systemName: "sidebar.leading")
+            }
+        }
+        
+        ToolbarItem(placement: .principal) {
+            TextField(text: sessionName)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+        
+        ToolbarItem {
+            Spacer()
+        }
+        
+        ToolbarItem(placement: .primaryAction) {
+            HStack {
+                // show a picker for choosing the current variable set
+                Picker(selection: $activeVariableSet, label: Text("Variable Set")) {
+                    Text("No Variables")
+                        .tag(nil as String?)
+                    
+                    if variableSets.count > 0 {
+                        Divider()
+                    }
+                    
+                    ForEach(variableSets, id: \.id) { vs in
+                        Text(vs.name)
+                            .tag(vs.id as String?)
+                    }
+                }
+                
+                // show a close button to destroy the current session
+                if appState.activeSession != nil {
+                    Button(action: onCloseSession) {
+                        Image(systemName: "xmark")
+                    }
+                    .help("Close the current request")
+                }
+                
+                // show a button to quickly add a new session
+                Button(action: onAddSession) {
+                    Image(systemName: "plus")
+                }
+                .help("Create a new request")
+            }
+        }
+    }
+    
+    private var sessionName: Binding<String> {
+        return Binding<String>(
+            get: { appState.activeSession?.request.name ?? "" },
+            set: {
+                appState.activeSession?.request.name = $0
+                appState.objectWillChange.send()
+            }
+        )
+    }
+    
+    private func handleSidebar() {
+        NSApp.keyWindow?.firstResponder?.tryToPerform(
+            #selector(NSSplitViewController.toggleSidebar(_:)),
+            with: nil)
+    }
 }
 
 // MARK: - Preview
