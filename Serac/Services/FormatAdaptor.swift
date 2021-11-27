@@ -40,33 +40,29 @@ struct VariableFormatAdaptor: FormatAdaptor {
     
     func decorate(_ text: NSMutableAttributedString, range: NSRange) -> NSMutableAttributedString {
         // look for embedded variables
-        guard let match = try! NSRegularExpression(pattern: #"(\$\{.*\})"#)
-                .matches(in: text.string, range: range).first else {
-                    return text
-                }
+        let regex = try! NSRegularExpression(pattern: #"(\$\{.*\})"#)
         
-        for index in 0..<match.numberOfRanges {
-            let matched = match.range(at: index)
+        regex.matches(in: text.string, range: range).forEach { match in
+            let matched = match.range
             
             // extract the variable name between the curly braces
             let variableName = NSMakeRange(matched.lowerBound + 2, matched.length - 3)
             
-            if let substring = Range(variableName, in: text.string) {
-                let variable = String(text.string[substring])
+            guard let substring = Range(variableName, in: text.string) else { return }
+            let variable = String(text.string[substring])
+            
+            // is this variable defined in our current variable set?
+            if let variable = variables.variables.first(where: { $0.key == variable }) {
+                text.addAttributes([
+                    .toolTip: variable.value as NSString,
+                    .cursor: NSCursor.pointingHand,
+                    .foregroundColor: NSColor.systemOrange,
+                ], range: matched)
                 
-                // is this variable defined in our current variable set?
-                if let variable = variables.variables.first(where: { $0.key == variable }) {
-                    text.addAttributes([
-                        .toolTip: variable.value as NSString,
-                        .cursor: NSCursor.pointingHand,
-                        .foregroundColor: NSColor.systemOrange,
-                    ], range: matched)
-                    
-                } else {
-                    text.addAttributes([
-                        .foregroundColor: NSColor.systemRed,
-                    ], range: matched)
-                }
+            } else {
+                text.addAttributes([
+                    .foregroundColor: NSColor.systemRed,
+                ], range: matched)
             }
         }
         
