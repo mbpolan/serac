@@ -106,6 +106,8 @@ struct ContentView: View {
     }
     
     private func handleOpenCollectionItem(_ item: CollectionItem) {
+        appState.activeItemID = item.id
+        
         // handle three possible cases when opening a request:
         // 1. this request is already open as the active session: do nothing
         // 2. this request was open previously in a session: restore that previous session
@@ -120,6 +122,8 @@ struct ContentView: View {
             appState.sessions.append(session)
             appState.activeSession = session
         }
+        
+        PersistAppStateNotification().notify()
     }
     
     private func handleHideQuickFind() {

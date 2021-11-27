@@ -11,11 +11,10 @@ import SwiftUI
 
 struct SidebarView: View {
     @EnvironmentObject private var appState: AppState
-    @State private var selected: String?
     
     var body: some View {
         VStack {
-            List(appState.collections, id: \.id, children: \.children, selection: $selected) { item in
+            List(appState.collections, id: \.id, children: \.children, selection: $appState.activeItemID) { item in
                 ListItemView(item: item,
                              onAddGroup: { handleAddGroup(under: $0) },
                              onAddRequest: { handleAddRequest(under: $0) },
@@ -29,7 +28,7 @@ struct SidebarView: View {
             
             Divider()
         }
-        .onChange(of: selected) { item in
+        .onChange(of: appState.activeItemID) { item in
             handleOpen(item)
         }
     }

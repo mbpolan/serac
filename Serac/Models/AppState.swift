@@ -8,17 +8,20 @@
 import Foundation
 
 class AppState: ObservableObject, Codable {
+    @Published var activeItemID: String?
     @Published var sessions: [Session]
     @Published var activeSession: Session?
     @Published var collections: [CollectionItem]
     
     enum CodingKeys: CodingKey {
+        case activeItemID
         case sessions
         case activeSession
         case collections
     }
     
     init() {
+        activeItemID = nil
         sessions = []
         activeSession = nil
         collections = []
@@ -27,6 +30,7 @@ class AppState: ObservableObject, Codable {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
+        activeItemID = try container.decodeIfPresent(String.self, forKey: .activeItemID)
         sessions = try container.decode([Session].self, forKey: .sessions)
         activeSession = try container.decodeIfPresent(Session.self, forKey: .activeSession)
         collections = try container.decode([CollectionItem].self, forKey: .collections)
@@ -35,6 +39,7 @@ class AppState: ObservableObject, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
+        try container.encode(activeItemID, forKey: .activeItemID)
         try container.encode(sessions, forKey: .sessions)
         try container.encode(activeSession, forKey: .activeSession)
         try container.encode(collections, forKey: .collections)
