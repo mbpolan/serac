@@ -66,6 +66,7 @@
 		27C015022727999B00F693A0 /* HeadersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C015012727999B00F693A0 /* HeadersView.swift */; };
 		27C0150427279B6B00F693A0 /* HTTPMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C0150327279B6B00F693A0 /* HTTPMessage.swift */; };
 		27FD7544274F1AC800FE095D /* QuickFindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD7543274F1AC800FE095D /* QuickFindView.swift */; };
+		27FD75462751D73C00FE095D /* DynamicRequestBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD75452751D73C00FE095D /* DynamicRequestBodyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -130,6 +131,7 @@
 		27C015012727999B00F693A0 /* HeadersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadersView.swift; sourceTree = "<group>"; };
 		27C0150327279B6B00F693A0 /* HTTPMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMessage.swift; sourceTree = "<group>"; };
 		27FD7543274F1AC800FE095D /* QuickFindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickFindView.swift; sourceTree = "<group>"; };
+		27FD75452751D73C00FE095D /* DynamicRequestBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicRequestBodyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 				274FF313273CB64F00D8AC2A /* BasicAuthenticationView.swift */,
 				274FF3342742E6B000D8AC2A /* BearerTokenAuthenticationView.swift */,
 				27945AB52709179D00F97E78 /* ContentView.swift */,
+				27FD75452751D73C00FE095D /* DynamicRequestBodyView.swift */,
 				274FF3482749BA2800D8AC2A /* FormDataRequestBodyView.swift */,
 				27C015012727999B00F693A0 /* HeadersView.swift */,
 				274FF3302741F0BE00D8AC2A /* KeyValueTableView.swift */,
@@ -376,6 +379,7 @@
 				27945AC82709448500F97E78 /* HTTPMethod.swift in Sources */,
 				274FF3372743097C00D8AC2A /* URLTextField.swift in Sources */,
 				274FF329273EEDD700D8AC2A /* SplashView.swift in Sources */,
+				27FD75462751D73C00FE095D /* DynamicRequestBodyView.swift in Sources */,
 				27C015022727999B00F693A0 /* HeadersView.swift in Sources */,
 				274FF310273CB34C00D8AC2A /* AuthenticationView.swift in Sources */,
 				274FF355274B25C900D8AC2A /* ActiveVariableSet.swift in Sources */,

@@ -16,21 +16,21 @@ struct SyntaxTextView: NSViewRepresentable {
     @Binding var formatter: TextFormatter
     var isEditable: Bool = true
     var observeVariables: Bool = true
-    
-    var onEditingChanged: () -> Void       = {}
-    var onCommit        : () -> Void       = {}
-    var onTextChange    : (String) -> Void = { _ in }
+    var introspect: (_ nsTextView: NSView) -> Void = { _ in }
+    var onCommit: () -> Void = {}
     
     init(string: Binding<String>,
          isEditable: Bool,
          formatter: Binding<TextFormatter>,
          observeVariables: Bool,
+         introspect: @escaping(_ nsView: NSView) -> Void = { _ in },
          onCommit: @escaping() -> Void = {}) {
         
         self._text = string
         self.isEditable = isEditable
         self._formatter = formatter
         self.observeVariables = observeVariables
+        self.introspect = introspect
         self.onCommit = onCommit
     }
     
@@ -67,6 +67,7 @@ struct SyntaxTextView: NSViewRepresentable {
         )
         
         textView.delegate = context.coordinator
+        introspect(textView)
         
         return textView
     }
@@ -103,7 +104,6 @@ struct SyntaxTextView_Previews: PreviewProvider {
 // MARK: - Coordinator
 
 extension SyntaxTextView {
-    
     class Coordinator: NSObject, NSTextViewDelegate {
         var parent: SyntaxTextView
         var selectedRanges: [NSValue] = []
@@ -118,7 +118,6 @@ extension SyntaxTextView {
             }
             
             self.parent.text = textView.string
-            self.parent.onEditingChanged()
         }
         
         func textDidChange(_ notification: Notification) {
@@ -253,6 +252,13 @@ final class CustomTextView: NSView {
         
         setupScrollViewConstraints()
         setupTextView()
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        guard let documentView = scrollView.documentView,
+              let window = documentView.window else { return false }
+        
+        return window.makeFirstResponder(documentView)
     }
     
     func setupScrollViewConstraints() {

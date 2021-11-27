@@ -81,6 +81,30 @@ struct FocusURLNotification: Notifiable {
     }
 }
 
+struct FocusRequestBodyNotification: Notifiable {
+    static var name = Notification.Name("focusRequestBody")
+    
+    func notify() {
+        NotificationCenter.default.post(name: FocusRequestBodyNotification.name, object: nil)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: FocusRequestBodyNotification.name, object: nil)
+    }
+}
+
+struct FormatRequestBodyNotification: Notifiable {
+    static var name = Notification.Name("formatRequestBody")
+    
+    func notify() {
+        NotificationCenter.default.post(name: FormatRequestBodyNotification.name, object: nil)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: FormatRequestBodyNotification.name, object: nil)
+    }
+}
+
 struct CloseRequestNotification: Notifiable {
     static var name = Notification.Name("closeRequest")
     
@@ -145,6 +169,14 @@ extension View {
     
     func onFocusURLField(perform: @escaping() -> Void) -> some View {
         return onNotification(FocusURLNotification.name, perform: perform)
+    }
+    
+    func onFocusRequestBody(perform: @escaping() -> Void) -> some View {
+        return onNotification(FocusRequestBodyNotification.name, perform: perform)
+    }
+    
+    func onFormatRequestBody(perform: @escaping() -> Void) -> some View {
+        return onNotification(FormatRequestBodyNotification.name, perform: perform)
     }
     
     func onCloseRequest(perform: @escaping() -> Void) -> some View {

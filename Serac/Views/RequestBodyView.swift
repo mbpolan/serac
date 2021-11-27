@@ -43,11 +43,7 @@ struct RequestBodyView: View {
                 if request.bodyContentType == .formURLEncoded {
                     FormDataRequestBodyView(request: request)
                 } else if request.bodyContentType != .none {
-                    SyntaxTextView(string: $request.body,
-                                   isEditable: true,
-                                   formatter: formatter,
-                                   observeVariables: true,
-                                   onCommit: handlePersistState)
+                    DynamicRequestBodyView(request: request)
                 } else {
                     EmptyView()
                         .centered(.vertical)
@@ -55,6 +51,7 @@ struct RequestBodyView: View {
             }
             .layoutPriority(2)
         }
+        .onFormatRequestBody(perform: handleFormat)
         .onChange(of: request.bodyContentType) { _ in
             handlePersistState()
         }
@@ -64,22 +61,8 @@ struct RequestBodyView: View {
         request.bodyContentType == .json
     }
     
-    private var formatter: Binding<TextFormatter> {
-        .init(
-            get: {
-                switch request.bodyContentType {
-                case .json:
-                    return .init(adaptors: [
-                        JSONFormatAdaptor(),
-                        VariableFormatAdaptor(variables: variables)
-                    ])
-                default:
-                    return .init(adaptors: [
-                        VariableFormatAdaptor(variables: variables)
-                    ])
-                }
-            },
-            set: { _ in })
+    private func handlePersistState() {
+        PersistAppStateNotification().notify()
     }
     
     private func handleFormat() {
@@ -90,9 +73,7 @@ struct RequestBodyView: View {
         ])
             .apply(to: request.body)
             .string
-    }
-    
-    private func handlePersistState() {
+        
         PersistAppStateNotification().notify()
     }
     

@@ -22,7 +22,7 @@ struct AppCommands: Commands {
             Button("Toggle Quick Find") {
                 ToggleQuickFindNotification().notify()
             }
-            .keyboardShortcut("/", modifiers: .command)
+            .keyboardShortcut("o", modifiers: [.command, .shift])
         }
         
         CommandMenu("Request") {
@@ -30,6 +30,16 @@ struct AppCommands: Commands {
                 FocusURLNotification().notify()
             }
             .keyboardShortcut("l", modifiers: .command)
+            
+            Button("Edit Body") {
+                FocusRequestBodyNotification().notify()
+            }
+            .keyboardShortcut("b", modifiers: .command)
+            
+            Button("Format Body") {
+                FormatRequestBodyNotification().notify()
+            }
+            .keyboardShortcut("i", modifiers: .control)
             
             Divider()
             
