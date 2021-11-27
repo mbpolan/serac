@@ -147,6 +147,7 @@ struct ContentView: View {
     }
     
     private func handleClose() {
+        appState.activeItemID = nil
         appState.activeSession = nil
         
         PersistAppStateNotification().notify()
