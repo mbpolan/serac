@@ -20,7 +20,7 @@ struct AppCommands: Commands {
         
         CommandGroup(before: .sidebar) {
             Button("Toggle Quick Find") {
-                ToggleQuickFindNotification().notify()
+                ToggleCommandPaletteNotification().notify()
             }
             .keyboardShortcut("o", modifiers: [.command, .shift])
         }

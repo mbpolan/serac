@@ -129,15 +129,28 @@ struct ClearSessionsNotification: Notifiable {
     }
 }
 
-struct ToggleQuickFindNotification: Notifiable {
-    static var name = Notification.Name("toggleQuickFind")
+struct ToggleCommandPaletteNotification: Notifiable {
+    static var name = Notification.Name("toggleCommandPalette")
     
     func notify() {
-        NotificationCenter.default.post(name: ToggleQuickFindNotification.name, object: nil)
+        NotificationCenter.default.post(name: ToggleCommandPaletteNotification.name, object: nil)
     }
     
     var publisher: NotificationCenter.Publisher {
-        NotificationCenter.default.publisher(for: ToggleQuickFindNotification.name, object: nil)
+        NotificationCenter.default.publisher(for: ToggleCommandPaletteNotification.name, object: nil)
+    }
+}
+
+struct ChangeVariableSetNotification: Notifiable {
+    static var name = Notification.Name("changeVariableSet")
+    let id: String?
+    
+    func notify() {
+        NotificationCenter.default.post(name: ChangeVariableSetNotification.name, object: id)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: ChangeVariableSetNotification.name, object: nil)
     }
 }
 
@@ -191,7 +204,11 @@ extension View {
         return onNotification(ImportDataNotification.name, perform: perform)
     }
     
-    func onToggleQuickFind(perform: @escaping() -> Void) -> some View {
-        return onNotification(ToggleQuickFindNotification.name, perform: perform)
+    func onToggleCommandPalette(perform: @escaping() -> Void) -> some View {
+        return onNotification(ToggleCommandPaletteNotification.name, perform: perform)
+    }
+    
+    func onChangeVariableSet(perform: @escaping(_ id: String?) -> Void) -> some View {
+        return onNotification(ChangeVariableSetNotification.name, perform: perform)
     }
 }

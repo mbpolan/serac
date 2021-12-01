@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - View
 
 struct ContentView: View {
+    @AppStorage("activeVariableSet") private var activeVariableSet: String?
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel: ContentViewModel = ContentViewModel()
     
@@ -35,10 +36,11 @@ struct ContentView: View {
                       dismissButton: .default(Text("OK")))
             }
             .sheet(isPresented: $viewModel.quickFindShown, onDismiss: handleHideQuickFind) {
-                QuickFindView(onDismiss: handleHideQuickFind)
+                CommandPaletteView(onDismiss: handleHideQuickFind)
             }
         }
-        .onToggleQuickFind(perform: handleToggleQuickFind)
+        .onToggleCommandPalette(perform: handleToggleQuickFind)
+        .onChangeVariableSet(perform: handleChangeVariableSet)
         .onOpenCollectionItem(perform: handleOpenCollectionItem)
         .onCloseRequest(perform: handleClose)
         .onClearSessions(perform: handleClearSessions)
@@ -124,6 +126,10 @@ struct ContentView: View {
                 viewModel.error = AppError.dataImportError(error: error)
             }
         }
+    }
+    
+    private func handleChangeVariableSet(_ id: String?) {
+        activeVariableSet = id
     }
 }
 
