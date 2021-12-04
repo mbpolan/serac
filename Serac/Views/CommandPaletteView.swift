@@ -23,9 +23,9 @@ struct CommandPaletteView: View {
                     .foregroundColor(.secondary)
                     .font(.title2)
                 
-                QuickFindTextField("Search for items or actions",
-                                   text: $viewModel.query,
-                                   onAction: handleAction)
+                CommandPaletteTextField("Search for requests or actions",
+                                        text: $viewModel.query,
+                                        onAction: handleAction)
             }
             .padding(5)
             
@@ -41,7 +41,7 @@ struct CommandPaletteView: View {
             ScrollView {
                 ForEach(0..<viewModel.actions.count, id: \.self) { i in
                     HStack {
-                        makeText(at: i)
+                        makeItemText(at: i)
                             .padding(.leading, 5)
                         
                         Spacer()
@@ -61,7 +61,7 @@ struct CommandPaletteView: View {
     }
     
     @ViewBuilder
-    private func makeText(at index: Int) -> some View {
+    private func makeItemText(at index: Int) -> some View {
         let item = viewModel.actions[index]
         
         switch item {
@@ -90,7 +90,7 @@ struct CommandPaletteView: View {
         }
     }
     
-    private func handleAction(_ action: QuickFindTextField.Action) {
+    private func handleAction(_ action: CommandPaletteTextField.Action) {
         switch action {
             // move selection to next or previous item
         case .previousSelection, .nextSelection:
@@ -170,7 +170,6 @@ struct CommandPaletteView: View {
             
         case .argument(let item):
             updateSearchForCommand(query: query, item: item)
-            break
         }
         
         // update the selection based on several conditions:
@@ -212,16 +211,26 @@ struct CommandPaletteView: View {
     }
     
     private func searchForCommands(query: String) {
-        var commands: [CommandPaletteViewModel.CommandItem] = []
-        if query.isEmpty {
-            commands = CommandPaletteViewModel.CommandItem.allCases
-        } else {
-            commands = CommandPaletteViewModel.CommandItem.allCases.filter { item in
-                return item.name.contains(caseInsensitive: query)
-            }
-        }
+        // was an argument given as part of the search?
+        let statement = query.split(separator: " ")
         
-        viewModel.actions = commands.map { .command($0) }
+        // match on an exact command
+        if query.hasSuffix(" ") || statement.count > 1 {
+            let commandName = statement[0]
+            
+            // switch to searching on arguments if we matched a command
+            if let command = CommandPaletteViewModel.CommandItem.allCases.first(where: { $0.name == commandName }) {
+                updateSearchForCommand(query: Array(statement[1...]).joined(separator: " "), item: command)
+            }
+        } else if query.isEmpty {
+            // show all available commands
+            viewModel.actions = CommandPaletteViewModel.CommandItem.allCases.map { .command($0) }
+        } else {
+            // filter by matching commands
+            viewModel.actions = CommandPaletteViewModel.CommandItem.allCases.filter { item in
+                return item.name.contains(caseInsensitive: query)
+            }.map { .command($0) }
+        }
     }
     
     private func matchCollectionItem(_ item: CollectionItem, query: String, into result: inout [CommandPaletteViewModel.ActionItem]) {
@@ -265,7 +274,7 @@ class CommandPaletteViewModel: ObservableObject {
         var name: String {
             switch self {
             case .changeVariableSet:
-                return "Change Variable Set"
+                return "setv"
             }
         }
         
@@ -293,7 +302,7 @@ class CommandPaletteViewModel: ObservableObject {
 
 // MARK: - Text Field
 
-struct QuickFindTextField: NSViewRepresentable {
+struct CommandPaletteTextField: NSViewRepresentable {
     let title: String
     @Binding var text: String
     let onAction: (_ action: Action) -> Void
@@ -333,7 +342,7 @@ struct QuickFindTextField: NSViewRepresentable {
 
 // MARK: - Extensions & Text Field Coordinator
 
-extension QuickFindTextField {
+extension CommandPaletteTextField {
     enum Action {
         case previousSelection
         case nextSelection
@@ -342,9 +351,9 @@ extension QuickFindTextField {
     }
     
     class Coordinator: NSObject, NSTextFieldDelegate, NSControlTextEditingDelegate {
-        let parent: QuickFindTextField
+        let parent: CommandPaletteTextField
         
-        init(_ parent: QuickFindTextField) {
+        init(_ parent: CommandPaletteTextField) {
             self.parent = parent
         }
         
@@ -386,7 +395,7 @@ extension QuickFindTextField {
 
 // MARK: - Preview
 
-struct QuickFindView_Preview: PreviewProvider {
+struct CommandPalette_Preview: PreviewProvider {
     static var previews: some View {
         CommandPaletteView(onDismiss: {})
             .environmentObject(AppState())
