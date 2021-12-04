@@ -35,11 +35,11 @@ struct ContentView: View {
                       message: Text(viewModel.error?.errorDescription ?? "An unknown error has occurred"),
                       dismissButton: .default(Text("OK")))
             }
-            .sheet(isPresented: $viewModel.quickFindShown, onDismiss: handleHideQuickFind) {
-                CommandPaletteView(onDismiss: handleHideQuickFind)
+            .sheet(item: $viewModel.commandPaletteMode, onDismiss: handleHideQuickFind) { mode in
+                CommandPaletteView(initialMode: mode, onDismiss: handleHideQuickFind)
             }
         }
-        .onToggleCommandPalette(perform: handleToggleQuickFind)
+        .onToggleCommandPalette(perform: handleToggleCommandPalette)
         .onChangeVariableSet(perform: handleChangeVariableSet)
         .onOpenCollectionItem(perform: handleOpenCollectionItem)
         .onCloseRequest(perform: handleClose)
@@ -47,8 +47,8 @@ struct ContentView: View {
         .onImportData(perform: handleImportData)
     }
     
-    private func handleToggleQuickFind() {
-        viewModel.quickFindShown = !viewModel.quickFindShown
+    private func handleToggleCommandPalette(_ mode: CommandPaletteView.InitialMode) {
+        viewModel.commandPaletteMode = mode
     }
     
     private func handleOpenCollectionItem(_ item: CollectionItem) {
@@ -73,7 +73,7 @@ struct ContentView: View {
     }
     
     private func handleHideQuickFind() {
-        viewModel.quickFindShown = false
+        viewModel.commandPaletteMode = nil
     }
     
     private func handleAdd() {
@@ -136,7 +136,8 @@ struct ContentView: View {
 // MARK: - View Model
 
 class ContentViewModel: ObservableObject {
-    @Published var quickFindShown: Bool = false
+    @Published var commandPaletteShown: Bool = false
+    @Published var commandPaletteMode: CommandPaletteView.InitialMode?
     @Published var alertShown: Bool = false
     @Published var error: AppError?
 }

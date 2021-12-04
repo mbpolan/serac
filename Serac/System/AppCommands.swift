@@ -19,10 +19,15 @@ struct AppCommands: Commands {
         }
         
         CommandGroup(before: .sidebar) {
-            Button("Toggle Quick Find") {
-                ToggleCommandPaletteNotification().notify()
+            Button("Toggle Quick Search") {
+                ToggleCommandPaletteNotification(mode: .search).notify()
             }
             .keyboardShortcut("o", modifiers: [.command, .shift])
+            
+            Button("Toggle Command Palette") {
+                ToggleCommandPaletteNotification(mode: .command).notify()
+            }
+            .keyboardShortcut("p", modifiers: [.command, .shift])
         }
         
         CommandMenu("Request") {

@@ -131,9 +131,10 @@ struct ClearSessionsNotification: Notifiable {
 
 struct ToggleCommandPaletteNotification: Notifiable {
     static var name = Notification.Name("toggleCommandPalette")
+    let mode: CommandPaletteView.InitialMode
     
     func notify() {
-        NotificationCenter.default.post(name: ToggleCommandPaletteNotification.name, object: nil)
+        NotificationCenter.default.post(name: ToggleCommandPaletteNotification.name, object: mode)
     }
     
     var publisher: NotificationCenter.Publisher {
@@ -204,7 +205,7 @@ extension View {
         return onNotification(ImportDataNotification.name, perform: perform)
     }
     
-    func onToggleCommandPalette(perform: @escaping() -> Void) -> some View {
+    func onToggleCommandPalette(perform: @escaping(_ mode: CommandPaletteView.InitialMode) -> Void) -> some View {
         return onNotification(ToggleCommandPaletteNotification.name, perform: perform)
     }
     

@@ -14,6 +14,7 @@ struct CommandPaletteView: View {
     @ActiveVariableSet private var variables: VariableSet?
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel: CommandPaletteViewModel = CommandPaletteViewModel()
+    let initialMode: InitialMode
     let onDismiss: () -> Void
     
     var body: some View {
@@ -53,6 +54,9 @@ struct CommandPaletteView: View {
             }
             
             Spacer()
+        }
+        .onAppear {
+            viewModel.query = initialMode == .search ? "" : ">"
         }
         .onReceive(viewModel.$query, perform: updateSearch)
         .padding([.top, .bottom], 10)
@@ -253,6 +257,15 @@ struct CommandPaletteView: View {
 
 extension CommandPaletteView {
     var maximumResults: Int { 50 }
+    
+    enum InitialMode: Identifiable {
+        case search
+        case command
+        
+        var id: Int {
+            hashValue
+        }
+    }
 }
 
 // MARK: - View Model
@@ -397,7 +410,7 @@ extension CommandPaletteTextField {
 
 struct CommandPalette_Preview: PreviewProvider {
     static var previews: some View {
-        CommandPaletteView(onDismiss: {})
+        CommandPaletteView(initialMode: .search, onDismiss: {})
             .environmentObject(AppState())
     }
 }
