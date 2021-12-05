@@ -36,10 +36,27 @@ struct AppCommands: Commands {
             }
             .keyboardShortcut("l", modifiers: .command)
             
-            Button("Edit Body") {
-                FocusRequestBodyNotification().notify()
+            Menu("Jump to...") {
+                Button("Authentication") {
+                    FocusRequestControlNotification(control: .authentication).notify()
+                }
+                .keyboardShortcut("a", modifiers: [.control, .option])
+                
+                Button("Headers") {
+                    FocusRequestControlNotification(control: .headers).notify()
+                }
+                .keyboardShortcut("h", modifiers: [.control, .option])
+                
+                Button("Body") {
+                    FocusRequestControlNotification(control: .body).notify()
+                }
+                .keyboardShortcut("b", modifiers: [.control, .option])
+                
+                Button("Query Parameters") {
+                    FocusRequestControlNotification(control: .parameters).notify()
+                }
+                .keyboardShortcut("q", modifiers: [.control, .option])
             }
-            .keyboardShortcut("b", modifiers: .command)
             
             Button("Format Body") {
                 FormatRequestBodyNotification().notify()

@@ -34,6 +34,20 @@ struct RequestView: View {
                     .tag(RequestViewModel.Tab.query)
             }
         }
+        .onFocusRequestControl(perform: handleFocusRequestTab)
+    }
+    
+    private func handleFocusRequestTab(_ control: FocusRequestControlNotification.Control) {
+        switch control {
+        case .authentication:
+            viewModel.tab = .authentication
+        case .body:
+            viewModel.tab = .body
+        case .headers:
+            viewModel.tab = .headers
+        case .parameters:
+            viewModel.tab = .query
+        }
     }
 }
 

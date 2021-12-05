@@ -21,9 +21,7 @@ struct DynamicRequestBodyView: View {
                        observeVariables: true,
                        introspect: { viewModel.textView = $0 },
                        onCommit: handlePersistState)
-            .onFocusRequestBody {
-                viewModel.textView?.becomeFirstResponder()
-            }
+            .onFocusRequestControl(perform: handleFocusRequestControl)
     }
     
     private var formatter: Binding<TextFormatter> {
@@ -46,6 +44,12 @@ struct DynamicRequestBodyView: View {
     
     private func handlePersistState() {
         PersistAppStateNotification().notify()
+    }
+    
+    private func handleFocusRequestControl(_ control: FocusRequestControlNotification.Control) {
+        guard control == .body else { return }
+        
+        viewModel.textView?.becomeFirstResponder()
     }
 }
 
