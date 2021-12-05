@@ -94,6 +94,13 @@ struct AppCommands: Commands {
                 }
                 .keyboardShortcut("b", modifiers: [.command, .option])
             }
+            
+            Divider()
+            
+            Button("Copy Body") {
+                ExportResponseBodyNotification(destination: .pasteboard).notify()
+            }
+            .keyboardShortcut("c", modifiers: [.command, .option])
         }
     }
 }

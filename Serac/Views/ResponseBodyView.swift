@@ -15,6 +15,17 @@ struct ResponseBodyView: View {
     var body: some View {
         VStack {
             if response.contentType != .none {
+                HStack {
+                    Button(action: handleCopyBody) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .help("Copy response body to pasteboard")
+                    
+                    Spacer()
+                }
+                .padding([.leading, .trailing], 5)
+                
                 SyntaxTextView(data: data,
                                isEditable: false,
                                formatter: formatter,
@@ -24,6 +35,7 @@ struct ResponseBodyView: View {
                     .foregroundColor(.secondary)
             }
         }
+        .onExportResponseBody(perform: handleExportBody)
     }
     
     private var hasBody: Bool {
@@ -50,6 +62,24 @@ struct ResponseBodyView: View {
                 }
             },
             set: { _ in })
+    }
+    
+    private func handleExportBody(_ destination: ExportResponseBodyNotification.Destination) {
+        switch destination {
+        case .pasteboard:
+            handleCopyBody()
+        }
+    }
+    
+    private func handleCopyBody() {
+        guard let data = response.data else {
+            NSSound.beep()
+            return
+        }
+        
+        NSPasteboard.general.prepareForNewContents(with: [])
+        NSPasteboard.general.setString(String(decoding: data, as: UTF8.self),
+                                       forType: .string)
     }
 }
 
