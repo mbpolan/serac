@@ -101,6 +101,24 @@ struct FocusRequestControlNotification: Notifiable {
     }
 }
 
+struct FocusResponseControlNotification: Notifiable {
+    static var name = Notification.Name("focusResponseControl")
+    let control: Control
+    
+    enum Control {
+        case headers
+        case body
+    }
+    
+    func notify() {
+        NotificationCenter.default.post(name: FocusResponseControlNotification.name, object: control)
+    }
+    
+    var publisher: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: FocusResponseControlNotification.name, object: nil)
+    }
+}
+
 struct FormatRequestBodyNotification: Notifiable {
     static var name = Notification.Name("formatRequestBody")
     
@@ -195,6 +213,10 @@ extension View {
     
     func onFocusRequestControl(perform: @escaping(_ control: FocusRequestControlNotification.Control) -> Void) -> some View {
         return onNotification(FocusRequestControlNotification.name, perform: perform)
+    }
+    
+    func onFocusResponseControl(perform: @escaping(_ control: FocusResponseControlNotification.Control) -> Void) -> some View {
+        return onNotification(FocusResponseControlNotification.name, perform: perform)
     }
     
     func onFormatRequestBody(perform: @escaping() -> Void) -> some View {

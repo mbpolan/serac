@@ -81,5 +81,19 @@ struct AppCommands: Commands {
                 ClearSessionsNotification().notify()
             }
         }
+        
+        CommandMenu("Response") {
+            Menu("Jump to...") {
+                Button("Headers") {
+                    FocusResponseControlNotification(control: .headers).notify()
+                }
+                .keyboardShortcut("h", modifiers: [.command, .option])
+                
+                Button("Body") {
+                    FocusResponseControlNotification(control: .body).notify()
+                }
+                .keyboardShortcut("b", modifiers: [.command, .option])
+            }
+        }
     }
 }

@@ -35,6 +35,21 @@ struct ResponseView: View {
                     .padding(15)
             }
         }
+        .onFocusResponseControl(perform: handleFocusResponseControl)
+    }
+    
+    private func handleFocusResponseControl(_ control: FocusResponseControlNotification.Control) {
+        guard response.valid else {
+            NSSound.beep()
+            return
+        }
+        
+        switch control {
+        case .headers:
+            viewModel.tab = .headers
+        case .body:
+            viewModel.tab = .body
+        }
     }
 }
 
@@ -118,7 +133,7 @@ class ResponseViewModel: ObservableObject {
 
 struct ResponseView_Preview: PreviewProvider {
     @State static var response: Response = Response()
-
+    
     static var previews: some View {
         ResponseView(response: response)
     }
