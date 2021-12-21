@@ -69,8 +69,15 @@ struct CommandPaletteView: View {
         let item = viewModel.actions[index]
         
         switch item {
-        case .collectionItem(let item):
+        case .collectionItem(let item, let path):
             HStack {
+                Text(path.joined(separator: " > "))
+                    .foregroundColor(Color(NSColor.secondaryLabelColor))
+                    .font(.system(size: NSFont.systemFontSize))
+                    .lineLimit(1)
+                
+                Spacer()
+                
                 Text(item.request?.name ?? "Untitled")
                     .font(.system(size: NSFont.systemFontSize + 4))
             }
@@ -129,7 +136,7 @@ struct CommandPaletteView: View {
         
         let item = viewModel.actions[viewModel.selection]
         switch item {
-        case .collectionItem(let item):
+        case .collectionItem(let item, _):
             OpenCollectionItemNotification(item: item).notify()
             onDismiss()
             
@@ -210,7 +217,7 @@ struct CommandPaletteView: View {
         viewModel.actions = []
         
         appState.collections.forEach { item in
-            matchCollectionItem(item, query: query, into: &viewModel.actions)
+            matchCollectionItem(item, path: [], query: query, into: &viewModel.actions)
         }
     }
     
@@ -237,17 +244,22 @@ struct CommandPaletteView: View {
         }
     }
     
-    private func matchCollectionItem(_ item: CollectionItem, query: String, into result: inout [CommandPaletteViewModel.ActionItem]) {
+    private func matchCollectionItem(_ item: CollectionItem, path: [String], query: String, into result: inout [CommandPaletteViewModel.ActionItem]) {
         switch item.type {
         case .request:
             guard let request = item.request else { return }
             if request.name.contains(caseInsensitive: query) {
-                result.append(.collectionItem(item))
+                result.append(.collectionItem(item, path))
             }
             
         case .group, .root:
+            var thisPath = path
+            if let groupName = item.groupName {
+                thisPath.append(groupName)
+            }
+            
             item.children?.forEach {
-                matchCollectionItem($0, query: query, into: &result)
+                matchCollectionItem($0, path: thisPath, query: query, into: &result)
             }
         }
     }
@@ -307,7 +319,7 @@ class CommandPaletteViewModel: ObservableObject {
     }
     
     enum ActionItem {
-        case collectionItem(_ item: CollectionItem)
+        case collectionItem(_ item: CollectionItem, _ path: [String])
         case command(_ item: CommandItem)
         case argument(_ item: CommandItem, _ label: String, _ value: Any?)
     }
