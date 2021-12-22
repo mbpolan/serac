@@ -69,7 +69,7 @@ struct CommandPaletteView: View {
         let item = viewModel.actions[index]
         
         switch item {
-        case .collectionItem(let item, let path):
+        case .collectionItem(let item, let path, _):
             HStack {
                 Text(path.joined(separator: " > "))
                     .foregroundColor(Color(NSColor.secondaryLabelColor))
@@ -82,7 +82,7 @@ struct CommandPaletteView: View {
                     .font(.system(size: NSFont.systemFontSize + 4))
             }
             
-        case .command(let item):
+        case .command(let item, _):
             HStack {
                 Text(item.name)
                     .font(.system(size: NSFont.systemFontSize + 4))
@@ -93,7 +93,7 @@ struct CommandPaletteView: View {
                     .font(.system(size: NSFont.systemFontSize))
             }
             
-        case .argument(_, let label, _):
+        case .argument(_, let label, _, _):
             HStack {
                 Text(label)
                     .font(.system(size: NSFont.systemFontSize + 4))
@@ -136,11 +136,11 @@ struct CommandPaletteView: View {
         
         let item = viewModel.actions[viewModel.selection]
         switch item {
-        case .collectionItem(let item, _):
+        case .collectionItem(let item, _, _):
             OpenCollectionItemNotification(item: item).notify()
             onDismiss()
             
-        case .command(let item):
+        case .command(let item, _):
             if item.requiresArgument {
                 resetSearchState(mode: .argument(item))
             } else {
@@ -148,7 +148,7 @@ struct CommandPaletteView: View {
                 onDismiss()
             }
             
-        case.argument(let item, _, let value):
+        case.argument(let item, _, let value, _):
             activateCommand(item, argument: value)
             break
         }
@@ -200,14 +200,14 @@ struct CommandPaletteView: View {
         switch item {
             // show available variable sets
         case .changeVariableSet:
-            viewModel.actions = [.argument(item, "None", nil)]
+            viewModel.actions = [.argument(item, "None", nil, .exact)]
             
             if query.isEmpty {
-                viewModel.actions.append(contentsOf: variableSets.map { .argument(item, $0.name, $0) })
+                viewModel.actions.append(contentsOf: variableSets.map { .argument(item, $0.name, $0, .exact) })
             } else {
                 viewModel.actions.append(contentsOf: variableSets.filter {
                     $0.name.contains(caseInsensitive: query)
-                }.map { .argument(item, $0.name, $0) })
+                }.map { .argument(item, $0.name, $0, .exact) })
             }
         }
     }
@@ -219,6 +219,11 @@ struct CommandPaletteView: View {
         appState.collections.forEach { item in
             matchCollectionItem(item, path: [], query: query, into: &viewModel.actions)
         }
+        
+        // sort the results based on best match
+        viewModel.actions.sort(by: { a, b in
+            return a.rating.rawValue > b.rating.rawValue
+        })
     }
     
     private func searchForCommands(query: String) {
@@ -235,12 +240,12 @@ struct CommandPaletteView: View {
             }
         } else if query.isEmpty {
             // show all available commands
-            viewModel.actions = CommandPaletteViewModel.CommandItem.allCases.map { .command($0) }
+            viewModel.actions = CommandPaletteViewModel.CommandItem.allCases.map { .command($0, .exact) }
         } else {
             // filter by matching commands
             viewModel.actions = CommandPaletteViewModel.CommandItem.allCases.filter { item in
                 return item.name.contains(caseInsensitive: query)
-            }.map { .command($0) }
+            }.map { .command($0, .exact) }
         }
     }
     
@@ -248,8 +253,16 @@ struct CommandPaletteView: View {
         switch item.type {
         case .request:
             guard let request = item.request else { return }
-            if request.name.contains(caseInsensitive: query) {
-                result.append(.collectionItem(item, path))
+            
+            // determine how close of a match this request is, if any
+            // look for exact matches in the request name, partial matches in the request name, or
+            // a match in one of the request's group names
+            if request.name.caseInsensitiveCompare(query) == .orderedSame {
+                result.append(.collectionItem(item, path, .exact))
+            } else if request.name.contains(caseInsensitive: query) {
+                result.append(.collectionItem(item, path, .partial))
+            } else if path.contains(where: { $0.contains(caseInsensitive: query) }) {
+                result.append(.collectionItem(item, path, .contextual))
             }
             
         case .group, .root:
@@ -318,10 +331,27 @@ class CommandPaletteViewModel: ObservableObject {
         }
     }
     
+    enum MatchRating: Int {
+        case exact = 3
+        case partial = 2
+        case contextual = 1
+    }
+    
     enum ActionItem {
-        case collectionItem(_ item: CollectionItem, _ path: [String])
-        case command(_ item: CommandItem)
-        case argument(_ item: CommandItem, _ label: String, _ value: Any?)
+        case collectionItem(_ item: CollectionItem, _ path: [String], _ rating: MatchRating)
+        case command(_ item: CommandItem, _ rating: MatchRating)
+        case argument(_ item: CommandItem, _ label: String, _ value: Any?, _ rating: MatchRating)
+        
+        var rating: MatchRating {
+            switch self {
+            case .collectionItem(_, _, let rating):
+                return rating
+            case .command(_, let rating):
+                return rating
+            case .argument(_, _, _, let rating):
+                return rating
+            }
+        }
     }
 }
 
