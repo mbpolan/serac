@@ -44,6 +44,35 @@ class AppState: ObservableObject, Codable {
         try container.encode(activeSession, forKey: .activeSession)
         try container.encode(collections, forKey: .collections)
     }
+    
+    func findRequestBy(id: String) -> Request? {
+        for item in collections {
+            let target = findRequestBy(id: id, under: item)
+            if target != nil {
+                return target
+            }
+        }
+        
+        return nil
+    }
+    
+    private func findRequestBy(id: String, under item: CollectionItem) -> Request? {
+        switch item.type {
+        case .request:
+            return item.id == id ? item.request : nil
+        case .group, .root:
+            guard let children = item.children else { return nil }
+            
+            for child in children {
+                let target = findRequestBy(id: id, under: child)
+                if target != nil {
+                    return target
+                }
+            }
+            
+            return nil
+        }
+    }
 }
 
 extension AppState {
@@ -62,6 +91,24 @@ extension AppState {
             do {
                 guard let self = self else { return }
                 let data = try JSONDecoder().decode(AppState.self, from: Data(contentsOf: self.getSaveFile()))
+                
+                // update each session to have the same request instance as the one it came from
+                // this avoids desyncing when someone updates a property on a session and it does not get
+                // reflected in the original request
+                data.sessions = data.sessions.map { session in
+                    if let request = data.findRequestBy(id: session.id) {
+                        session.request = request
+                    } else {
+                        print("WARN: could not find matching request for session \(session.id)")
+                    }
+                    
+                    return session
+                }
+                
+                // refresh the active session afterwards
+                if let activeID = data.activeSession?.id {
+                    data.activeSession = data.sessions.first { $0.id == activeID }
+                }
                 
                 DispatchQueue.main.async {
                     self.sessions = data.sessions
