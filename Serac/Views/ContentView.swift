@@ -159,10 +159,14 @@ struct ContentViewToolbar: ToolbarContent {
         }
         
         ToolbarItem(placement: .principal) {
-            TextField(text: sessionName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .multilineTextAlignment(.center)
-                .frame(minWidth: 150)
+            if appState.activeSession == nil {
+                EmptyView()
+            } else {
+                TextField(text: sessionName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .multilineTextAlignment(.center)
+                    .frame(minWidth: 150)
+            }
         }
         
         ToolbarItem {
